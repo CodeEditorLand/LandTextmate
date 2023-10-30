@@ -1,13 +1,5 @@
 {
-	"fileTypes": [
-		"html",
-		"htm",
-		"shtml",
-		"xhtml",
-		"inc",
-		"tmpl",
-		"tpl"
-	],
+	"fileTypes": ["html", "htm", "shtml", "xhtml", "inc", "tmpl", "tpl"],
 	"firstLineMatch": "<(?i:(!DOCTYPE\\s*)?html)",
 	"injections": {
 		"R:text.html - (comment.block, text.html source)": {

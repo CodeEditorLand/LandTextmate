@@ -1,12 +1,7 @@
 {
 	"scopeName": "source.css.scss",
 	"name": "SCSS",
-	"fileTypes": [
-		"scss",
-		"css.scss",
-		"css.scss.erb",
-		"scss.erb"
-	],
+	"fileTypes": ["scss", "css.scss", "css.scss.erb", "scss.erb"],
 	"patterns": [
 		{
 			"include": "#variable_setting"

@@ -2,8 +2,8 @@
  * Copyright (C) Microsoft Corporation. All rights reserved.
  *--------------------------------------------------------*/
 
-import * as assert from 'assert';
-import { createMatchers } from '../matcher';
+import * as assert from "assert";
+import { createMatchers } from "../matcher";
 
 let tests = [
 	{ "expression": "foo", "input": ["foo"], "result": true },
@@ -26,18 +26,47 @@ let tests = [
 	{ "expression": "(foo)", "input": ["foo"], "result": true },
 	{ "expression": "(foo - bar)", "input": ["foo"], "result": true },
 	{ "expression": "(foo - bar)", "input": ["foo", "bar"], "result": false },
-	{ "expression": "foo bar - (yo man)", "input": ["foo", "bar"], "result": true },
-	{ "expression": "foo bar - (yo man)", "input": ["foo", "bar", "yo"], "result": true },
-	{ "expression": "foo bar - (yo man)", "input": ["foo", "bar", "yo", "man"], "result": false },
-	{ "expression": "foo bar - (yo | man)", "input": ["foo", "bar", "yo", "man"], "result": false },
-	{ "expression": "foo bar - (yo | man)", "input": ["foo", "bar", "yo"], "result": false },
-	{ "expression": "R:text.html - (comment.block, text.html source)", "input": ["text.html", "bar", "source"], "result": false },
-	{ "expression": "text.html.php - (meta.embedded | meta.tag), L:text.html.php meta.tag, L:source.js.embedded.html", "input": ["text.html.php", "bar", "source.js"], "result": true }
+	{
+		"expression": "foo bar - (yo man)",
+		"input": ["foo", "bar"],
+		"result": true,
+	},
+	{
+		"expression": "foo bar - (yo man)",
+		"input": ["foo", "bar", "yo"],
+		"result": true,
+	},
+	{
+		"expression": "foo bar - (yo man)",
+		"input": ["foo", "bar", "yo", "man"],
+		"result": false,
+	},
+	{
+		"expression": "foo bar - (yo | man)",
+		"input": ["foo", "bar", "yo", "man"],
+		"result": false,
+	},
+	{
+		"expression": "foo bar - (yo | man)",
+		"input": ["foo", "bar", "yo"],
+		"result": false,
+	},
+	{
+		"expression": "R:text.html - (comment.block, text.html source)",
+		"input": ["text.html", "bar", "source"],
+		"result": false,
+	},
+	{
+		"expression":
+			"text.html.php - (meta.embedded | meta.tag), L:text.html.php meta.tag, L:source.js.embedded.html",
+		"input": ["text.html.php", "bar", "source.js"],
+		"result": true,
+	},
 ];
 
 let nameMatcher = (identifers: string[], stackElements: string[]) => {
 	let lastIndex = 0;
-	return identifers.every(identifier => {
+	return identifers.every((identifier) => {
 		for (let i = lastIndex; i < stackElements.length; i++) {
 			if (stackElements[i] === identifier) {
 				lastIndex = i + 1;
@@ -49,9 +78,9 @@ let nameMatcher = (identifers: string[], stackElements: string[]) => {
 };
 
 tests.forEach((tst, index) => {
-	test('Matcher Test #' + index, () => {
+	test("Matcher Test #" + index, () => {
 		let matchers = createMatchers(tst.expression, nameMatcher);
-		let result = matchers.some(m => m.matcher(tst.input));
+		let result = matchers.some((m) => m.matcher(tst.input));
 		assert.strictEqual(result, tst.result);
 	});
 });

@@ -1,8 +1,5 @@
 {
-	"fileTypes": [
-		"c",
-		"h"
-	],
+	"fileTypes": ["c", "h"],
 	"firstLineMatch": "-[*]-( Mode:)? C -[*]-",
 	"keyEquivalent": "^~C",
 	"name": "C",

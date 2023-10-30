@@ -1,7 +1,5 @@
 {
-	"fileTypes": [
-		"jade"
-	],
+	"fileTypes": ["jade"],
 	"name": "Jade",
 	"patterns": [
 		{

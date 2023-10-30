@@ -1,8 +1,5 @@
 {
-	"fileTypes": [
-		"m",
-		"h"
-	],
+	"fileTypes": ["m", "h"],
 	"keyEquivalent": "^~O",
 	"name": "Objective-C",
 	"patterns": [

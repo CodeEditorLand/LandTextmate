@@ -7,16 +7,30 @@ import { FontStyle } from "./theme";
 export type EncodedTokenAttributes = number;
 
 export namespace EncodedTokenAttributes {
-	export function toBinaryStr(encodedTokenAttributes: EncodedTokenAttributes): string {
+	export function toBinaryStr(
+		encodedTokenAttributes: EncodedTokenAttributes
+	): string {
 		return encodedTokenAttributes.toString(2).padStart(32, "0");
 	}
 
-	export function print(encodedTokenAttributes: EncodedTokenAttributes): void {
-		const languageId = EncodedTokenAttributes.getLanguageId(encodedTokenAttributes);
-		const tokenType = EncodedTokenAttributes.getTokenType(encodedTokenAttributes);
-		const fontStyle = EncodedTokenAttributes.getFontStyle(encodedTokenAttributes);
-		const foreground = EncodedTokenAttributes.getForeground(encodedTokenAttributes);
-		const background = EncodedTokenAttributes.getBackground(encodedTokenAttributes);
+	export function print(
+		encodedTokenAttributes: EncodedTokenAttributes
+	): void {
+		const languageId = EncodedTokenAttributes.getLanguageId(
+			encodedTokenAttributes
+		);
+		const tokenType = EncodedTokenAttributes.getTokenType(
+			encodedTokenAttributes
+		);
+		const fontStyle = EncodedTokenAttributes.getFontStyle(
+			encodedTokenAttributes
+		);
+		const foreground = EncodedTokenAttributes.getForeground(
+			encodedTokenAttributes
+		);
+		const background = EncodedTokenAttributes.getBackground(
+			encodedTokenAttributes
+		);
 
 		console.log({
 			languageId: languageId,
@@ -27,41 +41,62 @@ export namespace EncodedTokenAttributes {
 		});
 	}
 
-	export function getLanguageId(encodedTokenAttributes: EncodedTokenAttributes): number {
+	export function getLanguageId(
+		encodedTokenAttributes: EncodedTokenAttributes
+	): number {
 		return (
-			(encodedTokenAttributes & EncodedTokenDataConsts.LANGUAGEID_MASK) >>>
+			(encodedTokenAttributes &
+				EncodedTokenDataConsts.LANGUAGEID_MASK) >>>
 			EncodedTokenDataConsts.LANGUAGEID_OFFSET
 		);
 	}
 
-	export function getTokenType(encodedTokenAttributes: EncodedTokenAttributes): StandardTokenType {
+	export function getTokenType(
+		encodedTokenAttributes: EncodedTokenAttributes
+	): StandardTokenType {
 		return (
-			(encodedTokenAttributes & EncodedTokenDataConsts.TOKEN_TYPE_MASK) >>>
+			(encodedTokenAttributes &
+				EncodedTokenDataConsts.TOKEN_TYPE_MASK) >>>
 			EncodedTokenDataConsts.TOKEN_TYPE_OFFSET
 		);
 	}
 
-	export function containsBalancedBrackets(encodedTokenAttributes: EncodedTokenAttributes): boolean {
-		return (encodedTokenAttributes & EncodedTokenDataConsts.BALANCED_BRACKETS_MASK) !== 0;
+	export function containsBalancedBrackets(
+		encodedTokenAttributes: EncodedTokenAttributes
+	): boolean {
+		return (
+			(encodedTokenAttributes &
+				EncodedTokenDataConsts.BALANCED_BRACKETS_MASK) !==
+			0
+		);
 	}
 
-	export function getFontStyle(encodedTokenAttributes: EncodedTokenAttributes): number {
+	export function getFontStyle(
+		encodedTokenAttributes: EncodedTokenAttributes
+	): number {
 		return (
-			(encodedTokenAttributes & EncodedTokenDataConsts.FONT_STYLE_MASK) >>>
+			(encodedTokenAttributes &
+				EncodedTokenDataConsts.FONT_STYLE_MASK) >>>
 			EncodedTokenDataConsts.FONT_STYLE_OFFSET
 		);
 	}
 
-	export function getForeground(encodedTokenAttributes: EncodedTokenAttributes): number {
+	export function getForeground(
+		encodedTokenAttributes: EncodedTokenAttributes
+	): number {
 		return (
-			(encodedTokenAttributes & EncodedTokenDataConsts.FOREGROUND_MASK) >>>
+			(encodedTokenAttributes &
+				EncodedTokenDataConsts.FOREGROUND_MASK) >>>
 			EncodedTokenDataConsts.FOREGROUND_OFFSET
 		);
 	}
 
-	export function getBackground(encodedTokenAttributes: EncodedTokenAttributes): number {
+	export function getBackground(
+		encodedTokenAttributes: EncodedTokenAttributes
+	): number {
 		return (
-			(encodedTokenAttributes & EncodedTokenDataConsts.BACKGROUND_MASK) >>>
+			(encodedTokenAttributes &
+				EncodedTokenDataConsts.BACKGROUND_MASK) >>>
 			EncodedTokenDataConsts.BACKGROUND_OFFSET
 		);
 	}
@@ -79,13 +114,27 @@ export namespace EncodedTokenAttributes {
 		foreground: number | 0,
 		background: number | 0
 	): number {
-		let _languageId = EncodedTokenAttributes.getLanguageId(encodedTokenAttributes);
-		let _tokenType = EncodedTokenAttributes.getTokenType(encodedTokenAttributes);
+		let _languageId = EncodedTokenAttributes.getLanguageId(
+			encodedTokenAttributes
+		);
+		let _tokenType = EncodedTokenAttributes.getTokenType(
+			encodedTokenAttributes
+		);
 		let _containsBalancedBracketsBit: 0 | 1 =
-			EncodedTokenAttributes.containsBalancedBrackets(encodedTokenAttributes) ? 1 : 0;
-		let _fontStyle = EncodedTokenAttributes.getFontStyle(encodedTokenAttributes);
-		let _foreground = EncodedTokenAttributes.getForeground(encodedTokenAttributes);
-		let _background = EncodedTokenAttributes.getBackground(encodedTokenAttributes);
+			EncodedTokenAttributes.containsBalancedBrackets(
+				encodedTokenAttributes
+			)
+				? 1
+				: 0;
+		let _fontStyle = EncodedTokenAttributes.getFontStyle(
+			encodedTokenAttributes
+		);
+		let _foreground = EncodedTokenAttributes.getForeground(
+			encodedTokenAttributes
+		);
+		let _background = EncodedTokenAttributes.getBackground(
+			encodedTokenAttributes
+		);
 
 		if (languageId !== 0) {
 			_languageId = languageId;
@@ -153,17 +202,19 @@ const enum EncodedTokenDataConsts {
 	BALANCED_BRACKETS_OFFSET = 10,
 	FONT_STYLE_OFFSET = 11,
 	FOREGROUND_OFFSET = 15,
-	BACKGROUND_OFFSET = 24
+	BACKGROUND_OFFSET = 24,
 }
 
 export const enum StandardTokenType {
 	Other = 0,
 	Comment = 1,
 	String = 2,
-	RegEx = 3
+	RegEx = 3,
 }
 
-export function toOptionalTokenType(standardType: StandardTokenType): OptionalStandardTokenType {
+export function toOptionalTokenType(
+	standardType: StandardTokenType
+): OptionalStandardTokenType {
 	return standardType as any as OptionalStandardTokenType;
 }
 
@@ -184,5 +235,5 @@ export const enum OptionalStandardTokenType {
 	String = 2,
 	RegEx = 3,
 	// Indicates that no token type is set.
-	NotSet = 8
+	NotSet = 8,
 }

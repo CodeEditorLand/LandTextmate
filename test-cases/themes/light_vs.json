@@ -109,7 +109,6 @@
 			"settings": {
 				"fontStyle": "bold",
 				"foreground": "#000080"
-
 			}
 		},
 		{
@@ -221,7 +220,6 @@
 		},
 		{
 			"scope": [
-
 				"string.comment.buffered.block.jade",
 				"string.quoted.jade",
 				"string.interpolated.jade",
@@ -343,7 +341,10 @@
 		},
 		{
 			"name": "coloring of the Java import and package identifiers",
-			"scope": ["storage.modifier.import.java", "storage.modifier.package.java"],
+			"scope": [
+				"storage.modifier.import.java",
+				"storage.modifier.package.java"
+			],
 			"settings": {
 				"foreground": "#000000"
 			}

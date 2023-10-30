@@ -1,50 +1,50 @@
 {
-  "name": "vscode-textmate",
-  "version": "0.0.1",
-  "private": "false",
-  "description": "VSCode TextMate grammar helpers",
-  "homepage": "https://github.com/CodeEditorLand/CodeEditorLand#readme",
-  "bugs": {
-    "url": "https://github.com/CodeEditorLand/CodeEditorLand/issues"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/CodeEditorLand/CodeEditorLand.git"
-  },
-  "license": "MIT",
-  "author": {
-    "name": "Nikola Hristov",
-    "email": "nikola@nikolahristov.tech",
-    "url": "https://nikolahristov.tech"
-  },
-  "publisher": "playform",
-  "type": "module",
-  "main": "./release/main.js",
-  "typings": "./release/main.d.ts",
-  "scripts": {
-    "benchmark": "node benchmark/benchmark.js",
-    "bundle": "webpack",
-    "compile": "tsc",
-    "inspect": "node out/tests/inspect.js",
-    "prepublishOnly": "TypeScriptESBuild Source/**/*.ts",
-    "test": "mocha --ui=tdd ./out/tests/all.test.js",
-    "tmconvert": "node scripts/tmconvert.js",
-    "version": "npm run compile && npm run test",
-    "postversion": "git push && git push --tags",
-    "watch": "tsc --watch"
-  },
-  "devDependencies": {
-    "@types/mocha": "10.0.3",
-    "@types/node": "20.8.9",
-    "copy-webpack-plugin": "11.0.0",
-    "mocha": "10.2.0",
-    "typescript": "5.2.2",
-    "typescript-esbuild": "0.3.1",
-    "vscode-oniguruma": "2.0.1",
-    "webpack": "5.89.0",
-    "webpack-cli": "5.1.4"
-  },
-  "publishConfig": {
-    "access": "public"
-  }
+	"name": "vscode-textmate",
+	"version": "0.0.1",
+	"private": "false",
+	"description": "VSCode TextMate grammar helpers",
+	"homepage": "https://github.com/CodeEditorLand/CodeEditorLand#readme",
+	"bugs": {
+		"url": "https://github.com/CodeEditorLand/CodeEditorLand/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/CodeEditorLand/CodeEditorLand.git"
+	},
+	"license": "MIT",
+	"author": {
+		"name": "Nikola Hristov",
+		"email": "nikola@nikolahristov.tech",
+		"url": "https://nikolahristov.tech"
+	},
+	"publisher": "playform",
+	"type": "module",
+	"main": "./release/main.js",
+	"typings": "./release/main.d.ts",
+	"scripts": {
+		"benchmark": "node benchmark/benchmark.js",
+		"bundle": "webpack",
+		"compile": "tsc",
+		"inspect": "node out/tests/inspect.js",
+		"prepublishOnly": "TypeScriptESBuild 'Source/**/*.ts'",
+		"test": "mocha --ui=tdd ./out/tests/all.test.js",
+		"tmconvert": "node scripts/tmconvert.js",
+		"version": "npm run compile && npm run test",
+		"postversion": "git push && git push --tags",
+		"watch": "tsc --watch"
+	},
+	"devDependencies": {
+		"@types/mocha": "10.0.3",
+		"@types/node": "20.8.9",
+		"copy-webpack-plugin": "11.0.0",
+		"mocha": "10.2.0",
+		"typescript": "5.2.2",
+		"typescript-esbuild": "0.3.1",
+		"vscode-oniguruma": "2.0.1",
+		"webpack": "5.89.0",
+		"webpack-cli": "5.1.4"
+	},
+	"publishConfig": {
+		"access": "public"
+	}
 }

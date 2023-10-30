@@ -2,18 +2,33 @@
  * Copyright (C) Microsoft Corporation. All rights reserved.
  *--------------------------------------------------------*/
 
-import { DebugFlags, UseOnigurumaFindOptions } from '../debug';
-import type { LineTokens, StateStackImpl } from './grammar';
-import { disposeOnigString, FindOption, IOnigCaptureIndex, OnigString } from '../onigLib';
-import { BeginEndRule, BeginWhileRule, CaptureRule, CompiledRule, endRuleId, MatchRule, Rule, RuleId, whileRuleId } from '../rule';
-import { performanceNow } from '../utils';
-import type { AttributedScopeStack, Grammar, Injection } from './grammar';
+import { DebugFlags, UseOnigurumaFindOptions } from "../debug";
+import type { LineTokens, StateStackImpl } from "./grammar";
+import {
+	disposeOnigString,
+	FindOption,
+	IOnigCaptureIndex,
+	OnigString,
+} from "../onigLib";
+import {
+	BeginEndRule,
+	BeginWhileRule,
+	CaptureRule,
+	CompiledRule,
+	endRuleId,
+	MatchRule,
+	Rule,
+	RuleId,
+	whileRuleId,
+} from "../rule";
+import { performanceNow } from "../utils";
+import type { AttributedScopeStack, Grammar, Injection } from "./grammar";
 
 class TokenizeStringResult {
 	constructor(
 		public readonly stack: StateStackImpl,
 		public readonly stoppedEarly: boolean
-	) { }
+	) {}
 }
 
 /**
@@ -28,7 +43,7 @@ class TokenizeStringResult {
  * @param timeLimit Use `0` to indicate no time limit
  * @returns the StackElement or StackElement.TIME_LIMIT_REACHED if the time limit has been reached
  */
- export function _tokenizeString(
+export function _tokenizeString(
 	grammar: Grammar,
 	lineText: OnigString,
 	isFirstLine: boolean,
@@ -332,8 +347,15 @@ class TokenizeStringResult {
  * If any fails, cut off the entire stack above the failed while condition. While conditions
  * may also advance the linePosition.
  */
-function _checkWhileConditions(grammar: Grammar, lineText: OnigString, isFirstLine: boolean, linePos: number, stack: StateStackImpl, lineTokens: LineTokens): IWhileCheckResult {
-	let anchorPosition = (stack.beginRuleCapturedEOL ? 0 : -1);
+function _checkWhileConditions(
+	grammar: Grammar,
+	lineText: OnigString,
+	isFirstLine: boolean,
+	linePos: number,
+	stack: StateStackImpl,
+	lineTokens: LineTokens
+): IWhileCheckResult {
+	let anchorPosition = stack.beginRuleCapturedEOL ? 0 : -1;
 
 	interface IWhileStack {
 		readonly stack: StateStackImpl;
@@ -346,16 +368,26 @@ function _checkWhileConditions(grammar: Grammar, lineText: OnigString, isFirstLi
 		if (nodeRule instanceof BeginWhileRule) {
 			whileRules.push({
 				rule: nodeRule,
-				stack: node
+				stack: node,
 			});
 		}
 	}
 
-	for (let whileRule = whileRules.pop(); whileRule; whileRule = whileRules.pop()) {
-		const { ruleScanner, findOptions } = prepareRuleWhileSearch(whileRule.rule, grammar, whileRule.stack.endRule, isFirstLine, linePos === anchorPosition);
+	for (
+		let whileRule = whileRules.pop();
+		whileRule;
+		whileRule = whileRules.pop()
+	) {
+		const { ruleScanner, findOptions } = prepareRuleWhileSearch(
+			whileRule.rule,
+			grammar,
+			whileRule.stack.endRule,
+			isFirstLine,
+			linePos === anchorPosition
+		);
 		const r = ruleScanner.findNextMatchSync(lineText, linePos, findOptions);
 		if (DebugFlags.InDebugMode) {
-			console.log('  scanning for while rule');
+			console.log("  scanning for while rule");
 			console.log(ruleScanner.toString());
 		}
 
@@ -368,7 +400,15 @@ function _checkWhileConditions(grammar: Grammar, lineText: OnigString, isFirstLi
 			}
 			if (r.captureIndices && r.captureIndices.length) {
 				lineTokens.produce(whileRule.stack, r.captureIndices[0].start);
-				handleCaptures(grammar, lineText, isFirstLine, whileRule.stack, lineTokens, whileRule.rule.whileCaptures, r.captureIndices);
+				handleCaptures(
+					grammar,
+					lineText,
+					isFirstLine,
+					whileRule.stack,
+					lineTokens,
+					whileRule.rule.whileCaptures,
+					r.captureIndices
+				);
 				lineTokens.produce(whileRule.stack, r.captureIndices[0].end);
 				anchorPosition = r.captureIndices[0].end;
 				if (r.captureIndices[0].end > linePos) {
@@ -378,7 +418,12 @@ function _checkWhileConditions(grammar: Grammar, lineText: OnigString, isFirstLi
 			}
 		} else {
 			if (DebugFlags.InDebugMode) {
-				console.log('  popping ' + whileRule.rule.debugName + ' - ' + whileRule.rule.debugWhileRegExp);
+				console.log(
+					"  popping " +
+						whileRule.rule.debugName +
+						" - " +
+						whileRule.rule.debugWhileRegExp
+				);
 			}
 
 			stack = whileRule.stack.pop()!;
@@ -386,7 +431,12 @@ function _checkWhileConditions(grammar: Grammar, lineText: OnigString, isFirstLi
 		}
 	}
 
-	return { stack: stack, linePos: linePos, anchorPosition: anchorPosition, isFirstLine: isFirstLine };
+	return {
+		stack: stack,
+		linePos: linePos,
+		anchorPosition: anchorPosition,
+		isFirstLine: isFirstLine,
+	};
 }
 
 interface IWhileCheckResult {
@@ -396,9 +446,23 @@ interface IWhileCheckResult {
 	readonly isFirstLine: boolean;
 }
 
-function matchRuleOrInjections(grammar: Grammar, lineText: OnigString, isFirstLine: boolean, linePos: number, stack: StateStackImpl, anchorPosition: number): IMatchResult | null {
+function matchRuleOrInjections(
+	grammar: Grammar,
+	lineText: OnigString,
+	isFirstLine: boolean,
+	linePos: number,
+	stack: StateStackImpl,
+	anchorPosition: number
+): IMatchResult | null {
 	// Look for normal grammar rule
-	const matchResult = matchRule(grammar, lineText, isFirstLine, linePos, stack, anchorPosition);
+	const matchResult = matchRule(
+		grammar,
+		lineText,
+		isFirstLine,
+		linePos,
+		stack,
+		anchorPosition
+	);
 
 	// Look for injected rules
 	const injections = grammar.getInjections();
@@ -407,7 +471,15 @@ function matchRuleOrInjections(grammar: Grammar, lineText: OnigString, isFirstLi
 		return matchResult;
 	}
 
-	const injectionResult = matchInjections(injections, grammar, lineText, isFirstLine, linePos, stack, anchorPosition);
+	const injectionResult = matchInjections(
+		injections,
+		grammar,
+		lineText,
+		isFirstLine,
+		linePos,
+		stack,
+		anchorPosition
+	);
 	if (!injectionResult) {
 		// No injections matched => early return
 		return matchResult;
@@ -422,7 +494,11 @@ function matchRuleOrInjections(grammar: Grammar, lineText: OnigString, isFirstLi
 	const matchResultScore = matchResult.captureIndices[0].start;
 	const injectionResultScore = injectionResult.captureIndices[0].start;
 
-	if (injectionResultScore < matchResultScore || (injectionResult.priorityMatch && injectionResultScore === matchResultScore)) {
+	if (
+		injectionResultScore < matchResultScore ||
+		(injectionResult.priorityMatch &&
+			injectionResultScore === matchResultScore)
+	) {
 		// injection won!
 		return injectionResult;
 	}
@@ -434,9 +510,22 @@ interface IMatchResult {
 	readonly matchedRuleId: RuleId | typeof endRuleId;
 }
 
-function matchRule(grammar: Grammar, lineText: OnigString, isFirstLine: boolean, linePos: number, stack: StateStackImpl, anchorPosition: number): IMatchResult | null {
+function matchRule(
+	grammar: Grammar,
+	lineText: OnigString,
+	isFirstLine: boolean,
+	linePos: number,
+	stack: StateStackImpl,
+	anchorPosition: number
+): IMatchResult | null {
 	const rule = stack.getRule(grammar);
-	const { ruleScanner, findOptions } = prepareRuleSearch(rule, grammar, stack.endRule, isFirstLine, linePos === anchorPosition);
+	const { ruleScanner, findOptions } = prepareRuleSearch(
+		rule,
+		grammar,
+		stack.endRule,
+		isFirstLine,
+		linePos === anchorPosition
+	);
 
 	let perfStart = 0;
 	if (DebugFlags.InDebugMode) {
@@ -448,25 +537,39 @@ function matchRule(grammar: Grammar, lineText: OnigString, isFirstLine: boolean,
 	if (DebugFlags.InDebugMode) {
 		const elapsedMillis = performanceNow() - perfStart;
 		if (elapsedMillis > 5) {
-			console.warn(`Rule ${rule.debugName} (${rule.id}) matching took ${elapsedMillis} against '${lineText}'`);
+			console.warn(
+				`Rule ${rule.debugName} (${rule.id}) matching took ${elapsedMillis} against '${lineText}'`
+			);
 		}
-		console.log(`  scanning for (linePos: ${linePos}, anchorPosition: ${anchorPosition})`);
+		console.log(
+			`  scanning for (linePos: ${linePos}, anchorPosition: ${anchorPosition})`
+		);
 		console.log(ruleScanner.toString());
 		if (r) {
-			console.log(`matched rule id: ${r.ruleId} from ${r.captureIndices[0].start} to ${r.captureIndices[0].end}`);
+			console.log(
+				`matched rule id: ${r.ruleId} from ${r.captureIndices[0].start} to ${r.captureIndices[0].end}`
+			);
 		}
 	}
 
 	if (r) {
 		return {
 			captureIndices: r.captureIndices,
-			matchedRuleId: r.ruleId
+			matchedRuleId: r.ruleId,
 		};
 	}
 	return null;
 }
 
-function matchInjections(injections: Injection[], grammar: Grammar, lineText: OnigString, isFirstLine: boolean, linePos: number, stack: StateStackImpl, anchorPosition: number): IMatchInjectionsResult | null {
+function matchInjections(
+	injections: Injection[],
+	grammar: Grammar,
+	lineText: OnigString,
+	isFirstLine: boolean,
+	linePos: number,
+	stack: StateStackImpl,
+	anchorPosition: number
+): IMatchInjectionsResult | null {
 	// The lower the better
 	let bestMatchRating = Number.MAX_VALUE;
 	let bestMatchCaptureIndices: IOnigCaptureIndex[] | null = null;
@@ -482,8 +585,18 @@ function matchInjections(injections: Injection[], grammar: Grammar, lineText: On
 			continue;
 		}
 		const rule = grammar.getRule(injection.ruleId);
-		const { ruleScanner, findOptions } = prepareRuleSearch(rule, grammar, null, isFirstLine, linePos === anchorPosition);
-		const matchResult = ruleScanner.findNextMatchSync(lineText, linePos, findOptions);
+		const { ruleScanner, findOptions } = prepareRuleSearch(
+			rule,
+			grammar,
+			null,
+			isFirstLine,
+			linePos === anchorPosition
+		);
+		const matchResult = ruleScanner.findNextMatchSync(
+			lineText,
+			linePos,
+			findOptions
+		);
 		if (!matchResult) {
 			continue;
 		}
@@ -514,7 +627,7 @@ function matchInjections(injections: Injection[], grammar: Grammar, lineText: On
 		return {
 			priorityMatch: bestMatchResultPriority === -1,
 			captureIndices: bestMatchCaptureIndices,
-			matchedRuleId: bestMatchRuleId!
+			matchedRuleId: bestMatchRuleId!,
 		};
 	}
 
@@ -527,7 +640,13 @@ interface IMatchInjectionsResult {
 	readonly matchedRuleId: RuleId | typeof endRuleId;
 }
 
-function prepareRuleSearch(rule: Rule, grammar: Grammar, endRegexSource: string | null, allowA: boolean, allowG: boolean): { ruleScanner: CompiledRule; findOptions: number; } {
+function prepareRuleSearch(
+	rule: Rule,
+	grammar: Grammar,
+	endRegexSource: string | null,
+	allowA: boolean,
+	allowG: boolean
+): { ruleScanner: CompiledRule; findOptions: number } {
 	if (UseOnigurumaFindOptions) {
 		const ruleScanner = rule.compile(grammar, endRegexSource);
 		const findOptions = getFindOptions(allowA, allowG);
@@ -537,13 +656,27 @@ function prepareRuleSearch(rule: Rule, grammar: Grammar, endRegexSource: string 
 	return { ruleScanner, findOptions: FindOption.None };
 }
 
-function prepareRuleWhileSearch(rule: BeginWhileRule, grammar: Grammar, endRegexSource: string | null, allowA: boolean, allowG: boolean): { ruleScanner: CompiledRule<RuleId | typeof whileRuleId>; findOptions: number; } {
+function prepareRuleWhileSearch(
+	rule: BeginWhileRule,
+	grammar: Grammar,
+	endRegexSource: string | null,
+	allowA: boolean,
+	allowG: boolean
+): {
+	ruleScanner: CompiledRule<RuleId | typeof whileRuleId>;
+	findOptions: number;
+} {
 	if (UseOnigurumaFindOptions) {
 		const ruleScanner = rule.compileWhile(grammar, endRegexSource);
 		const findOptions = getFindOptions(allowA, allowG);
 		return { ruleScanner, findOptions };
 	}
-	const ruleScanner = rule.compileWhileAG(grammar, endRegexSource, allowA, allowG);
+	const ruleScanner = rule.compileWhileAG(
+		grammar,
+		endRegexSource,
+		allowA,
+		allowG
+	);
 	return { ruleScanner, findOptions: FindOption.None };
 }
 
@@ -558,7 +691,15 @@ function getFindOptions(allowA: boolean, allowG: boolean): number {
 	return options;
 }
 
-function handleCaptures(grammar: Grammar, lineText: OnigString, isFirstLine: boolean, stack: StateStackImpl, lineTokens: LineTokens, captures: (CaptureRule | null)[], captureIndices: IOnigCaptureIndex[]): void {
+function handleCaptures(
+	grammar: Grammar,
+	lineText: OnigString,
+	isFirstLine: boolean,
+	stack: StateStackImpl,
+	lineTokens: LineTokens,
+	captures: (CaptureRule | null)[],
+	captureIndices: IOnigCaptureIndex[]
+): void {
 	if (captures.length === 0) {
 		return;
 	}
@@ -589,44 +730,98 @@ function handleCaptures(grammar: Grammar, lineText: OnigString, isFirstLine: boo
 		}
 
 		// pop captures while needed
-		while (localStack.length > 0 && localStack[localStack.length - 1].endPos <= captureIndex.start) {
+		while (
+			localStack.length > 0 &&
+			localStack[localStack.length - 1].endPos <= captureIndex.start
+		) {
 			// pop!
-			lineTokens.produceFromScopes(localStack[localStack.length - 1].scopes, localStack[localStack.length - 1].endPos);
+			lineTokens.produceFromScopes(
+				localStack[localStack.length - 1].scopes,
+				localStack[localStack.length - 1].endPos
+			);
 			localStack.pop();
 		}
 
 		if (localStack.length > 0) {
-			lineTokens.produceFromScopes(localStack[localStack.length - 1].scopes, captureIndex.start);
+			lineTokens.produceFromScopes(
+				localStack[localStack.length - 1].scopes,
+				captureIndex.start
+			);
 		} else {
 			lineTokens.produce(stack, captureIndex.start);
 		}
 
 		if (captureRule.retokenizeCapturedWithRuleId) {
 			// the capture requires additional matching
-			const scopeName = captureRule.getName(lineTextContent, captureIndices);
-			const nameScopesList = stack.contentNameScopesList!.pushAttributed(scopeName, grammar);
-			const contentName = captureRule.getContentName(lineTextContent, captureIndices);
-			const contentNameScopesList = nameScopesList.pushAttributed(contentName, grammar);
+			const scopeName = captureRule.getName(
+				lineTextContent,
+				captureIndices
+			);
+			const nameScopesList = stack.contentNameScopesList!.pushAttributed(
+				scopeName,
+				grammar
+			);
+			const contentName = captureRule.getContentName(
+				lineTextContent,
+				captureIndices
+			);
+			const contentNameScopesList = nameScopesList.pushAttributed(
+				contentName,
+				grammar
+			);
 
-			const stackClone = stack.push(captureRule.retokenizeCapturedWithRuleId, captureIndex.start, -1, false, null, nameScopesList, contentNameScopesList);
-			const onigSubStr = grammar.createOnigString(lineTextContent.substring(0, captureIndex.end));
-			_tokenizeString(grammar, onigSubStr, (isFirstLine && captureIndex.start === 0), captureIndex.start, stackClone, lineTokens, false, /* no time limit */0);
+			const stackClone = stack.push(
+				captureRule.retokenizeCapturedWithRuleId,
+				captureIndex.start,
+				-1,
+				false,
+				null,
+				nameScopesList,
+				contentNameScopesList
+			);
+			const onigSubStr = grammar.createOnigString(
+				lineTextContent.substring(0, captureIndex.end)
+			);
+			_tokenizeString(
+				grammar,
+				onigSubStr,
+				isFirstLine && captureIndex.start === 0,
+				captureIndex.start,
+				stackClone,
+				lineTokens,
+				false,
+				/* no time limit */ 0
+			);
 			disposeOnigString(onigSubStr);
 			continue;
 		}
 
-		const captureRuleScopeName = captureRule.getName(lineTextContent, captureIndices);
+		const captureRuleScopeName = captureRule.getName(
+			lineTextContent,
+			captureIndices
+		);
 		if (captureRuleScopeName !== null) {
 			// push
-			const base = localStack.length > 0 ? localStack[localStack.length - 1].scopes : stack.contentNameScopesList;
-			const captureRuleScopesList = base!.pushAttributed(captureRuleScopeName, grammar);
-			localStack.push(new LocalStackElement(captureRuleScopesList, captureIndex.end));
+			const base =
+				localStack.length > 0
+					? localStack[localStack.length - 1].scopes
+					: stack.contentNameScopesList;
+			const captureRuleScopesList = base!.pushAttributed(
+				captureRuleScopeName,
+				grammar
+			);
+			localStack.push(
+				new LocalStackElement(captureRuleScopesList, captureIndex.end)
+			);
 		}
 	}
 
 	while (localStack.length > 0) {
 		// pop!
-		lineTokens.produceFromScopes(localStack[localStack.length - 1].scopes, localStack[localStack.length - 1].endPos);
+		lineTokens.produceFromScopes(
+			localStack[localStack.length - 1].scopes,
+			localStack[localStack.length - 1].endPos
+		);
 		localStack.pop();
 	}
 }

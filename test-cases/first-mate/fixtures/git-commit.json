@@ -1,8 +1,5 @@
 {
-	"fileTypes": [
-		"COMMIT_EDITMSG",
-		"MERGE_MSG"
-	],
+	"fileTypes": ["COMMIT_EDITMSG", "MERGE_MSG"],
 	"foldingStartMarker": "^\\+\\+\\+",
 	"foldingStopMarker": "^---",
 	"name": "Git Commit Message",
