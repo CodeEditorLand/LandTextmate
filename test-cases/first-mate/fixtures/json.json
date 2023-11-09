@@ -1,7 +1,5 @@
 {
-	"fileTypes": [
-		"json"
-	],
+	"fileTypes": ["json"],
 	"keyEquivalent": "^~J",
 	"name": "JSON",
 	"patterns": [

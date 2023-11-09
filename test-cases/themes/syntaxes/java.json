@@ -1,8 +1,5 @@
 {
-	"fileTypes": [
-		"java",
-		"bsh"
-	],
+	"fileTypes": ["java", "bsh"],
 	"keyEquivalent": "^~J",
 	"name": "Java",
 	"patterns": [

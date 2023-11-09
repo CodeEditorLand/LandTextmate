@@ -1,8 +1,6 @@
 {
 	"comment": "Lua Syntax: version 0.8",
-	"fileTypes": [
-		"lua"
-	],
+	"fileTypes": ["lua"],
 	"firstLineMatch": "\\A#!.*?\\blua\\b",
 	"keyEquivalent": "^~L",
 	"name": "Lua",

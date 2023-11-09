@@ -1,8 +1,6 @@
 {
 	"comment": "Matches Python's regular expression syntax.",
-	"fileTypes": [
-		"re"
-	],
+	"fileTypes": ["re"],
 	"foldingStartMarker": "(/\\*|\\{|\\()",
 	"foldingStopMarker": "(\\*/|\\}|\\))",
 	"name": "Regular Expressions (Python)",

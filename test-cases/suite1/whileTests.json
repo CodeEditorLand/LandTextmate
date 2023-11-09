@@ -1,8 +1,6 @@
 [
 	{
-		"grammars": [
-			"fixtures/whileLang.plist"
-		],
+		"grammars": ["fixtures/whileLang.plist"],
 		"grammarPath": "fixtures/whileLang.plist",
 		"desc": "While should match begin and stop on next line if while condition fails",
 		"lines": [
@@ -10,25 +8,15 @@
 				"line": "A x",
 				"tokens": [
 					{
-						"scopes": [
-							"text.whileLang",
-							"alist"
-						],
+						"scopes": ["text.whileLang", "alist"],
 						"value": "A"
 					},
 					{
-						"scopes": [
-							"text.whileLang",
-							"alist"
-						],
+						"scopes": ["text.whileLang", "alist"],
 						"value": " "
 					},
 					{
-						"scopes": [
-							"text.whileLang",
-							"alist",
-							"letter"
-						],
+						"scopes": ["text.whileLang", "alist", "letter"],
 						"value": "x"
 					}
 				]
@@ -37,9 +25,7 @@
 				"line": "c",
 				"tokens": [
 					{
-						"scopes": [
-							"text.whileLang"
-						],
+						"scopes": ["text.whileLang"],
 						"value": "c"
 					}
 				]
@@ -47,9 +33,7 @@
 		]
 	},
 	{
-		"grammars": [
-			"fixtures/whileLang.plist"
-		],
+		"grammars": ["fixtures/whileLang.plist"],
 		"grammarPath": "fixtures/whileLang.plist",
 		"desc": "While should match multiple lines while condition holds",
 		"lines": [
@@ -57,25 +41,15 @@
 				"line": "A x",
 				"tokens": [
 					{
-						"scopes": [
-							"text.whileLang",
-							"alist"
-						],
+						"scopes": ["text.whileLang", "alist"],
 						"value": "A"
 					},
 					{
-						"scopes": [
-							"text.whileLang",
-							"alist"
-						],
+						"scopes": ["text.whileLang", "alist"],
 						"value": " "
 					},
 					{
-						"scopes": [
-							"text.whileLang",
-							"alist",
-							"letter"
-						],
+						"scopes": ["text.whileLang", "alist", "letter"],
 						"value": "x"
 					}
 				]
@@ -84,33 +58,19 @@
 				"line": "ax x",
 				"tokens": [
 					{
-						"scopes": [
-							"text.whileLang",
-							"alist"
-						],
+						"scopes": ["text.whileLang", "alist"],
 						"value": "a"
 					},
 					{
-						"scopes": [
-							"text.whileLang",
-							"alist",
-							"letter"
-						],
+						"scopes": ["text.whileLang", "alist", "letter"],
 						"value": "x"
 					},
 					{
-						"scopes": [
-							"text.whileLang",
-							"alist"
-						],
+						"scopes": ["text.whileLang", "alist"],
 						"value": " "
 					},
 					{
-						"scopes": [
-							"text.whileLang",
-							"alist",
-							"letter"
-						],
+						"scopes": ["text.whileLang", "alist", "letter"],
 						"value": "x"
 					}
 				]
@@ -119,9 +79,7 @@
 				"line": "c",
 				"tokens": [
 					{
-						"scopes": [
-							"text.whileLang"
-						],
+						"scopes": ["text.whileLang"],
 						"value": "c"
 					}
 				]
@@ -129,9 +87,7 @@
 		]
 	},
 	{
-		"grammars": [
-			"fixtures/whileLang.plist"
-		],
+		"grammars": ["fixtures/whileLang.plist"],
 		"grammarPath": "fixtures/whileLang.plist",
 		"desc": "While condition can match anywhere in line",
 		"lines": [
@@ -139,25 +95,15 @@
 				"line": "A x",
 				"tokens": [
 					{
-						"scopes": [
-							"text.whileLang",
-							"alist"
-						],
+						"scopes": ["text.whileLang", "alist"],
 						"value": "A"
 					},
 					{
-						"scopes": [
-							"text.whileLang",
-							"alist"
-						],
+						"scopes": ["text.whileLang", "alist"],
 						"value": " "
 					},
 					{
-						"scopes": [
-							"text.whileLang",
-							"alist",
-							"letter"
-						],
+						"scopes": ["text.whileLang", "alist", "letter"],
 						"value": "x"
 					}
 				]
@@ -166,25 +112,15 @@
 				"line": "xax",
 				"tokens": [
 					{
-						"scopes": [
-							"text.whileLang",
-							"alist"
-						],
+						"scopes": ["text.whileLang", "alist"],
 						"value": "x"
 					},
 					{
-						"scopes": [
-							"text.whileLang",
-							"alist"
-						],
+						"scopes": ["text.whileLang", "alist"],
 						"value": "a"
 					},
 					{
-						"scopes": [
-							"text.whileLang",
-							"alist",
-							"letter"
-						],
+						"scopes": ["text.whileLang", "alist", "letter"],
 						"value": "x"
 					}
 				]
@@ -192,9 +128,7 @@
 		]
 	},
 	{
-		"grammars": [
-			"fixtures/whileLang.plist"
-		],
+		"grammars": ["fixtures/whileLang.plist"],
 		"grammarPath": "fixtures/whileLang.plist",
 		"desc": "Begin of while should consume entire rest of line.",
 		"lines": [
@@ -202,48 +136,27 @@
 				"line": "A x B 1",
 				"tokens": [
 					{
-						"scopes": [
-							"text.whileLang",
-							"alist"
-						],
+						"scopes": ["text.whileLang", "alist"],
 						"value": "A"
 					},
 					{
-						"scopes": [
-							"text.whileLang",
-							"alist"
-						],
+						"scopes": ["text.whileLang", "alist"],
 						"value": " "
 					},
 					{
-						"scopes": [
-							"text.whileLang",
-							"alist",
-							"letter"
-						],
+						"scopes": ["text.whileLang", "alist", "letter"],
 						"value": "x"
 					},
 					{
-						"scopes": [
-							"text.whileLang",
-							"alist"
-						],
+						"scopes": ["text.whileLang", "alist"],
 						"value": " "
 					},
 					{
-						"scopes": [
-							"text.whileLang",
-							"alist",
-							"blist"
-						],
+						"scopes": ["text.whileLang", "alist", "blist"],
 						"value": "B"
 					},
 					{
-						"scopes": [
-							"text.whileLang",
-							"alist",
-							"blist"
-						],
+						"scopes": ["text.whileLang", "alist", "blist"],
 						"value": " "
 					},
 					{
@@ -260,9 +173,7 @@
 		]
 	},
 	{
-		"grammars": [
-			"fixtures/whileLang.plist"
-		],
+		"grammars": ["fixtures/whileLang.plist"],
 		"grammarPath": "fixtures/whileLang.plist",
 		"desc": "Nested whiles should match using only inner most while on a mached line",
 		"lines": [
@@ -270,18 +181,11 @@
 				"line": "AB",
 				"tokens": [
 					{
-						"scopes": [
-							"text.whileLang",
-							"alist"
-						],
+						"scopes": ["text.whileLang", "alist"],
 						"value": "A"
 					},
 					{
-						"scopes": [
-							"text.whileLang",
-							"alist",
-							"blist"
-						],
+						"scopes": ["text.whileLang", "alist", "blist"],
 						"value": "B"
 					}
 				]
@@ -290,10 +194,7 @@
 				"line": "abx1",
 				"tokens": [
 					{
-						"scopes": [
-							"text.whileLang",
-							"alist"
-						],
+						"scopes": ["text.whileLang", "alist"],
 						"value": "a"
 					},
 					{
@@ -306,11 +207,7 @@
 						"value": "b"
 					},
 					{
-						"scopes": [
-							"text.whileLang",
-							"alist",
-							"blist"
-						],
+						"scopes": ["text.whileLang", "alist", "blist"],
 						"value": "x"
 					},
 					{
@@ -327,9 +224,7 @@
 		]
 	},
 	{
-		"grammars": [
-			"fixtures/whileLang.plist"
-		],
+		"grammars": ["fixtures/whileLang.plist"],
 		"grammarPath": "fixtures/whileLang.plist",
 		"desc": "Nested whiles should check line for outer most while to inner most while",
 		"lines": [
@@ -337,18 +232,11 @@
 				"line": "AB",
 				"tokens": [
 					{
-						"scopes": [
-							"text.whileLang",
-							"alist"
-						],
+						"scopes": ["text.whileLang", "alist"],
 						"value": "A"
 					},
 					{
-						"scopes": [
-							"text.whileLang",
-							"alist",
-							"blist"
-						],
+						"scopes": ["text.whileLang", "alist", "blist"],
 						"value": "B"
 					}
 				]
@@ -357,9 +245,7 @@
 				"line": "b1",
 				"tokens": [
 					{
-						"scopes": [
-							"text.whileLang"
-						],
+						"scopes": ["text.whileLang"],
 						"value": "b1"
 					}
 				]
@@ -367,9 +253,7 @@
 		]
 	},
 	{
-		"grammars": [
-			"fixtures/whileLang.plist"
-		],
+		"grammars": ["fixtures/whileLang.plist"],
 		"grammarPath": "fixtures/whileLang.plist",
 		"desc": "Nested whiles should move line ahead before checking other conditions",
 		"lines": [
@@ -377,18 +261,11 @@
 				"line": "AB",
 				"tokens": [
 					{
-						"scopes": [
-							"text.whileLang",
-							"alist"
-						],
+						"scopes": ["text.whileLang", "alist"],
 						"value": "A"
 					},
 					{
-						"scopes": [
-							"text.whileLang",
-							"alist",
-							"blist"
-						],
+						"scopes": ["text.whileLang", "alist", "blist"],
 						"value": "B"
 					}
 				]
@@ -397,25 +274,15 @@
 				"line": "bax",
 				"tokens": [
 					{
-						"scopes": [
-							"text.whileLang",
-							"alist"
-						],
+						"scopes": ["text.whileLang", "alist"],
 						"value": "b"
 					},
 					{
-						"scopes": [
-							"text.whileLang",
-							"alist"
-						],
+						"scopes": ["text.whileLang", "alist"],
 						"value": "a"
 					},
 					{
-						"scopes": [
-							"text.whileLang",
-							"alist",
-							"letter"
-						],
+						"scopes": ["text.whileLang", "alist", "letter"],
 						"value": "x"
 					}
 				]
@@ -423,9 +290,7 @@
 		]
 	},
 	{
-		"grammars": [
-			"fixtures/whileLang.plist"
-		],
+		"grammars": ["fixtures/whileLang.plist"],
 		"grammarPath": "fixtures/whileLang.plist",
 		"desc": "Nested whiles should check line for outer most while to inner most while",
 		"lines": [
@@ -433,18 +298,11 @@
 				"line": "AB",
 				"tokens": [
 					{
-						"scopes": [
-							"text.whileLang",
-							"alist"
-						],
+						"scopes": ["text.whileLang", "alist"],
 						"value": "A"
 					},
 					{
-						"scopes": [
-							"text.whileLang",
-							"alist",
-							"blist"
-						],
+						"scopes": ["text.whileLang", "alist", "blist"],
 						"value": "B"
 					}
 				]
@@ -453,9 +311,7 @@
 				"line": "b1",
 				"tokens": [
 					{
-						"scopes": [
-							"text.whileLang"
-						],
+						"scopes": ["text.whileLang"],
 						"value": "b1"
 					}
 				]
@@ -463,9 +319,7 @@
 		]
 	},
 	{
-		"grammars": [
-			"fixtures/whileLang.plist"
-		],
+		"grammars": ["fixtures/whileLang.plist"],
 		"grammarPath": "fixtures/whileLang.plist",
 		"desc": "Should Correctly handle anchor in while rule",
 		"lines": [
@@ -473,18 +327,11 @@
 				"line": "BB",
 				"tokens": [
 					{
-						"scopes": [
-							"text.whileLang",
-							"blist"
-						],
+						"scopes": ["text.whileLang", "blist"],
 						"value": "B"
 					},
 					{
-						"scopes": [
-							"text.whileLang",
-							"blist",
-							"blist"
-						],
+						"scopes": ["text.whileLang", "blist", "blist"],
 						"value": "B"
 					}
 				]
@@ -493,18 +340,11 @@
 				"line": "b b",
 				"tokens": [
 					{
-						"scopes": [
-							"text.whileLang",
-							"blist",
-							"bstart"
-						],
+						"scopes": ["text.whileLang", "blist", "bstart"],
 						"value": "b"
 					},
 					{
-						"scopes": [
-							"text.whileLang",
-							"blist"
-						],
+						"scopes": ["text.whileLang", "blist"],
 						"value": " b"
 					}
 				]

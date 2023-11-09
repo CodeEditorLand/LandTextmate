@@ -51,14 +51,12 @@
 				}
 			]
 		},
-		"spaces":
-		{
+		"spaces": {
 			"name": "spaces",
 			"begin": "^(?=\\s)",
 			"end": "(?=\\S)"
 		},
-		"not_a_problem":
-		{
+		"not_a_problem": {
 			"name": "not_a_problem",
 			"begin": "(?=not)",
 			"end": "\\z",
