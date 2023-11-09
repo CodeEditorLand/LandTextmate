@@ -1,6 +1,9 @@
 {
 	"comment": "SCSS Version 2 Grammar by Mario \"Kuroir\" Ricalde (http://kuroir.com)",
-	"fileTypes": ["scss", "css.scss"],
+	"fileTypes": [
+		"scss",
+		"css.scss"
+	],
 	"foldingStartMarker": "\\{\\s*$",
 	"foldingStopMarker": "^\\s*\\}",
 	"keyEquivalent": "^~S",

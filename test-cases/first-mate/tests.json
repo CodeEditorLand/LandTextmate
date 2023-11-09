@@ -7,15 +7,23 @@
 				"tokens": [
 					{
 						"value": "hello",
-						"scopes": ["source.hello", "prefix.hello"]
+						"scopes": [
+							"source.hello",
+							"prefix.hello"
+						]
 					},
 					{
 						"value": " ",
-						"scopes": ["source.hello"]
+						"scopes": [
+							"source.hello"
+						]
 					},
 					{
 						"value": "world",
-						"scopes": ["source.hello", "suffix.hello"]
+						"scopes": [
+							"source.hello",
+							"suffix.hello"
+						]
 					},
 					{
 						"value": "!",
@@ -51,7 +59,10 @@
 				"tokens": [
 					{
 						"value": "return",
-						"scopes": ["source.coffee", "keyword.control.coffee"]
+						"scopes": [
+							"source.coffee",
+							"keyword.control.coffee"
+						]
 					}
 				]
 			}
@@ -124,7 +135,10 @@
 				"tokens": [
 					{
 						"value": "abc def",
-						"scopes": ["text.plain", "meta.paragraph.text"]
+						"scopes": [
+							"text.plain",
+							"meta.paragraph.text"
+						]
 					}
 				]
 			}
@@ -151,15 +165,22 @@
 				"tokens": [
 					{
 						"value": " ",
-						"scopes": ["source.coffee"]
+						"scopes": [
+							"source.coffee"
+						]
 					},
 					{
 						"value": "return",
-						"scopes": ["source.coffee", "keyword.control.coffee"]
+						"scopes": [
+							"source.coffee",
+							"keyword.control.coffee"
+						]
 					},
 					{
 						"value": " ",
-						"scopes": ["source.coffee"]
+						"scopes": [
+							"source.coffee"
+						]
 					},
 					{
 						"value": "new",
@@ -186,7 +207,9 @@
 					},
 					{
 						"value": " ",
-						"scopes": ["source.coffee"]
+						"scopes": [
+							"source.coffee"
+						]
 					}
 				]
 			}
@@ -221,7 +244,10 @@
 					},
 					{
 						"value": " ",
-						"scopes": ["source.coffee", "meta.class.coffee"]
+						"scopes": [
+							"source.coffee",
+							"meta.class.coffee"
+						]
 					},
 					{
 						"value": "Quicksort",
@@ -256,7 +282,9 @@
 				"tokens": [
 					{
 						"value": "  ",
-						"scopes": ["source.coffee"]
+						"scopes": [
+							"source.coffee"
+						]
 					},
 					{
 						"value": "destro",
@@ -277,11 +305,16 @@
 					},
 					{
 						"value": ":",
-						"scopes": ["source.coffee", "keyword.operator.coffee"]
+						"scopes": [
+							"source.coffee",
+							"keyword.operator.coffee"
+						]
 					},
 					{
 						"value": " ",
-						"scopes": ["source.coffee"]
+						"scopes": [
+							"source.coffee"
+						]
 					},
 					{
 						"value": "->",
@@ -315,7 +348,10 @@
 				"tokens": [
 					{
 						"value": "7777777",
-						"scopes": ["source.coffee", "constant.numeric.coffee"]
+						"scopes": [
+							"source.coffee",
+							"constant.numeric.coffee"
+						]
 					}
 				]
 			}
@@ -532,7 +568,9 @@
 				"tokens": [
 					{
 						"value": "",
-						"scopes": ["source.coffee"]
+						"scopes": [
+							"source.coffee"
+						]
 					}
 				]
 			}
@@ -559,7 +597,10 @@
 				"tokens": [
 					{
 						"value": "hoo",
-						"scopes": ["text.plain", "meta.paragraph.text"]
+						"scopes": [
+							"text.plain",
+							"meta.paragraph.text"
+						]
 					}
 				]
 			}
@@ -586,7 +627,10 @@
 				"tokens": [
 					{
 						"value": "ok, cool",
-						"scopes": ["text.plain", "meta.paragraph.text"]
+						"scopes": [
+							"text.plain",
+							"meta.paragraph.text"
+						]
 					}
 				]
 			}
@@ -613,11 +657,16 @@
 				"tokens": [
 					{
 						"value": " ",
-						"scopes": ["text.plain"]
+						"scopes": [
+							"text.plain"
+						]
 					},
 					{
 						"value": "ok, cool",
-						"scopes": ["text.plain", "meta.paragraph.text"]
+						"scopes": [
+							"text.plain",
+							"meta.paragraph.text"
+						]
 					}
 				]
 			}
@@ -644,7 +693,10 @@
 				"tokens": [
 					{
 						"value": "#if",
-						"scopes": ["source.test", "pre"]
+						"scopes": [
+							"source.test",
+							"pre"
+						]
 					}
 				]
 			},
@@ -653,7 +705,11 @@
 				"tokens": [
 					{
 						"value": "test",
-						"scopes": ["source.test", "pre", "nested"]
+						"scopes": [
+							"source.test",
+							"pre",
+							"nested"
+						]
 					}
 				]
 			},
@@ -662,11 +718,17 @@
 				"tokens": [
 					{
 						"value": "#endif",
-						"scopes": ["source.test", "pre"]
+						"scopes": [
+							"source.test",
+							"pre"
+						]
 					},
 					{
 						"value": "",
-						"scopes": ["source.test", "all"]
+						"scopes": [
+							"source.test",
+							"all"
+						]
 					}
 				]
 			}
@@ -694,7 +756,11 @@
 				"tokens": [
 					{
 						"value": "test",
-						"scopes": ["source.test", "all", "middle"]
+						"scopes": [
+							"source.test",
+							"all",
+							"middle"
+						]
 					}
 				]
 			}
@@ -722,11 +788,18 @@
 				"tokens": [
 					{
 						"value": " ",
-						"scopes": ["source.test", "all"]
+						"scopes": [
+							"source.test",
+							"all"
+						]
 					},
 					{
 						"value": "test",
-						"scopes": ["source.test", "all", "middle"]
+						"scopes": [
+							"source.test",
+							"all",
+							"middle"
+						]
 					}
 				]
 			}
@@ -1030,7 +1103,9 @@
 				"tokens": [
 					{
 						"value": "",
-						"scopes": ["source.apply-end-pattern-last"]
+						"scopes": [
+							"source.apply-end-pattern-last"
+						]
 					}
 				]
 			},
@@ -1240,7 +1315,9 @@
 					},
 					{
 						"value": " ",
-						"scopes": ["source.ruby"]
+						"scopes": [
+							"source.ruby"
+						]
 					},
 					{
 						"value": "#",
@@ -1305,7 +1382,10 @@
 					},
 					{
 						"value": " ",
-						"scopes": ["text.html.ruby", "meta.tag.block.any.html"]
+						"scopes": [
+							"text.html.ruby",
+							"meta.tag.block.any.html"
+						]
 					},
 					{
 						"value": "class",
@@ -1317,7 +1397,10 @@
 					},
 					{
 						"value": "=",
-						"scopes": ["text.html.ruby", "meta.tag.block.any.html"]
+						"scopes": [
+							"text.html.ruby",
+							"meta.tag.block.any.html"
+						]
 					},
 					{
 						"value": "'",
@@ -1505,7 +1588,10 @@
 					},
 					{
 						"value": " ",
-						"scopes": ["text.html.ruby", "meta.tag.block.any.html"]
+						"scopes": [
+							"text.html.ruby",
+							"meta.tag.block.any.html"
+						]
 					},
 					{
 						"value": "class",
@@ -1517,7 +1603,10 @@
 					},
 					{
 						"value": "=",
-						"scopes": ["text.html.ruby", "meta.tag.block.any.html"]
+						"scopes": [
+							"text.html.ruby",
+							"meta.tag.block.any.html"
+						]
 					},
 					{
 						"value": "'",
@@ -1631,7 +1720,10 @@
 					},
 					{
 						"value": " ",
-						"scopes": ["text.html.ruby", "meta.tag.block.any.html"]
+						"scopes": [
+							"text.html.ruby",
+							"meta.tag.block.any.html"
+						]
 					},
 					{
 						"value": "class",
@@ -1643,7 +1735,10 @@
 					},
 					{
 						"value": "=",
-						"scopes": ["text.html.ruby", "meta.tag.block.any.html"]
+						"scopes": [
+							"text.html.ruby",
+							"meta.tag.block.any.html"
+						]
 					},
 					{
 						"value": "'",
@@ -1836,7 +1931,9 @@
 				"tokens": [
 					{
 						"value": "<div class='name'>",
-						"scopes": ["text.html.ruby"]
+						"scopes": [
+							"text.html.ruby"
+						]
 					},
 					{
 						"value": "<%=",
@@ -1925,7 +2022,9 @@
 					},
 					{
 						"value": "</div>",
-						"scopes": ["text.html.ruby"]
+						"scopes": [
+							"text.html.ruby"
+						]
 					}
 				]
 			}
@@ -1969,7 +2068,10 @@
 					},
 					{
 						"value": " ",
-						"scopes": ["text.html.ruby", "meta.tag.block.any.html"]
+						"scopes": [
+							"text.html.ruby",
+							"meta.tag.block.any.html"
+						]
 					},
 					{
 						"value": "class",
@@ -1981,7 +2083,10 @@
 					},
 					{
 						"value": "=",
-						"scopes": ["text.html.ruby", "meta.tag.block.any.html"]
+						"scopes": [
+							"text.html.ruby",
+							"meta.tag.block.any.html"
+						]
 					},
 					{
 						"value": "'",
@@ -2162,11 +2267,17 @@
 					},
 					{
 						"value": " a singleLineComment",
-						"scopes": ["source.imaginaryLanguage", "comment-body"]
+						"scopes": [
+							"source.imaginaryLanguage",
+							"comment-body"
+						]
 					},
 					{
 						"value": "",
-						"scopes": ["source.imaginaryLanguage", "comment-body"]
+						"scopes": [
+							"source.imaginaryLanguage",
+							"comment-body"
+						]
 					}
 				]
 			}
@@ -2202,7 +2313,10 @@
 					},
 					{
 						"value": "y",
-						"scopes": ["source.multilineLanguage", "outside-x"]
+						"scopes": [
+							"source.multilineLanguage",
+							"outside-x"
+						]
 					},
 					{
 						"value": "\\",
@@ -2219,7 +2333,10 @@
 				"tokens": [
 					{
 						"value": "z",
-						"scopes": ["source.multilineLanguage", "outside-x"]
+						"scopes": [
+							"source.multilineLanguage",
+							"outside-x"
+						]
 					},
 					{
 						"value": "X",
@@ -2263,11 +2380,17 @@
 					},
 					{
 						"value": " line comment",
-						"scopes": ["source.js", "comment.line.double-slash.js"]
+						"scopes": [
+							"source.js",
+							"comment.line.double-slash.js"
+						]
 					},
 					{
 						"value": "",
-						"scopes": ["source.js", "comment.line.double-slash.js"]
+						"scopes": [
+							"source.js",
+							"comment.line.double-slash.js"
+						]
 					}
 				]
 			},
@@ -2291,11 +2414,17 @@
 					},
 					{
 						"value": " second line comment with a single leading space",
-						"scopes": ["source.js", "comment.line.double-slash.js"]
+						"scopes": [
+							"source.js",
+							"comment.line.double-slash.js"
+						]
 					},
 					{
 						"value": "",
-						"scopes": ["source.js", "comment.line.double-slash.js"]
+						"scopes": [
+							"source.js",
+							"comment.line.double-slash.js"
+						]
 					}
 				]
 			}
@@ -2322,19 +2451,29 @@
 				"tokens": [
 					{
 						"value": "if",
-						"scopes": ["source.c", "keyword.control.c"]
+						"scopes": [
+							"source.c",
+							"keyword.control.c"
+						]
 					},
 					{
 						"value": "(",
-						"scopes": ["source.c"]
+						"scopes": [
+							"source.c"
+						]
 					},
 					{
 						"value": "1",
-						"scopes": ["source.c", "constant.numeric.c"]
+						"scopes": [
+							"source.c",
+							"constant.numeric.c"
+						]
 					},
 					{
 						"value": ")",
-						"scopes": ["source.c"]
+						"scopes": [
+							"source.c"
+						]
 					},
 					{
 						"value": "{",
@@ -2363,7 +2502,10 @@
 					},
 					{
 						"value": ")",
-						"scopes": ["source.c", "meta.block.c"]
+						"scopes": [
+							"source.c",
+							"meta.block.c"
+						]
 					},
 					{
 						"value": "}",
@@ -2400,19 +2542,29 @@
 				"tokens": [
 					{
 						"value": "if",
-						"scopes": ["source.c", "keyword.control.c"]
+						"scopes": [
+							"source.c",
+							"keyword.control.c"
+						]
 					},
 					{
 						"value": "(",
-						"scopes": ["source.c"]
+						"scopes": [
+							"source.c"
+						]
 					},
 					{
 						"value": "1",
-						"scopes": ["source.c", "constant.numeric.c"]
+						"scopes": [
+							"source.c",
+							"constant.numeric.c"
+						]
 					},
 					{
 						"value": ")",
-						"scopes": ["source.c"]
+						"scopes": [
+							"source.c"
+						]
 					},
 					{
 						"value": "{",
@@ -2432,7 +2584,10 @@
 					},
 					{
 						"value": "(",
-						"scopes": ["source.c", "meta.block.c"]
+						"scopes": [
+							"source.c",
+							"meta.block.c"
+						]
 					},
 					{
 						"value": "1",
@@ -2444,7 +2599,10 @@
 					},
 					{
 						"value": ")",
-						"scopes": ["source.c", "meta.block.c"]
+						"scopes": [
+							"source.c",
+							"meta.block.c"
+						]
 					},
 					{
 						"value": "{",
@@ -2476,7 +2634,11 @@
 					},
 					{
 						"value": ")",
-						"scopes": ["source.c", "meta.block.c", "meta.block.c"]
+						"scopes": [
+							"source.c",
+							"meta.block.c",
+							"meta.block.c"
+						]
 					},
 					{
 						"value": "}",
@@ -2519,16 +2681,20 @@
 		"lines": [
 			{
 				"line": "abc",
-				"tokens": [
-					{
-						"value": "a",
-						"scopes": ["source.infinite-loop", "start"]
-					},
-					{
-						"value": "bc",
-						"scopes": ["source.infinite-loop"]
-					}
-				]
+				"tokens": [{
+					"value": "a",
+					"scopes": [
+						"source.infinite-loop",
+						"start"
+					]
+
+				},
+				{
+					"value": "bc",
+					"scopes": [
+						"source.infinite-loop"
+					]
+				}]
 			}
 		],
 		"grammars": [
@@ -2571,7 +2737,10 @@
 					},
 					{
 						"value": " ",
-						"scopes": ["source.css.scss", "meta.at-rule.mixin.scss"]
+						"scopes": [
+							"source.css.scss",
+							"meta.at-rule.mixin.scss"
+						]
 					},
 					{
 						"value": "x",
@@ -2583,15 +2752,23 @@
 					},
 					{
 						"value": "(",
-						"scopes": ["source.css.scss", "meta.at-rule.mixin.scss"]
+						"scopes": [
+							"source.css.scss",
+							"meta.at-rule.mixin.scss"
+						]
 					},
 					{
 						"value": ")",
-						"scopes": ["source.css.scss", "meta.at-rule.mixin.scss"]
+						"scopes": [
+							"source.css.scss",
+							"meta.at-rule.mixin.scss"
+						]
 					},
 					{
 						"value": " ",
-						"scopes": ["source.css.scss"]
+						"scopes": [
+							"source.css.scss"
+						]
 					},
 					{
 						"value": "{",
@@ -2603,7 +2780,10 @@
 					},
 					{
 						"value": " ",
-						"scopes": ["source.css.scss", "meta.property-list.scss"]
+						"scopes": [
+							"source.css.scss",
+							"meta.property-list.scss"
+						]
 					},
 					{
 						"value": "-moz-selector",
@@ -2649,7 +2829,10 @@
 					},
 					{
 						"value": " ",
-						"scopes": ["source.css.scss", "meta.property-list.scss"]
+						"scopes": [
+							"source.css.scss",
+							"meta.property-list.scss"
+						]
 					},
 					{
 						"value": "}",
@@ -2863,7 +3046,11 @@
 				"tokens": [
 					{
 						"value": "ab",
-						"scopes": ["nested", "text", "a"]
+						"scopes": [
+							"nested",
+							"text",
+							"a"
+						]
 					}
 				]
 			}
@@ -3111,11 +3298,16 @@
 				"tokens": [
 					{
 						"value": "var",
-						"scopes": ["source.js", "storage.modifier.js"]
+						"scopes": [
+							"source.js",
+							"storage.modifier.js"
+						]
 					},
 					{
 						"value": " i",
-						"scopes": ["source.js"]
+						"scopes": [
+							"source.js"
+						]
 					},
 					{
 						"value": ";",
@@ -3126,7 +3318,9 @@
 					},
 					{
 						"value": " ",
-						"scopes": ["source.js"]
+						"scopes": [
+							"source.js"
+						]
 					},
 					{
 						"value": "//",
@@ -3138,7 +3332,10 @@
 					},
 					{
 						"value": " ",
-						"scopes": ["source.js", "comment.line.double-slash.js"]
+						"scopes": [
+							"source.js",
+							"comment.line.double-slash.js"
+						]
 					},
 					{
 						"value": "http://github.com",
@@ -3150,7 +3347,10 @@
 					},
 					{
 						"value": "",
-						"scopes": ["source.js", "comment.line.double-slash.js"]
+						"scopes": [
+							"source.js",
+							"comment.line.double-slash.js"
+						]
 					}
 				]
 			}
@@ -3175,12 +3375,13 @@
 		"lines": [
 			{
 				"line": "forever and ever",
-				"tokens": [
-					{
-						"value": "forever and ever",
-						"scopes": ["source.forever", "text"]
-					}
-				]
+				"tokens": [{
+					"value": "forever and ever",
+					"scopes": [
+						"source.forever",
+						"text"
+					]
+				}]
 			}
 		],
 		"grammars": [
@@ -3488,7 +3689,10 @@
 				"tokens": [
 					{
 						"value": "#",
-						"scopes": ["source.c++", "meta.preprocessor.c.include"]
+						"scopes": [
+							"source.c++",
+							"meta.preprocessor.c.include"
+						]
 					},
 					{
 						"value": "include",
@@ -3500,7 +3704,10 @@
 					},
 					{
 						"value": " ",
-						"scopes": ["source.c++", "meta.preprocessor.c.include"]
+						"scopes": [
+							"source.c++",
+							"meta.preprocessor.c.include"
+						]
 					},
 					{
 						"value": "\"",
@@ -3535,7 +3742,10 @@
 				"tokens": [
 					{
 						"value": "#",
-						"scopes": ["source.c++", "meta.preprocessor.c.include"]
+						"scopes": [
+							"source.c++",
+							"meta.preprocessor.c.include"
+						]
 					},
 					{
 						"value": "include",
@@ -3547,7 +3757,10 @@
 					},
 					{
 						"value": " ",
-						"scopes": ["source.c++", "meta.preprocessor.c.include"]
+						"scopes": [
+							"source.c++",
+							"meta.preprocessor.c.include"
+						]
 					},
 					{
 						"value": "\"",
@@ -3602,7 +3815,10 @@
 				"tokens": [
 					{
 						"value": "#",
-						"scopes": ["source.c++", "meta.preprocessor.c.include"]
+						"scopes": [
+							"source.c++",
+							"meta.preprocessor.c.include"
+						]
 					},
 					{
 						"value": "include",
@@ -3614,7 +3830,10 @@
 					},
 					{
 						"value": " ",
-						"scopes": ["source.c++", "meta.preprocessor.c.include"]
+						"scopes": [
+							"source.c++",
+							"meta.preprocessor.c.include"
+						]
 					},
 					{
 						"value": "\"",
@@ -3649,7 +3868,10 @@
 				"tokens": [
 					{
 						"value": "#",
-						"scopes": ["source.c++", "meta.preprocessor.c.include"]
+						"scopes": [
+							"source.c++",
+							"meta.preprocessor.c.include"
+						]
 					},
 					{
 						"value": "include",
@@ -3661,7 +3883,10 @@
 					},
 					{
 						"value": " ",
-						"scopes": ["source.c++", "meta.preprocessor.c.include"]
+						"scopes": [
+							"source.c++",
+							"meta.preprocessor.c.include"
+						]
 					},
 					{
 						"value": "\"",
@@ -3716,7 +3941,9 @@
 				"tokens": [
 					{
 						"value": "a ",
-						"scopes": ["source.ruby"]
+						"scopes": [
+							"source.ruby"
+						]
 					},
 					{
 						"value": "=",
@@ -3727,7 +3954,9 @@
 					},
 					{
 						"value": " ",
-						"scopes": ["source.ruby"]
+						"scopes": [
+							"source.ruby"
+						]
 					},
 					{
 						"value": "{",
@@ -3750,7 +3979,9 @@
 				"tokens": [
 					{
 						"value": "  ",
-						"scopes": ["source.ruby"]
+						"scopes": [
+							"source.ruby"
+						]
 					},
 					{
 						"value": "\"",
@@ -3762,7 +3993,10 @@
 					},
 					{
 						"value": "b",
-						"scopes": ["source.ruby", "string.quoted.double.ruby"]
+						"scopes": [
+							"source.ruby",
+							"string.quoted.double.ruby"
+						]
 					},
 					{
 						"value": "\"",
@@ -3774,7 +4008,9 @@
 					},
 					{
 						"value": " ",
-						"scopes": ["source.ruby"]
+						"scopes": [
+							"source.ruby"
+						]
 					},
 					{
 						"value": "=>",
@@ -3785,7 +4021,9 @@
 					},
 					{
 						"value": " ",
-						"scopes": ["source.ruby"]
+						"scopes": [
+							"source.ruby"
+						]
 					},
 					{
 						"value": "\"",
@@ -3797,7 +4035,10 @@
 					},
 					{
 						"value": "c",
-						"scopes": ["source.ruby", "string.quoted.double.ruby"]
+						"scopes": [
+							"source.ruby",
+							"string.quoted.double.ruby"
+						]
 					},
 					{
 						"value": "\"",
@@ -3851,7 +4092,10 @@
 				"tokens": [
 					{
 						"value": "void",
-						"scopes": ["source.objc++", "storage.type.c"]
+						"scopes": [
+							"source.objc++",
+							"storage.type.c"
+						]
 					},
 					{
 						"value": " ",
@@ -3889,7 +4133,10 @@
 					},
 					{
 						"value": " ",
-						"scopes": ["source.objc++", "meta.function.c"]
+						"scopes": [
+							"source.objc++",
+							"meta.function.c"
+						]
 					},
 					{
 						"value": "{",
@@ -4021,11 +4268,16 @@
 				"tokens": [
 					{
 						"value": "public",
-						"scopes": ["source.java", "storage.modifier.java"]
+						"scopes": [
+							"source.java",
+							"storage.modifier.java"
+						]
 					},
 					{
 						"value": " ",
-						"scopes": ["source.java"]
+						"scopes": [
+							"source.java"
+						]
 					},
 					{
 						"value": "void",
@@ -4036,7 +4288,9 @@
 					},
 					{
 						"value": " ",
-						"scopes": ["source.java"]
+						"scopes": [
+							"source.java"
+						]
 					},
 					{
 						"value": "test",
@@ -4064,7 +4318,9 @@
 					},
 					{
 						"value": " ",
-						"scopes": ["source.java"]
+						"scopes": [
+							"source.java"
+						]
 					},
 					{
 						"value": "{",
@@ -4240,7 +4496,10 @@
 					},
 					{
 						"value": ";",
-						"scopes": ["source.java", "punctuation.terminator.java"]
+						"scopes": [
+							"source.java",
+							"punctuation.terminator.java"
+						]
 					}
 				]
 			}
@@ -4361,7 +4620,9 @@
 				"tokens": [
 					{
 						"value": "<%>",
-						"scopes": ["text.html.erb"]
+						"scopes": [
+							"text.html.erb"
+						]
 					}
 				]
 			}
@@ -4398,7 +4659,10 @@
 					},
 					{
 						"value": "𝞗",
-						"scopes": ["source.js", "string.quoted.single.js"]
+						"scopes": [
+							"source.js",
+							"string.quoted.single.js"
+						]
 					},
 					{
 						"value": "'",
@@ -4532,11 +4796,15 @@
 					},
 					{
 						"value": " ",
-						"scopes": ["source.python"]
+						"scopes": [
+							"source.python"
+						]
 					},
 					{
 						"value": "a",
-						"scopes": ["source.python"]
+						"scopes": [
+							"source.python"
+						]
 					}
 				]
 			},
@@ -4552,11 +4820,15 @@
 					},
 					{
 						"value": " ",
-						"scopes": ["source.python"]
+						"scopes": [
+							"source.python"
+						]
 					},
 					{
 						"value": "b",
-						"scopes": ["source.python"]
+						"scopes": [
+							"source.python"
+						]
 					}
 				]
 			}
@@ -4612,7 +4884,9 @@
 				"tokens": [
 					{
 						"value": "  ",
-						"scopes": ["text.html.basic"]
+						"scopes": [
+							"text.html.basic"
+						]
 					},
 					{
 						"value": "<",
@@ -4847,7 +5121,9 @@
 				"tokens": [
 					{
 						"value": "  ",
-						"scopes": ["text.html.basic"]
+						"scopes": [
+							"text.html.basic"
+						]
 					},
 					{
 						"value": "</",
@@ -4990,212 +5266,215 @@
 		"lines": [
 			{
 				"line": "exception SimpleErr {",
-				"tokens": [
-					{
-						"value": "exception",
-						"scopes": [
-							"source.thrift",
-							"meta.exception.thrift",
-							"keyword.other.exception.thrift"
-						]
-					},
-					{
-						"value": " ",
-						"scopes": ["source.thrift", "meta.exception.thrift"]
-					},
-					{
-						"value": "SimpleErr",
-						"scopes": [
-							"source.thrift",
-							"meta.exception.thrift",
-							"entity.name.type.exception.thrift"
-						]
-					},
-					{
-						"value": " ",
-						"scopes": ["source.thrift", "meta.exception.thrift"]
-					},
-					{
-						"value": "{",
-						"scopes": [
-							"source.thrift",
-							"meta.exception.thrift",
-							"punctuation.section.exception.begin.thrift"
-						]
-					}
-				]
+				"tokens": [{
+					"value": "exception",
+					"scopes": [
+						"source.thrift",
+						"meta.exception.thrift",
+						"keyword.other.exception.thrift"
+					]
+				},
+				{
+					"value": " ",
+					"scopes": [
+						"source.thrift",
+						"meta.exception.thrift"
+					]
+				},
+				{
+					"value": "SimpleErr",
+					"scopes": [
+						"source.thrift",
+						"meta.exception.thrift",
+						"entity.name.type.exception.thrift"
+					]
+				},
+				{
+					"value": " ",
+					"scopes": [
+						"source.thrift",
+						"meta.exception.thrift"
+					]
+				},
+				{
+					"value": "{",
+					"scopes": [
+						"source.thrift",
+						"meta.exception.thrift",
+						"punctuation.section.exception.begin.thrift"
+					]
+				}]
 			},
 			{
 				"line": "  1: string message",
-				"tokens": [
-					{
-						"value": "  ",
-						"scopes": ["source.thrift", "meta.exception.thrift"]
-					},
-					{
-						"value": "1:",
-						"scopes": [
-							"source.thrift",
-							"meta.exception.thrift",
-							"meta.field.thrift",
-							"entity.other.field-id.thrift"
-						]
-					},
-					{
-						"value": " ",
-						"scopes": [
-							"source.thrift",
-							"meta.exception.thrift",
-							"meta.field.thrift"
-						]
-					},
-					{
-						"value": "string",
-						"scopes": [
-							"source.thrift",
-							"meta.exception.thrift",
-							"meta.field.thrift",
-							"storage.type.field.thrift"
-						]
-					},
-					{
-						"value": " ",
-						"scopes": [
-							"source.thrift",
-							"meta.exception.thrift",
-							"meta.field.thrift"
-						]
-					},
-					{
-						"value": "message",
-						"scopes": [
-							"source.thrift",
-							"meta.exception.thrift",
-							"meta.field.thrift",
-							"variable.other.field-name.thrift"
-						]
-					}
-				]
+				"tokens": [{
+					"value": "  ",
+					"scopes": [
+						"source.thrift",
+						"meta.exception.thrift"
+					]
+				},
+				{
+					"value": "1:",
+					"scopes": [
+						"source.thrift",
+						"meta.exception.thrift",
+						"meta.field.thrift",
+						"entity.other.field-id.thrift"
+					]
+				},
+				{
+					"value": " ",
+					"scopes": [
+						"source.thrift",
+						"meta.exception.thrift",
+						"meta.field.thrift"
+					]
+				},
+				{
+					"value": "string",
+					"scopes": [
+						"source.thrift",
+						"meta.exception.thrift",
+						"meta.field.thrift",
+						"storage.type.field.thrift"
+					]
+				},
+				{
+					"value": " ",
+					"scopes": [
+						"source.thrift",
+						"meta.exception.thrift",
+						"meta.field.thrift"
+					]
+				},
+				{
+					"value": "message",
+					"scopes": [
+						"source.thrift",
+						"meta.exception.thrift",
+						"meta.field.thrift",
+						"variable.other.field-name.thrift"
+					]
+				}]
 			},
 			{
 				"line": "",
-				"tokens": [
-					{
-						"value": "",
-						"scopes": ["source.thrift", "meta.exception.thrift"]
-					}
-				]
+				"tokens": [{
+					"value": "",
+					"scopes": [
+						"source.thrift",
+						"meta.exception.thrift"
+					]
+				}]
 			},
 			{
 				"line": "service SimpleService {",
-				"tokens": [
-					{
-						"value": "service",
-						"scopes": [
-							"source.thrift",
-							"meta.exception.thrift",
-							"meta.field.thrift",
-							"storage.type.field.thrift"
-						]
-					},
-					{
-						"value": " ",
-						"scopes": [
-							"source.thrift",
-							"meta.exception.thrift",
-							"meta.field.thrift"
-						]
-					},
-					{
-						"value": "SimpleService",
-						"scopes": [
-							"source.thrift",
-							"meta.exception.thrift",
-							"meta.field.thrift",
-							"variable.other.field-name.thrift"
-						]
-					},
-					{
-						"value": " ",
-						"scopes": [
-							"source.thrift",
-							"meta.exception.thrift",
-							"meta.field.thrift"
-						]
-					},
-					{
-						"value": "{",
-						"scopes": [
-							"source.thrift",
-							"meta.exception.thrift",
-							"meta.field.thrift"
-						]
-					}
-				]
+				"tokens": [{
+					"value": "service",
+					"scopes": [
+						"source.thrift",
+						"meta.exception.thrift",
+						"meta.field.thrift",
+						"storage.type.field.thrift"
+					]
+				},
+				{
+					"value": " ",
+					"scopes": [
+						"source.thrift",
+						"meta.exception.thrift",
+						"meta.field.thrift"
+					]
+				},
+				{
+					"value": "SimpleService",
+					"scopes": [
+						"source.thrift",
+						"meta.exception.thrift",
+						"meta.field.thrift",
+						"variable.other.field-name.thrift"
+					]
+				},
+				{
+					"value": " ",
+					"scopes": [
+						"source.thrift",
+						"meta.exception.thrift",
+						"meta.field.thrift"
+					]
+				},
+				{
+					"value": "{",
+					"scopes": [
+						"source.thrift",
+						"meta.exception.thrift",
+						"meta.field.thrift"
+					]
+				}]
 			},
 			{
 				"line": "  void Simple() throws (1: SimpleErr simpleErr)",
-				"tokens": [
-					{
-						"value": "  ",
-						"scopes": ["source.thrift", "meta.exception.thrift"]
-					},
-					{
-						"value": "void",
-						"scopes": [
-							"source.thrift",
-							"meta.exception.thrift",
-							"meta.field.thrift",
-							"storage.type.field.thrift"
-						]
-					},
-					{
-						"value": " ",
-						"scopes": [
-							"source.thrift",
-							"meta.exception.thrift",
-							"meta.field.thrift"
-						]
-					},
-					{
-						"value": "Simple",
-						"scopes": [
-							"source.thrift",
-							"meta.exception.thrift",
-							"meta.field.thrift",
-							"variable.other.field-name.thrift"
-						]
-					},
-					{
-						"value": "(",
-						"scopes": [
-							"source.thrift",
-							"meta.exception.thrift",
-							"meta.field.thrift"
-						]
-					},
-					{
-						"value": ") throws (1: SimpleErr simpleErr)",
-						"scopes": [
-							"source.thrift",
-							"meta.exception.thrift",
-							"meta.field.thrift"
-						]
-					}
-				]
+				"tokens": [{
+					"value": "  ",
+					"scopes": [
+						"source.thrift",
+						"meta.exception.thrift"
+					]
+				},
+				{
+					"value": "void",
+					"scopes": [
+						"source.thrift",
+						"meta.exception.thrift",
+						"meta.field.thrift",
+						"storage.type.field.thrift"
+					]
+				},
+				{
+					"value": " ",
+					"scopes": [
+						"source.thrift",
+						"meta.exception.thrift",
+						"meta.field.thrift"
+					]
+				},
+				{
+					"value": "Simple",
+					"scopes": [
+						"source.thrift",
+						"meta.exception.thrift",
+						"meta.field.thrift",
+						"variable.other.field-name.thrift"
+					]
+				},
+				{
+					"value": "(",
+					"scopes": [
+						"source.thrift",
+						"meta.exception.thrift",
+						"meta.field.thrift"
+					]
+				},
+				{
+					"value": ") throws (1: SimpleErr simpleErr)",
+					"scopes": [
+						"source.thrift",
+						"meta.exception.thrift",
+						"meta.field.thrift"
+					]
+				}]
 			},
 			{
 				"line": "}",
-				"tokens": [
-					{
-						"value": "}",
-						"scopes": [
-							"source.thrift",
-							"meta.exception.thrift",
-							"meta.field.thrift"
-						]
-					}
-				]
+				"tokens": [{
+					"value": "}",
+					"scopes": [
+						"source.thrift",
+						"meta.exception.thrift",
+						"meta.field.thrift"
+					]
+				}]
 			}
 		],
 		"grammars": [
@@ -5218,12 +5497,12 @@
 		"lines": [
 			{
 				"line": "test",
-				"tokens": [
-					{
-						"value": "test",
-						"scopes": ["source.loops"]
-					}
-				]
+				"tokens": [{
+					"value": "test",
+					"scopes": [
+						"source.loops"
+					]
+				}]
 			}
 		],
 		"grammars": [

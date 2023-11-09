@@ -4,7 +4,10 @@
 	"settings": [
 		{
 			"name": "Function declarations",
-			"scope": ["entity.name.function", "support.function"],
+			"scope": [
+				"entity.name.function",
+				"support.function"
+			],
 			"settings": {
 				"foreground": "#DCDCAA"
 			}

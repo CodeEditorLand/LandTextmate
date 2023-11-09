@@ -1,7 +1,10 @@
 {
 	"name": "ASP.NET Razor",
 	"scopeName": "text.html.cshtml",
-	"fileTypes": ["cshtml", "gohtml"],
+	"fileTypes": [
+		"cshtml",
+		"gohtml"
+	],
 	"patterns": [
 		{
 			"name": "section.embedded.source.cshtml",

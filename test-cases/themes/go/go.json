@@ -2,7 +2,9 @@
 	"scopeName": "source.go",
 	"name": "Go",
 	"comment": "Go language",
-	"fileTypes": ["go"],
+	"fileTypes": [
+		"go"
+	],
 	"foldingStartMarker": "({|\\()\\s*$",
 	"foldingStopMarker": "(}|\\))\\s*$",
 	"patterns": [

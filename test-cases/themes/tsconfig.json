@@ -1,3 +1,5 @@
 {
-	"exclude": ["tests"]
+	"exclude": [
+		"tests"
+	]
 }

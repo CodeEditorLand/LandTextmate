@@ -1,5 +1,9 @@
 {
-	"fileTypes": ["mm", "M", "h"],
+	"fileTypes": [
+		"mm",
+		"M",
+		"h"
+	],
 	"keyEquivalent": "^~O",
 	"name": "Objective-C++",
 	"patterns": [

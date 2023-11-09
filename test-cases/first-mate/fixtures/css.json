@@ -1,5 +1,8 @@
 {
-	"fileTypes": ["css", "css.erb"],
+	"fileTypes": [
+		"css",
+		"css.erb"
+	],
 	"keyEquivalent": "^~C",
 	"name": "CSS",
 	"patterns": [
