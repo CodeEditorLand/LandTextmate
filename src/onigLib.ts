@@ -41,11 +41,7 @@ export const enum FindOption {
 }
 
 export interface OnigScanner {
-	findNextMatchSync(
-		string: string | OnigString,
-		startPosition: number,
-		options: OrMask<FindOption>
-	): IOnigMatch | null;
+	findNextMatchSync(string: string | OnigString, startPosition: number, options: OrMask<FindOption>): IOnigMatch | null;
 	dispose?(): void;
 }
 
@@ -55,7 +51,7 @@ export interface OnigString {
 }
 
 export function disposeOnigString(str: OnigString) {
-	if (typeof str.dispose === "function") {
+	if (typeof str.dispose === 'function') {
 		str.dispose();
 	}
 }

@@ -1,6 +1,10 @@
 {
 	"comment": "JavaScript Syntax: version 2.0",
-	"fileTypes": ["js", "htc", "jsx"],
+	"fileTypes": [
+		"js",
+		"htc",
+		"jsx"
+	],
 	"firstLineMatch": "^#!.*\\bnode",
 	"keyEquivalent": "^~J",
 	"name": "JavaScript",

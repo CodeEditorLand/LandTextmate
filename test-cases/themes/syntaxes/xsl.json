@@ -1,7 +1,10 @@
 {
 	"scopeName": "text.xml.xsl",
 	"name": "XSL",
-	"fileTypes": ["xsl", "xslt"],
+	"fileTypes": [
+		"xsl",
+		"xslt"
+	],
 	"patterns": [
 		{
 			"begin": "(<)(xsl)((:))(template)",

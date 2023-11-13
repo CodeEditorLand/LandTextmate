@@ -1,5 +1,9 @@
 {
-	"fileTypes": ["sql", "ddl", "dml"],
+	"fileTypes": [
+		"sql",
+		"ddl",
+		"dml"
+	],
 	"keyEquivalent": "^~S",
 	"name": "SQL",
 	"patterns": [

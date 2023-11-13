@@ -1,26 +1,53 @@
 [
 	{
 		"id": "bat",
-		"extensions": [".bat", ".cmd"],
-		"aliases": ["Batch", "bat"],
+		"extensions": [
+			".bat",
+			".cmd"
+		],
+		"aliases": [
+			"Batch",
+			"bat"
+		],
 		"configuration": "./language-configuration.json"
 	},
 	{
 		"id": "clojure",
-		"aliases": ["Clojure", "clojure"],
-		"extensions": [".clj", ".cljs", ".cljx", ".clojure", ".edn"],
+		"aliases": [
+			"Clojure",
+			"clojure"
+		],
+		"extensions": [
+			".clj",
+			".cljs",
+			".cljx",
+			".clojure",
+			".edn"
+		],
 		"configuration": "./language-configuration.json"
 	},
 	{
 		"id": "coffeescript",
-		"extensions": [".coffee", ".cson"],
-		"aliases": ["CoffeeScript", "coffeescript", "coffee"],
+		"extensions": [
+			".coffee",
+			".cson"
+		],
+		"aliases": [
+			"CoffeeScript",
+			"coffeescript",
+			"coffee"
+		],
 		"configuration": "./language-configuration.json"
 	},
 	{
 		"id": "c",
-		"extensions": [".c"],
-		"aliases": ["C", "c"],
+		"extensions": [
+			".c"
+		],
+		"aliases": [
+			"C",
+			"c"
+		],
 		"configuration": "./language-configuration.json"
 	},
 	{
@@ -37,65 +64,128 @@
 			".ino",
 			".inl"
 		],
-		"aliases": ["C++", "Cpp", "cpp"],
+		"aliases": [
+			"C++",
+			"Cpp",
+			"cpp"
+		],
 		"configuration": "./language-configuration.json"
 	},
 	{
 		"id": "css",
-		"aliases": ["CSS", "css"],
-		"extensions": [".css"],
-		"mimetypes": ["text/css"],
+		"aliases": [
+			"CSS",
+			"css"
+		],
+		"extensions": [
+			".css"
+		],
+		"mimetypes": [
+			"text/css"
+		],
 		"configuration": "./language-configuration.json"
 	},
 	{
 		"id": "diff",
-		"aliases": ["Diff", "diff"],
-		"extensions": [".patch", ".diff", ".rej"],
+		"aliases": [
+			"Diff",
+			"diff"
+		],
+		"extensions": [
+			".patch",
+			".diff",
+			".rej"
+		],
 		"configuration": "./language-configuration.json"
 	},
 	{
 		"id": "dockerfile",
-		"extensions": [".dockerfile"],
-		"filenames": ["Dockerfile"],
-		"aliases": ["Dockerfile"],
+		"extensions": [
+			".dockerfile"
+		],
+		"filenames": [
+			"Dockerfile"
+		],
+		"aliases": [
+			"Dockerfile"
+		],
 		"configuration": "./language-configuration.json"
 	},
 	{
 		"id": "fsharp",
-		"extensions": [".fs", ".fsi", ".fsx", ".fsscript"],
-		"aliases": ["F#", "FSharp", "fsharp"],
+		"extensions": [
+			".fs",
+			".fsi",
+			".fsx",
+			".fsscript"
+		],
+		"aliases": [
+			"F#",
+			"FSharp",
+			"fsharp"
+		],
 		"configuration": "./language-configuration.json"
 	},
 	{
 		"id": "git-commit",
-		"aliases": ["Git Commit Message", "git-commit"],
-		"filenames": ["COMMIT_EDITMSG", "MERGE_MSG"],
+		"aliases": [
+			"Git Commit Message",
+			"git-commit"
+		],
+		"filenames": [
+			"COMMIT_EDITMSG",
+			"MERGE_MSG"
+		],
 		"configuration": "./git-commit.language-configuration.json"
 	},
 	{
 		"id": "git-rebase",
-		"aliases": ["Git Rebase Message", "git-rebase"],
-		"filenames": ["git-rebase-todo"],
+		"aliases": [
+			"Git Rebase Message",
+			"git-rebase"
+		],
+		"filenames": [
+			"git-rebase-todo"
+		],
 		"configuration": "./git-rebase.language-configuration.json"
 	},
 	{
 		"id": "go",
-		"extensions": [".go"],
-		"aliases": ["Go"],
+		"extensions": [
+			".go"
+		],
+		"aliases": [
+			"Go"
+		],
 		"configuration": "./language-configuration.json"
 	},
 	{
 		"id": "groovy",
-		"aliases": ["Groovy", "groovy"],
-		"extensions": [".groovy", ".gvy", ".gradle"],
+		"aliases": [
+			"Groovy",
+			"groovy"
+		],
+		"extensions": [
+			".groovy",
+			".gvy",
+			".gradle"
+		],
 		"firstLine": "^#!.*\\bgroovy\\b",
 		"configuration": "./language-configuration.json"
 	},
 	{
 		"id": "handlebars",
-		"extensions": [".handlebars", ".hbs"],
-		"aliases": ["Handlebars", "handlebars"],
-		"mimetypes": ["text/x-handlebars-template"],
+		"extensions": [
+			".handlebars",
+			".hbs"
+		],
+		"aliases": [
+			"Handlebars",
+			"handlebars"
+		],
+		"mimetypes": [
+			"text/x-handlebars-template"
+		],
 		"configuration": "./language-configuration.json"
 	},
 	{
@@ -112,7 +202,12 @@
 			".jshtm",
 			".vue"
 		],
-		"aliases": ["HTML", "htm", "html", "xhtml"],
+		"aliases": [
+			"HTML",
+			"htm",
+			"html",
+			"xhtml"
+		],
 		"mimetypes": [
 			"text/html",
 			"text/x-jshtm",
@@ -124,13 +219,21 @@
 	},
 	{
 		"id": "ini",
-		"extensions": [".ini"],
-		"aliases": ["Ini", "ini"],
+		"extensions": [
+			".ini"
+		],
+		"aliases": [
+			"Ini",
+			"ini"
+		],
 		"configuration": "./ini.language-configuration.json"
 	},
 	{
 		"id": "properties",
-		"extensions": [".properties", ".gitconfig"],
+		"extensions": [
+			".properties",
+			".gitconfig"
+		],
 		"filenames": [
 			"config",
 			".gitattributes",
@@ -138,39 +241,73 @@
 			"gitconfig",
 			".editorconfig"
 		],
-		"aliases": ["properties", "properties"],
+		"aliases": [
+			"properties",
+			"properties"
+		],
 		"configuration": "./properties.language-configuration.json"
 	},
 	{
 		"id": "jade",
-		"extensions": [".jade", ".pug"],
-		"aliases": ["Jade", "jade"],
+		"extensions": [
+			".jade",
+			".pug"
+		],
+		"aliases": [
+			"Jade",
+			"jade"
+		],
 		"configuration": "./language-configuration.json"
 	},
 	{
 		"id": "java",
-		"extensions": [".java", ".jav"],
-		"aliases": ["Java", "java"],
+		"extensions": [
+			".java",
+			".jav"
+		],
+		"aliases": [
+			"Java",
+			"java"
+		],
 		"configuration": "./language-configuration.json"
 	},
 	{
 		"id": "javascriptreact",
-		"aliases": ["JavaScript React", "jsx"],
-		"extensions": [".jsx"],
+		"aliases": [
+			"JavaScript React",
+			"jsx"
+		],
+		"extensions": [
+			".jsx"
+		],
 		"configuration": "./language-configuration.json"
 	},
 	{
 		"id": "javascript",
-		"aliases": ["JavaScript", "javascript", "js"],
-		"extensions": [".js", ".es6"],
-		"filenames": ["jakefile"],
+		"aliases": [
+			"JavaScript",
+			"javascript",
+			"js"
+		],
+		"extensions": [
+			".js",
+			".es6"
+		],
+		"filenames": [
+			"jakefile"
+		],
 		"firstLine": "^#!.*\\bnode",
-		"mimetypes": ["text/javascript"],
+		"mimetypes": [
+			"text/javascript"
+		],
 		"configuration": "./language-configuration.json"
 	},
 	{
 		"id": "json",
-		"aliases": ["JSON", "json"],
+		"aliases": [
+			"JSON",
+			"json"
+		],
 		"extensions": [
 			".json",
 			".bowerrc",
@@ -180,117 +317,257 @@
 			".babelrc",
 			".webmanifest"
 		],
-		"mimetypes": ["application/json", "application/manifest+json"],
+		"mimetypes": [
+			"application/json",
+			"application/manifest+json"
+		],
 		"configuration": "./language-configuration.json"
 	},
 	{
 		"id": "less",
-		"aliases": ["Less", "less"],
-		"extensions": [".less"],
-		"mimetypes": ["text/x-less", "text/less"],
+		"aliases": [
+			"Less",
+			"less"
+		],
+		"extensions": [
+			".less"
+		],
+		"mimetypes": [
+			"text/x-less",
+			"text/less"
+		],
 		"configuration": "./language-configuration.json"
 	},
 	{
 		"id": "lua",
-		"extensions": [".lua"],
-		"aliases": ["Lua", "lua"],
+		"extensions": [
+			".lua"
+		],
+		"aliases": [
+			"Lua",
+			"lua"
+		],
 		"configuration": "./language-configuration.json"
 	},
 	{
 		"id": "makefile",
-		"aliases": ["Makefile", "makefile"],
-		"filenames": ["Makefile", "makefile", "GNUmakefile", "OCamlMakefile"],
+		"aliases": [
+			"Makefile",
+			"makefile"
+		],
+		"filenames": [
+			"Makefile",
+			"makefile",
+			"GNUmakefile",
+			"OCamlMakefile"
+		],
 		"configuration": "./language-configuration.json"
 	},
 	{
 		"id": "markdown",
-		"aliases": ["Markdown", "markdown"],
-		"extensions": [".md", ".mdown", ".markdown", ".markdn"],
+		"aliases": [
+			"Markdown",
+			"markdown"
+		],
+		"extensions": [
+			".md",
+			".mdown",
+			".markdown",
+			".markdn"
+		],
 		"configuration": "./language-configuration.json"
 	},
 	{
 		"id": "objective-c",
-		"extensions": [".m"],
-		"aliases": ["Objective-C"],
+		"extensions": [
+			".m"
+		],
+		"aliases": [
+			"Objective-C"
+		],
 		"configuration": "./language-configuration.json"
 	},
 	{
 		"id": "perl",
-		"aliases": ["Perl", "perl"],
-		"extensions": [".pl", ".pm", ".pod", ".t", ".PL", ".psgi"],
+		"aliases": [
+			"Perl",
+			"perl"
+		],
+		"extensions": [
+			".pl",
+			".pm",
+			".pod",
+			".t",
+			".PL",
+			".psgi"
+		],
 		"firstLine": "^#!.*\\bperl\\b",
 		"configuration": "./perl.language-configuration.json"
 	},
 	{
 		"id": "perl6",
-		"aliases": ["Perl 6", "perl6"],
-		"extensions": [".p6", ".pl6", ".pm6", ".nqp"],
+		"aliases": [
+			"Perl 6",
+			"perl6"
+		],
+		"extensions": [
+			".p6",
+			".pl6",
+			".pm6",
+			".nqp"
+		],
 		"firstLine": "(^#!.*\\bperl6\\b)|use\\s+v6",
 		"configuration": "./perl6.language-configuration.json"
 	},
 	{
 		"id": "php",
-		"extensions": [".php", ".php4", ".php5", ".phtml", ".ctp"],
-		"aliases": ["PHP", "php"],
-		"mimetypes": ["application/x-php"],
+		"extensions": [
+			".php",
+			".php4",
+			".php5",
+			".phtml",
+			".ctp"
+		],
+		"aliases": [
+			"PHP",
+			"php"
+		],
+		"mimetypes": [
+			"application/x-php"
+		],
 		"configuration": "./language-configuration.json"
 	},
 	{
 		"id": "powershell",
-		"extensions": [".ps1", ".psm1", ".psd1", ".pssc", ".psrc"],
-		"aliases": ["PowerShell", "powershell", "ps", "ps1"],
+		"extensions": [
+			".ps1",
+			".psm1",
+			".psd1",
+			".pssc",
+			".psrc"
+		],
+		"aliases": [
+			"PowerShell",
+			"powershell",
+			"ps",
+			"ps1"
+		],
 		"configuration": "./language-configuration.json"
 	},
 	{
 		"id": "python",
-		"extensions": [".py", ".rpy", ".pyw", ".cpy", ".gyp", ".gypi"],
-		"aliases": ["Python", "py"],
+		"extensions": [
+			".py",
+			".rpy",
+			".pyw",
+			".cpy",
+			".gyp",
+			".gypi"
+		],
+		"aliases": [
+			"Python",
+			"py"
+		],
 		"firstLine": "^#!/.*\\bpython[0-9.-]*\\b",
 		"configuration": "./language-configuration.json"
 	},
 	{
 		"id": "r",
-		"extensions": [".r", ".rhistory", ".rprofile", ".rt"],
-		"aliases": ["R", "r"],
+		"extensions": [
+			".r",
+			".rhistory",
+			".rprofile",
+			".rt"
+		],
+		"aliases": [
+			"R",
+			"r"
+		],
 		"configuration": "./language-configuration.json"
 	},
 	{
 		"id": "razor",
-		"extensions": [".cshtml"],
-		"aliases": ["Razor", "razor"],
-		"mimetypes": ["text/x-cshtml"],
+		"extensions": [
+			".cshtml"
+		],
+		"aliases": [
+			"Razor",
+			"razor"
+		],
+		"mimetypes": [
+			"text/x-cshtml"
+		],
 		"configuration": "./language-configuration.json"
 	},
 	{
 		"id": "ruby",
-		"extensions": [".rb", ".rbx", ".rjs", ".gemspec", ".rake", ".ru"],
-		"filenames": ["rakefile", "gemfile", "guardfile"],
-		"aliases": ["Ruby", "rb"],
+		"extensions": [
+			".rb",
+			".rbx",
+			".rjs",
+			".gemspec",
+			".rake",
+			".ru"
+		],
+		"filenames": [
+			"rakefile",
+			"gemfile",
+			"guardfile"
+		],
+		"aliases": [
+			"Ruby",
+			"rb"
+		],
 		"firstLine": "^#!/.*\\bruby\\b",
 		"configuration": "./language-configuration.json"
 	},
 	{
 		"id": "rust",
-		"extensions": [".rs"],
-		"aliases": ["Rust", "rust"],
+		"extensions": [
+			".rs"
+		],
+		"aliases": [
+			"Rust",
+			"rust"
+		],
 		"configuration": "./language-configuration.json"
 	},
 	{
 		"id": "scss",
-		"aliases": ["Sass", "scss"],
-		"extensions": [".scss"],
-		"mimetypes": ["text/x-scss", "text/scss"],
+		"aliases": [
+			"Sass",
+			"scss"
+		],
+		"extensions": [
+			".scss"
+		],
+		"mimetypes": [
+			"text/x-scss",
+			"text/scss"
+		],
 		"configuration": "./language-configuration.json"
 	},
 	{
 		"id": "shaderlab",
-		"extensions": [".shader", ".cginc"],
-		"aliases": ["ShaderLab", "shaderlab"],
+		"extensions": [
+			".shader",
+			".cginc"
+		],
+		"aliases": [
+			"ShaderLab",
+			"shaderlab"
+		],
 		"configuration": "./language-configuration.json"
 	},
 	{
 		"id": "shellscript",
-		"aliases": ["Shell Script (Bash)", "shellscript", "bash", "sh", "zsh"],
+		"aliases": [
+			"Shell Script (Bash)",
+			"shellscript",
+			"bash",
+			"sh",
+			"zsh"
+		],
 		"extensions": [
 			".sh",
 			".bash",
@@ -309,39 +586,72 @@
 			".zlogout",
 			".zshenv"
 		],
-		"filenames": ["PKGBUILD"],
+		"filenames": [
+			"PKGBUILD"
+		],
 		"firstLine": "^#!.*\\b(bash|zsh|sh|tcsh).*|^#\\s*-\\*-[^*]*mode:\\s*shell-script[^*]*-\\*-",
 		"configuration": "./language-configuration.json",
-		"mimetypes": ["text/x-shellscript"]
+		"mimetypes": [
+			"text/x-shellscript"
+		]
 	},
 	{
 		"id": "sql",
-		"extensions": [".sql", ".dsql"],
-		"aliases": ["SQL"],
+		"extensions": [
+			".sql",
+			".dsql"
+		],
+		"aliases": [
+			"SQL"
+		],
 		"configuration": "./language-configuration.json"
 	},
 	{
 		"id": "swift",
-		"aliases": ["Swift", "swift"],
-		"extensions": [".swift"],
+		"aliases": [
+			"Swift",
+			"swift"
+		],
+		"extensions": [
+			".swift"
+		],
 		"configuration": "./language-configuration.json"
 	},
 	{
 		"id": "typescript",
-		"aliases": ["TypeScript", "ts", "typescript"],
-		"extensions": [".ts"],
+		"aliases": [
+			"TypeScript",
+			"ts",
+			"typescript"
+		],
+		"extensions": [
+			".ts"
+		],
 		"configuration": "./language-configuration.json"
 	},
 	{
 		"id": "typescriptreact",
-		"aliases": ["TypeScript React", "tsx"],
-		"extensions": [".tsx"],
+		"aliases": [
+			"TypeScript React",
+			"tsx"
+		],
+		"extensions": [
+			".tsx"
+		],
 		"configuration": "./language-configuration.json"
 	},
 	{
 		"id": "vb",
-		"extensions": [".vb", ".brs", ".vbs", ".bas"],
-		"aliases": ["Visual Basic", "vb"],
+		"extensions": [
+			".vb",
+			".brs",
+			".vbs",
+			".bas"
+		],
+		"aliases": [
+			"Visual Basic",
+			"vb"
+		],
 		"configuration": "./language-configuration.json"
 	},
 	{
@@ -404,19 +714,36 @@
 			".xoml"
 		],
 		"firstLine": "(\\<\\?xml.*)|(\\<svg)|(\\<\\!doctype\\s+svg)",
-		"aliases": ["XML", "xml"],
+		"aliases": [
+			"XML",
+			"xml"
+		],
 		"configuration": "./xml.language-configuration.json"
 	},
 	{
 		"id": "xsl",
-		"extensions": [".xsl", ".xslt"],
-		"aliases": ["XSL", "xsl"],
+		"extensions": [
+			".xsl",
+			".xslt"
+		],
+		"aliases": [
+			"XSL",
+			"xsl"
+		],
 		"configuration": "./xsl.language-configuration.json"
 	},
 	{
 		"id": "yaml",
-		"aliases": ["YAML", "yaml"],
-		"extensions": [".eyaml", ".eyml", ".yaml", ".yml"],
+		"aliases": [
+			"YAML",
+			"yaml"
+		],
+		"extensions": [
+			".eyaml",
+			".eyml",
+			".yaml",
+			".yml"
+		],
 		"firstLine": "^#cloud-config",
 		"configuration": "./language-configuration.json"
 	}

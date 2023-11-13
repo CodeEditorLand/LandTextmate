@@ -11,48 +11,33 @@ export class BasicScopeAttributes {
 	constructor(
 		public readonly languageId: number,
 		public readonly tokenType: OptionalStandardTokenType
-	) {}
+	) {
+	}
 }
 
 export class BasicScopeAttributesProvider {
 	private readonly _defaultAttributes: BasicScopeAttributes;
 	private readonly _embeddedLanguagesMatcher: ScopeMatcher</* language id */ number>;
 
-	constructor(
-		initialLanguageId: number,
-		embeddedLanguages: IEmbeddedLanguagesMap | null
-	) {
-		this._defaultAttributes = new BasicScopeAttributes(
-			initialLanguageId,
-			OptionalStandardTokenType.NotSet
-		);
-		this._embeddedLanguagesMatcher = new ScopeMatcher(
-			Object.entries(embeddedLanguages || {})
-		);
+	constructor(initialLanguageId: number, embeddedLanguages: IEmbeddedLanguagesMap | null) {
+		this._defaultAttributes = new BasicScopeAttributes(initialLanguageId, OptionalStandardTokenType.NotSet);
+		this._embeddedLanguagesMatcher = new ScopeMatcher(Object.entries(embeddedLanguages || {}));
 	}
 
 	public getDefaultAttributes(): BasicScopeAttributes {
 		return this._defaultAttributes;
 	}
 
-	public getBasicScopeAttributes(
-		scopeName: ScopeName | null
-	): BasicScopeAttributes {
+	public getBasicScopeAttributes(scopeName: ScopeName | null): BasicScopeAttributes {
 		if (scopeName === null) {
 			return BasicScopeAttributesProvider._NULL_SCOPE_METADATA;
 		}
 		return this._getBasicScopeAttributes.get(scopeName);
 	}
 
-	private static readonly _NULL_SCOPE_METADATA = new BasicScopeAttributes(
-		0,
-		0
-	);
+	private static readonly _NULL_SCOPE_METADATA = new BasicScopeAttributes(0, 0);
 
-	private readonly _getBasicScopeAttributes = new CachedFn<
-		ScopeName,
-		BasicScopeAttributes
-	>((scopeName) => {
+	private readonly _getBasicScopeAttributes = new CachedFn<ScopeName, BasicScopeAttributes>((scopeName) => {
 		const languageId = this._scopeToLanguage(scopeName);
 		const standardTokenType = this._toStandardTokenType(scopeName);
 		return new BasicScopeAttributes(languageId, standardTokenType);
@@ -66,12 +51,8 @@ export class BasicScopeAttributesProvider {
 		return this._embeddedLanguagesMatcher.match(scope) || 0;
 	}
 
-	private _toStandardTokenType(
-		scopeName: ScopeName
-	): OptionalStandardTokenType {
-		const m = scopeName.match(
-			BasicScopeAttributesProvider.STANDARD_TOKEN_TYPE_REGEXP
-		);
+	private _toStandardTokenType(scopeName: ScopeName): OptionalStandardTokenType {
+		const m = scopeName.match(BasicScopeAttributesProvider.STANDARD_TOKEN_TYPE_REGEXP);
 		if (!m) {
 			return OptionalStandardTokenType.NotSet;
 		}
@@ -88,8 +69,7 @@ export class BasicScopeAttributesProvider {
 		throw new Error("Unexpected match for standard token type!");
 	}
 
-	private static STANDARD_TOKEN_TYPE_REGEXP =
-		/\b(comment|string|regex|meta\.embedded)\b/;
+	private static STANDARD_TOKEN_TYPE_REGEXP = /\b(comment|string|regex|meta\.embedded)\b/;
 }
 
 class ScopeMatcher<TValue> {
@@ -104,8 +84,8 @@ class ScopeMatcher<TValue> {
 			this.values = new Map(values);
 
 			// create the regex
-			const escapedScopes = values.map(([scopeName, value]) =>
-				escapeRegExpCharacters(scopeName)
+			const escapedScopes = values.map(
+				([scopeName, value]) => escapeRegExpCharacters(scopeName)
 			);
 
 			escapedScopes.sort();

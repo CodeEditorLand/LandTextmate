@@ -1,5 +1,7 @@
 {
-	"fileTypes": ["thrift"],
+	"fileTypes": [
+		"thrift"
+	],
 	"name": "Thrift",
 	"patterns": [
 		{

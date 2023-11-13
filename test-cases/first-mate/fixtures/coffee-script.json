@@ -1,6 +1,11 @@
 {
 	"comment": "CoffeeScript",
-	"fileTypes": ["coffee", "Cakefile", "coffee.erb", "cson"],
+	"fileTypes": [
+		"coffee",
+		"Cakefile",
+		"coffee.erb",
+		"cson"
+	],
 	"firstLineMatch": "^#!.*\\bcoffee",
 	"foldingStartMarker": "^\\s*class\\s+\\S.*$|.*(->|=>)\\s*$|.*[\\[{]\\s*$",
 	"foldingStopMarker": "^\\s*$|^\\s*[}\\]]\\s*$",

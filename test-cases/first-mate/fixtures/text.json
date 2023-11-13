@@ -1,5 +1,7 @@
 {
-	"fileTypes": ["txt"],
+	"fileTypes": [
+		"txt"
+	],
 	"keyEquivalent": "^~P",
 	"name": "Plain Text",
 	"patterns": [

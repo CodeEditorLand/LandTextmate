@@ -2,21 +2,17 @@
  * Copyright (C) Microsoft Corporation. All rights reserved.
  *--------------------------------------------------------*/
 
-import { BalancedBracketSelectors, StateStackImpl } from "./grammar";
-import * as grammarReader from "./parseRawGrammar";
-import { IOnigLib } from "./onigLib";
-import { IRawGrammar } from "./rawGrammar";
-import { SyncRegistry } from "./registry";
-import { IRawTheme, ScopeName, Theme } from "./theme";
-import { StandardTokenType } from "./encodedTokenAttributes";
-import { ScopeDependencyProcessor } from "./grammar/grammarDependencies";
-import {
-	applyStateStackDiff,
-	diffStateStacksRefEq,
-	StackDiff,
-} from "./diffStateStacks";
+import { BalancedBracketSelectors, StateStackImpl } from './grammar';
+import * as grammarReader from './parseRawGrammar';
+import { IOnigLib } from './onigLib';
+import { IRawGrammar } from './rawGrammar';
+import { SyncRegistry } from './registry';
+import { IRawTheme, ScopeName, Theme } from './theme';
+import { StandardTokenType } from './encodedTokenAttributes';
+import { ScopeDependencyProcessor } from './grammar/grammarDependencies'
+import { applyStateStackDiff, diffStateStacksRefEq, StackDiff } from './diffStateStacks';
 
-export * from "./onigLib";
+export * from './onigLib';
 
 export { IRawGrammar, IRawTheme };
 
@@ -96,11 +92,7 @@ export class Registry {
 		initialLanguage: number,
 		embeddedLanguages: IEmbeddedLanguagesMap
 	): Promise<IGrammar | null> {
-		return this.loadGrammarWithConfiguration(
-			initialScopeName,
-			initialLanguage,
-			{ embeddedLanguages }
-		);
+		return this.loadGrammarWithConfiguration(initialScopeName, initialLanguage, { embeddedLanguages });
 	}
 
 	/**
@@ -138,16 +130,9 @@ export class Registry {
 		tokenTypes: ITokenTypeMap | null | undefined,
 		balancedBracketSelectors: BalancedBracketSelectors | null
 	): Promise<IGrammar | null> {
-		const dependencyProcessor = new ScopeDependencyProcessor(
-			this._syncRegistry,
-			initialScopeName
-		);
+		const dependencyProcessor = new ScopeDependencyProcessor(this._syncRegistry, initialScopeName);
 		while (dependencyProcessor.Q.length > 0) {
-			await Promise.all(
-				dependencyProcessor.Q.map((request) =>
-					this._loadSingleGrammar(request.scopeName)
-				)
-			);
+			await Promise.all(dependencyProcessor.Q.map((request) => this._loadSingleGrammar(request.scopeName)));
 			dependencyProcessor.processQueue();
 		}
 
@@ -162,10 +147,7 @@ export class Registry {
 
 	private async _loadSingleGrammar(scopeName: ScopeName): Promise<void> {
 		if (!this._ensureGrammarCache.has(scopeName)) {
-			this._ensureGrammarCache.set(
-				scopeName,
-				this._doLoadSingleGrammar(scopeName)
-			);
+			this._ensureGrammarCache.set(scopeName, this._doLoadSingleGrammar(scopeName));
 		}
 		return this._ensureGrammarCache.get(scopeName);
 	}
@@ -174,9 +156,7 @@ export class Registry {
 		const grammar = await this._options.loadGrammar(scopeName);
 		if (grammar) {
 			const injections =
-				typeof this._options.getInjections === "function"
-					? this._options.getInjections(scopeName)
-					: undefined;
+				typeof this._options.getInjections === "function" ? this._options.getInjections(scopeName) : undefined;
 			this._syncRegistry.addGrammar(grammar, injections);
 		}
 	}
@@ -191,11 +171,7 @@ export class Registry {
 		embeddedLanguages: IEmbeddedLanguagesMap | null = null
 	): Promise<IGrammar> {
 		this._syncRegistry.addGrammar(rawGrammar, injections);
-		return (await this._grammarForScopeName(
-			rawGrammar.scopeName,
-			initialLanguage,
-			embeddedLanguages
-		))!;
+		return (await this._grammarForScopeName(rawGrammar.scopeName, initialLanguage, embeddedLanguages))!;
 	}
 
 	/**
@@ -225,11 +201,7 @@ export interface IGrammar {
 	/**
 	 * Tokenize `lineText` using previous line state `prevState`.
 	 */
-	tokenizeLine(
-		lineText: string,
-		prevState: StateStack | null,
-		timeLimit?: number
-	): ITokenizeLineResult;
+	tokenizeLine(lineText: string, prevState: StateStack | null, timeLimit?: number): ITokenizeLineResult;
 
 	/**
 	 * Tokenize `lineText` using previous line state `prevState`.
@@ -241,11 +213,7 @@ export interface IGrammar {
 	 *  - background color
 	 * e.g. for getting the languageId: `(metadata & MetadataConsts.LANGUAGEID_MASK) >>> MetadataConsts.LANGUAGEID_OFFSET`
 	 */
-	tokenizeLine2(
-		lineText: string,
-		prevState: StateStack | null,
-		timeLimit?: number
-	): ITokenizeLineResult2;
+	tokenizeLine2(lineText: string, prevState: StateStack | null, timeLimit?: number): ITokenizeLineResult2;
 }
 
 export interface ITokenizeLineResult {
@@ -297,9 +265,6 @@ export interface StateStack {
 
 export const INITIAL: StateStack = StateStackImpl.NULL;
 
-export const parseRawGrammar: (
-	content: string,
-	filePath?: string
-) => IRawGrammar = grammarReader.parseRawGrammar;
+export const parseRawGrammar: (content: string, filePath?: string) => IRawGrammar = grammarReader.parseRawGrammar;
 
-export { diffStateStacksRefEq, applyStateStackDiff, StackDiff };
+export { diffStateStacksRefEq, applyStateStackDiff, StackDiff, };

@@ -1,7 +1,14 @@
 {
 	"name": "Less",
 	"scopeName": "source.css.less",
-	"fileTypes": ["less", "less.erb", "rc", "gtkrc", "gtkrc-2.0", "themerc"],
+	"fileTypes": [
+		"less",
+		"less.erb",
+		"rc",
+		"gtkrc",
+		"gtkrc-2.0",
+		"themerc"
+	],
 	"patterns": [
 		{
 			"include": "#strings"

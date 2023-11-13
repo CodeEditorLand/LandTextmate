@@ -2,7 +2,7 @@
  * Copyright (C) Microsoft Corporation. All rights reserved.
  *--------------------------------------------------------*/
 
-import { CachedFn, isValidHexColor, OrMask, strArrCmp, strcmp } from "./utils";
+import { CachedFn, isValidHexColor, OrMask, strArrCmp, strcmp } from './utils';
 
 export class Theme {
 	public static createFromRawTheme(
@@ -19,10 +19,9 @@ export class Theme {
 		return resolveParsedThemeRules(source, colorMap);
 	}
 
-	private readonly _cachedMatchRoot = new CachedFn<
-		ScopeName,
-		ThemeTrieElementRule[]
-	>((scopeName) => this._root.match(scopeName));
+	private readonly _cachedMatchRoot = new CachedFn<ScopeName, ThemeTrieElementRule[]>(
+		(scopeName) => this._root.match(scopeName)
+	);
 
 	constructor(
 		private readonly _colorMap: ColorMap,
@@ -63,25 +62,25 @@ export class Theme {
 /**
  * Identifiers with a binary dot operator.
  * Examples: `baz` or `foo.bar`
- */
+*/
 export type ScopeName = string;
 
 /**
  * An expression language of ScopeNames with a binary space (to indicate nesting) operator.
  * Examples: `foo.bar boo.baz`
- */
+*/
 export type ScopePath = string;
 
 /**
  * An expression language of ScopePathStr with a binary comma (to indicate alternatives) operator.
  * Examples: `foo.bar boo.baz,quick quack`
- */
+*/
 export type ScopePattern = string;
 
 /**
  * A TextMate theme.
  */
-export interface IRawTheme {
+ export interface IRawTheme {
 	readonly name?: string;
 	readonly settings: IRawThemeSetting[];
 }
@@ -89,7 +88,7 @@ export interface IRawTheme {
 /**
  * A single theme setting.
  */
-export interface IRawThemeSetting {
+ export interface IRawThemeSetting {
 	readonly name?: string;
 	readonly scope?: ScopePattern | ScopePattern[];
 	readonly settings: {
@@ -100,10 +99,7 @@ export interface IRawThemeSetting {
 }
 
 export class ScopeStack {
-	static push(
-		path: ScopeStack | null,
-		scopeNames: ScopeName[]
-	): ScopeStack | null {
+	static push(path: ScopeStack | null, scopeNames: ScopeName[]): ScopeStack | null {
 		for (const name of scopeNames) {
 			path = new ScopeStack(path, name);
 		}
@@ -141,7 +137,7 @@ export class ScopeStack {
 	}
 
 	public toString() {
-		return this.getSegments().join(" ");
+		return this.getSegments().join(' ');
 	}
 
 	public extends(other: ScopeStack): boolean {
@@ -154,9 +150,7 @@ export class ScopeStack {
 		return this.parent.extends(other);
 	}
 
-	public getExtensionIfDefined(
-		base: ScopeStack | null
-	): string[] | undefined {
+	public getExtensionIfDefined(base: ScopeStack | null): string[] | undefined {
 		const result: string[] = [];
 		let item: ScopeStack | null = this;
 		while (item && item !== base) {
@@ -167,10 +161,7 @@ export class ScopeStack {
 	}
 }
 
-function _scopePathMatchesParentScopes(
-	scopePath: ScopeStack | null,
-	parentScopes: ScopeName[] | null
-): boolean {
+function _scopePathMatchesParentScopes(scopePath: ScopeStack | null, parentScopes: ScopeName[] | null): boolean {
 	if (parentScopes === null) {
 		return true;
 	}
@@ -193,11 +184,7 @@ function _scopePathMatchesParentScopes(
 }
 
 function _matchesScope(scopeName: ScopeName, scopePattern: ScopeName): boolean {
-	return (
-		scopePattern === scopeName ||
-		(scopeName.startsWith(scopePattern) &&
-			scopeName[scopePattern.length] === ".")
-	);
+	return scopePattern === scopeName || (scopeName.startsWith(scopePattern) && scopeName[scopePattern.length] === '.');
 }
 
 export class StyleAttributes {
@@ -219,8 +206,7 @@ export function parseTheme(source: IRawTheme | undefined): ParsedThemeRule[] {
 		return [];
 	}
 	let settings = source.settings;
-	let result: ParsedThemeRule[] = [],
-		resultLen = 0;
+	let result: ParsedThemeRule[] = [], resultLen = 0;
 	for (let i = 0, len = settings.length; i < len; i++) {
 		let entry = settings[i];
 
@@ -229,40 +215,40 @@ export function parseTheme(source: IRawTheme | undefined): ParsedThemeRule[] {
 		}
 
 		let scopes: string[];
-		if (typeof entry.scope === "string") {
+		if (typeof entry.scope === 'string') {
 			let _scope = entry.scope;
 
 			// remove leading commas
-			_scope = _scope.replace(/^[,]+/, "");
+			_scope = _scope.replace(/^[,]+/, '');
 
 			// remove trailing commans
-			_scope = _scope.replace(/[,]+$/, "");
+			_scope = _scope.replace(/[,]+$/, '');
 
-			scopes = _scope.split(",");
+			scopes = _scope.split(',');
 		} else if (Array.isArray(entry.scope)) {
 			scopes = entry.scope;
 		} else {
-			scopes = [""];
+			scopes = [''];
 		}
 
 		let fontStyle: OrMask<FontStyle> = FontStyle.NotSet;
-		if (typeof entry.settings.fontStyle === "string") {
+		if (typeof entry.settings.fontStyle === 'string') {
 			fontStyle = FontStyle.None;
 
-			let segments = entry.settings.fontStyle.split(" ");
+			let segments = entry.settings.fontStyle.split(' ');
 			for (let j = 0, lenJ = segments.length; j < lenJ; j++) {
 				let segment = segments[j];
 				switch (segment) {
-					case "italic":
+					case 'italic':
 						fontStyle = fontStyle | FontStyle.Italic;
 						break;
-					case "bold":
+					case 'bold':
 						fontStyle = fontStyle | FontStyle.Bold;
 						break;
-					case "underline":
+					case 'underline':
 						fontStyle = fontStyle | FontStyle.Underline;
 						break;
-					case "strikethrough":
+					case 'strikethrough':
 						fontStyle = fontStyle | FontStyle.Strikethrough;
 						break;
 				}
@@ -270,25 +256,19 @@ export function parseTheme(source: IRawTheme | undefined): ParsedThemeRule[] {
 		}
 
 		let foreground: string | null = null;
-		if (
-			typeof entry.settings.foreground === "string" &&
-			isValidHexColor(entry.settings.foreground)
-		) {
+		if (typeof entry.settings.foreground === 'string' && isValidHexColor(entry.settings.foreground)) {
 			foreground = entry.settings.foreground;
 		}
 
 		let background: string | null = null;
-		if (
-			typeof entry.settings.background === "string" &&
-			isValidHexColor(entry.settings.background)
-		) {
+		if (typeof entry.settings.background === 'string' && isValidHexColor(entry.settings.background)) {
 			background = entry.settings.background;
 		}
 
 		for (let j = 0, lenJ = scopes.length; j < lenJ; j++) {
 			let _scope = scopes[j].trim();
 
-			let segments = _scope.split(" ");
+			let segments = _scope.split(' ');
 
 			let scope = segments[segments.length - 1];
 			let parentScopes: string[] | null = null;
@@ -318,8 +298,9 @@ export class ParsedThemeRule {
 		public readonly index: number,
 		public readonly fontStyle: OrMask<FontStyle>,
 		public readonly foreground: string | null,
-		public readonly background: string | null
-	) {}
+		public readonly background: string | null,
+	) {
+	}
 }
 
 export const enum FontStyle {
@@ -328,29 +309,29 @@ export const enum FontStyle {
 	Italic = 1,
 	Bold = 2,
 	Underline = 4,
-	Strikethrough = 8,
+	Strikethrough = 8
 }
 
 export function fontStyleToString(fontStyle: OrMask<FontStyle>) {
 	if (fontStyle === FontStyle.NotSet) {
-		return "not set";
+		return 'not set';
 	}
 
-	let style = "";
+	let style = '';
 	if (fontStyle & FontStyle.Italic) {
-		style += "italic ";
+		style += 'italic ';
 	}
 	if (fontStyle & FontStyle.Bold) {
-		style += "bold ";
+		style += 'bold ';
 	}
 	if (fontStyle & FontStyle.Underline) {
-		style += "underline ";
+		style += 'underline ';
 	}
 	if (fontStyle & FontStyle.Strikethrough) {
-		style += "strikethrough ";
+		style += 'strikethrough ';
 	}
-	if (style === "") {
-		style = "none";
+	if (style === '') {
+		style = 'none';
 	}
 	return style.trim();
 }
@@ -358,10 +339,8 @@ export function fontStyleToString(fontStyle: OrMask<FontStyle>) {
 /**
  * Resolve rules (i.e. inheritance).
  */
-function resolveParsedThemeRules(
-	parsedThemeRules: ParsedThemeRule[],
-	_colorMap: string[] | undefined
-): Theme {
+function resolveParsedThemeRules(parsedThemeRules: ParsedThemeRule[], _colorMap: string[] | undefined): Theme {
+
 	// Sort rules lexicographically, and then by index if necessary
 	parsedThemeRules.sort((a, b) => {
 		let r = strcmp(a.scope, b.scope);
@@ -377,9 +356,9 @@ function resolveParsedThemeRules(
 
 	// Determine defaults
 	let defaultFontStyle = FontStyle.None;
-	let defaultForeground = "#000000";
-	let defaultBackground = "#ffffff";
-	while (parsedThemeRules.length >= 1 && parsedThemeRules[0].scope === "") {
+	let defaultForeground = '#000000';
+	let defaultBackground = '#ffffff';
+	while (parsedThemeRules.length >= 1 && parsedThemeRules[0].scope === '') {
 		let incomingDefaults = parsedThemeRules.shift()!;
 		if (incomingDefaults.fontStyle !== FontStyle.NotSet) {
 			defaultFontStyle = incomingDefaults.fontStyle;
@@ -392,26 +371,12 @@ function resolveParsedThemeRules(
 		}
 	}
 	let colorMap = new ColorMap(_colorMap);
-	let defaults = new StyleAttributes(
-		defaultFontStyle,
-		colorMap.getId(defaultForeground),
-		colorMap.getId(defaultBackground)
-	);
+	let defaults = new StyleAttributes(defaultFontStyle, colorMap.getId(defaultForeground), colorMap.getId(defaultBackground));
 
-	let root = new ThemeTrieElement(
-		new ThemeTrieElementRule(0, null, FontStyle.NotSet, 0, 0),
-		[]
-	);
+	let root = new ThemeTrieElement(new ThemeTrieElementRule(0, null, FontStyle.NotSet, 0, 0), []);
 	for (let i = 0, len = parsedThemeRules.length; i < len; i++) {
 		let rule = parsedThemeRules[i];
-		root.insert(
-			0,
-			rule.scope,
-			rule.parentScopes,
-			rule.fontStyle,
-			colorMap.getId(rule.foreground),
-			colorMap.getId(rule.background)
-		);
+		root.insert(0, rule.scope, rule.parentScopes, rule.fontStyle, colorMap.getId(rule.foreground), colorMap.getId(rule.background));
 	}
 
 	return new Theme(colorMap, defaults, root);
@@ -421,7 +386,7 @@ export class ColorMap {
 	private readonly _isFrozen: boolean;
 	private _lastColorId: number;
 	private _id2color: string[];
-	private _color2id: { [color: string]: number };
+	private _color2id: { [color: string]: number; };
 
 	constructor(_colorMap?: string[]) {
 		this._lastColorId = 0;
@@ -463,19 +428,14 @@ export class ColorMap {
 }
 
 export class ThemeTrieElementRule {
+
 	scopeDepth: number;
 	parentScopes: ScopeName[] | null;
 	fontStyle: number;
 	foreground: number;
 	background: number;
 
-	constructor(
-		scopeDepth: number,
-		parentScopes: ScopeName[] | null,
-		fontStyle: number,
-		foreground: number,
-		background: number
-	) {
+	constructor(scopeDepth: number, parentScopes: ScopeName[] | null, fontStyle: number, foreground: number, background: number) {
 		this.scopeDepth = scopeDepth;
 		this.parentScopes = parentScopes;
 		this.fontStyle = fontStyle;
@@ -484,18 +444,10 @@ export class ThemeTrieElementRule {
 	}
 
 	public clone(): ThemeTrieElementRule {
-		return new ThemeTrieElementRule(
-			this.scopeDepth,
-			this.parentScopes,
-			this.fontStyle,
-			this.foreground,
-			this.background
-		);
+		return new ThemeTrieElementRule(this.scopeDepth, this.parentScopes, this.fontStyle, this.foreground, this.background);
 	}
 
-	public static cloneArr(
-		arr: ThemeTrieElementRule[]
-	): ThemeTrieElementRule[] {
+	public static cloneArr(arr:ThemeTrieElementRule[]): ThemeTrieElementRule[] {
 		let r: ThemeTrieElementRule[] = [];
 		for (let i = 0, len = arr.length; i < len; i++) {
 			r[i] = arr[i].clone();
@@ -503,14 +455,9 @@ export class ThemeTrieElementRule {
 		return r;
 	}
 
-	public acceptOverwrite(
-		scopeDepth: number,
-		fontStyle: number,
-		foreground: number,
-		background: number
-	): void {
+	public acceptOverwrite(scopeDepth: number, fontStyle: number, foreground: number, background: number): void {
 		if (this.scopeDepth > scopeDepth) {
-			console.log("how did this happen?");
+			console.log('how did this happen?');
 		} else {
 			this.scopeDepth = scopeDepth;
 		}
@@ -542,9 +489,7 @@ export class ThemeTrieElement {
 		this._rulesWithParentScopes = rulesWithParentScopes;
 	}
 
-	private static _sortBySpecificity(
-		arr: ThemeTrieElementRule[]
-	): ThemeTrieElementRule[] {
+	private static _sortBySpecificity(arr: ThemeTrieElementRule[]): ThemeTrieElementRule[] {
 		if (arr.length === 1) {
 			return arr;
 		}
@@ -552,17 +497,12 @@ export class ThemeTrieElement {
 		return arr;
 	}
 
-	private static _cmpBySpecificity(
-		a: ThemeTrieElementRule,
-		b: ThemeTrieElementRule
-	): number {
+	private static _cmpBySpecificity(a: ThemeTrieElementRule, b: ThemeTrieElementRule): number {
 		if (a.scopeDepth === b.scopeDepth) {
 			const aParentScopes = a.parentScopes;
 			const bParentScopes = b.parentScopes;
-			let aParentScopesLen =
-				aParentScopes === null ? 0 : aParentScopes.length;
-			let bParentScopesLen =
-				bParentScopes === null ? 0 : bParentScopes.length;
+			let aParentScopesLen = aParentScopes === null ? 0 : aParentScopes.length;
+			let bParentScopesLen = bParentScopes === null ? 0 : bParentScopes.length;
 			if (aParentScopesLen === bParentScopesLen) {
 				for (let i = 0; i < aParentScopesLen; i++) {
 					const aLen = aParentScopes![i].length;
@@ -578,20 +518,16 @@ export class ThemeTrieElement {
 	}
 
 	public match(scope: ScopeName): ThemeTrieElementRule[] {
-		if (scope === "") {
-			return ThemeTrieElement._sortBySpecificity(
-				(<ThemeTrieElementRule[]>[])
-					.concat(this._mainRule)
-					.concat(this._rulesWithParentScopes)
-			);
+		if (scope === '') {
+			return ThemeTrieElement._sortBySpecificity((<ThemeTrieElementRule[]>[]).concat(this._mainRule).concat(this._rulesWithParentScopes));
 		}
 
-		let dotIndex = scope.indexOf(".");
+		let dotIndex = scope.indexOf('.');
 		let head: string;
 		let tail: string;
 		if (dotIndex === -1) {
 			head = scope;
-			tail = "";
+			tail = '';
 		} else {
 			head = scope.substring(0, dotIndex);
 			tail = scope.substring(dotIndex + 1);
@@ -601,38 +537,21 @@ export class ThemeTrieElement {
 			return this._children[head].match(tail);
 		}
 
-		return ThemeTrieElement._sortBySpecificity(
-			(<ThemeTrieElementRule[]>[])
-				.concat(this._mainRule)
-				.concat(this._rulesWithParentScopes)
-		);
+		return ThemeTrieElement._sortBySpecificity((<ThemeTrieElementRule[]>[]).concat(this._mainRule).concat(this._rulesWithParentScopes));
 	}
 
-	public insert(
-		scopeDepth: number,
-		scope: ScopeName,
-		parentScopes: ScopeName[] | null,
-		fontStyle: number,
-		foreground: number,
-		background: number
-	): void {
-		if (scope === "") {
-			this._doInsertHere(
-				scopeDepth,
-				parentScopes,
-				fontStyle,
-				foreground,
-				background
-			);
+	public insert(scopeDepth: number, scope: ScopeName, parentScopes: ScopeName[] | null, fontStyle: number, foreground: number, background: number): void {
+		if (scope === '') {
+			this._doInsertHere(scopeDepth, parentScopes, fontStyle, foreground, background);
 			return;
 		}
 
-		let dotIndex = scope.indexOf(".");
+		let dotIndex = scope.indexOf('.');
 		let head: string;
 		let tail: string;
 		if (dotIndex === -1) {
 			head = scope;
-			tail = "";
+			tail = '';
 		} else {
 			head = scope.substring(0, dotIndex);
 			tail = scope.substring(dotIndex + 1);
@@ -642,57 +561,28 @@ export class ThemeTrieElement {
 		if (this._children.hasOwnProperty(head)) {
 			child = this._children[head];
 		} else {
-			child = new ThemeTrieElement(
-				this._mainRule.clone(),
-				ThemeTrieElementRule.cloneArr(this._rulesWithParentScopes)
-			);
+			child = new ThemeTrieElement(this._mainRule.clone(), ThemeTrieElementRule.cloneArr(this._rulesWithParentScopes));
 			this._children[head] = child;
 		}
 
-		child.insert(
-			scopeDepth + 1,
-			tail,
-			parentScopes,
-			fontStyle,
-			foreground,
-			background
-		);
+		child.insert(scopeDepth + 1, tail, parentScopes, fontStyle, foreground, background);
 	}
 
-	private _doInsertHere(
-		scopeDepth: number,
-		parentScopes: ScopeName[] | null,
-		fontStyle: number,
-		foreground: number,
-		background: number
-	): void {
+	private _doInsertHere(scopeDepth: number, parentScopes: ScopeName[] | null, fontStyle: number, foreground: number, background: number): void {
+
 		if (parentScopes === null) {
 			// Merge into the main rule
-			this._mainRule.acceptOverwrite(
-				scopeDepth,
-				fontStyle,
-				foreground,
-				background
-			);
+			this._mainRule.acceptOverwrite(scopeDepth, fontStyle, foreground, background);
 			return;
 		}
 
 		// Try to merge into existing rule
-		for (
-			let i = 0, len = this._rulesWithParentScopes.length;
-			i < len;
-			i++
-		) {
+		for (let i = 0, len = this._rulesWithParentScopes.length; i < len; i++) {
 			let rule = this._rulesWithParentScopes[i];
 
 			if (strArrCmp(rule.parentScopes, parentScopes) === 0) {
 				// bingo! => we get to merge this into an existing one
-				rule.acceptOverwrite(
-					scopeDepth,
-					fontStyle,
-					foreground,
-					background
-				);
+				rule.acceptOverwrite(scopeDepth, fontStyle, foreground, background);
 				return;
 			}
 		}
@@ -710,14 +600,6 @@ export class ThemeTrieElement {
 			background = this._mainRule.background;
 		}
 
-		this._rulesWithParentScopes.push(
-			new ThemeTrieElementRule(
-				scopeDepth,
-				parentScopes,
-				fontStyle,
-				foreground,
-				background
-			)
-		);
+		this._rulesWithParentScopes.push(new ThemeTrieElementRule(scopeDepth, parentScopes, fontStyle, foreground, background));
 	}
 }

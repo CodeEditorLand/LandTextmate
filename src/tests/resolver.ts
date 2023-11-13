@@ -2,13 +2,13 @@
  * Copyright (C) Microsoft Corporation. All rights reserved.
  *--------------------------------------------------------*/
 
-import { IOnigLib } from "../onigLib";
-import { parseRawGrammar } from "../parseRawGrammar";
-import { RegistryOptions } from "../main";
+import { IOnigLib } from '../onigLib';
+import { parseRawGrammar } from '../parseRawGrammar';
+import { RegistryOptions } from '../main';
 
-import * as path from "path";
-import * as fs from "fs";
-import { IRawGrammar } from "../rawGrammar";
+import * as path from 'path';
+import * as fs from 'fs';
+import { IRawGrammar } from '../rawGrammar';
 
 export interface ILanguageRegistration {
 	id: string;
@@ -20,23 +20,19 @@ export interface IGrammarRegistration {
 	language: string;
 	scopeName: string;
 	path: string;
-	embeddedLanguages: { [scopeName: string]: string };
+	embeddedLanguages: { [scopeName: string]: string; };
 	grammar?: Promise<IRawGrammar>;
 }
 
 export class Resolver implements RegistryOptions {
-	public readonly language2id: { [languages: string]: number };
+	public readonly language2id: { [languages: string]: number; };
 	private _lastLanguageId: number;
 	private _id2language: string[];
 	private readonly _grammars: IGrammarRegistration[];
 	private readonly _languages: ILanguageRegistration[];
 	public readonly onigLib: Promise<IOnigLib>;
 
-	constructor(
-		grammars: IGrammarRegistration[],
-		languages: ILanguageRegistration[],
-		onigLibPromise: Promise<IOnigLib>
-	) {
+	constructor(grammars: IGrammarRegistration[], languages: ILanguageRegistration[], onigLibPromise: Promise<IOnigLib>) {
 		this._grammars = grammars;
 		this._languages = languages;
 		this.onigLib = onigLibPromise;
@@ -93,9 +89,7 @@ export class Resolver implements RegistryOptions {
 	}
 
 	public findScopeByFilename(filename: string): string | null {
-		let language =
-			this.findLanguageByExtension(path.extname(filename)) ||
-			this.findLanguageByFilename(filename);
+		let language = this.findLanguageByExtension(path.extname(filename)) || this.findLanguageByFilename(filename);
 		if (language) {
 			let grammar = this.findGrammarByLanguage(language);
 			if (grammar) {
@@ -114,7 +108,7 @@ export class Resolver implements RegistryOptions {
 			}
 		}
 
-		throw new Error("Could not findGrammarByLanguage for " + language);
+		throw new Error('Could not findGrammarByLanguage for ' + language);
 	}
 
 	public async loadGrammar(scopeName: string): Promise<IRawGrammar | null> {
@@ -132,8 +126,8 @@ export class Resolver implements RegistryOptions {
 	}
 }
 
-function readGrammarFromPath(path: string): Promise<IRawGrammar> {
-	return new Promise((c, e) => {
+function readGrammarFromPath(path: string) : Promise<IRawGrammar> {
+	return new Promise((c,e) => {
 		fs.readFile(path, (error, content) => {
 			if (error) {
 				e(error);
