@@ -11,23 +11,16 @@ export interface Matcher<T> {
 	(matcherInput: T): boolean;
 }
 
-export function createMatchers<T>(
-	selector: string,
-	matchesName: (names: string[], matcherInput: T) => boolean
-): MatcherWithPriority<T>[] {
+export function createMatchers<T>(selector: string, matchesName: (names: string[], matcherInput: T) => boolean): MatcherWithPriority<T>[] {
 	const results = <MatcherWithPriority<T>[]>[];
 	const tokenizer = newTokenizer(selector);
 	let token = tokenizer.next();
 	while (token !== null) {
 		let priority: -1 | 0 | 1 = 0;
-		if (token.length === 2 && token.charAt(1) === ":") {
+		if (token.length === 2 && token.charAt(1) === ':') {
 			switch (token.charAt(0)) {
-				case "R":
-					priority = 1;
-					break;
-				case "L":
-					priority = -1;
-					break;
+				case 'R': priority = 1; break;
+				case 'L': priority = -1; break;
 				default:
 					console.log(`Unknown priority ${token} in scope selector`);
 			}
@@ -35,7 +28,7 @@ export function createMatchers<T>(
 		}
 		let matcher = parseConjunction();
 		results.push({ matcher, priority });
-		if (token !== ",") {
+		if (token !== ',') {
 			break;
 		}
 		token = tokenizer.next();
@@ -43,16 +36,15 @@ export function createMatchers<T>(
 	return results;
 
 	function parseOperand(): Matcher<T> | null {
-		if (token === "-") {
+		if (token === '-') {
 			token = tokenizer.next();
 			const expressionToNegate = parseOperand();
-			return (matcherInput) =>
-				!!expressionToNegate && !expressionToNegate(matcherInput);
+			return matcherInput => !!expressionToNegate && !expressionToNegate(matcherInput);
 		}
-		if (token === "(") {
+		if (token === '(') {
 			token = tokenizer.next();
 			const expressionInParents = parseInnerExpression();
-			if (token === ")") {
+			if (token === ')') {
 				token = tokenizer.next();
 			}
 			return expressionInParents;
@@ -63,7 +55,7 @@ export function createMatchers<T>(
 				identifiers.push(token);
 				token = tokenizer.next();
 			} while (isIdentifier(token));
-			return (matcherInput) => matchesName(identifiers, matcherInput);
+			return matcherInput => matchesName(identifiers, matcherInput);
 		}
 		return null;
 	}
@@ -74,25 +66,23 @@ export function createMatchers<T>(
 			matchers.push(matcher);
 			matcher = parseOperand();
 		}
-		return (matcherInput) =>
-			matchers.every((matcher) => matcher(matcherInput)); // and
+		return matcherInput => matchers.every(matcher => matcher(matcherInput)); // and
 	}
 	function parseInnerExpression(): Matcher<T> {
 		const matchers: Matcher<T>[] = [];
 		let matcher = parseConjunction();
 		while (matcher) {
 			matchers.push(matcher);
-			if (token === "|" || token === ",") {
+			if (token === '|' || token === ',') {
 				do {
 					token = tokenizer.next();
-				} while (token === "|" || token === ","); // ignore subsequent commas
+				} while (token === '|' || token === ','); // ignore subsequent commas
 			} else {
 				break;
 			}
 			matcher = parseConjunction();
 		}
-		return (matcherInput) =>
-			matchers.some((matcher) => matcher(matcherInput)); // or
+		return matcherInput => matchers.some(matcher => matcher(matcherInput)); // or
 	}
 }
 
@@ -111,6 +101,6 @@ function newTokenizer(input: string): { next: () => string | null } {
 			const res = match[0];
 			match = regex.exec(input);
 			return res;
-		},
+		}
 	};
 }

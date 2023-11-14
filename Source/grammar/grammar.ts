@@ -2,52 +2,17 @@
  * Copyright (C) Microsoft Corporation. All rights reserved.
  *--------------------------------------------------------*/
 
-import { DebugFlags } from "../debug";
-import {
-	EncodedTokenAttributes,
-	OptionalStandardTokenType,
-	StandardTokenType,
-	toOptionalTokenType,
-} from "../encodedTokenAttributes";
-import {
-	IEmbeddedLanguagesMap,
-	IGrammar,
-	IToken,
-	ITokenizeLineResult,
-	ITokenizeLineResult2,
-	ITokenTypeMap,
-	StateStack,
-} from "../main";
-import { createMatchers, Matcher } from "../matcher";
-import {
-	disposeOnigString,
-	IOnigLib,
-	OnigScanner,
-	OnigString,
-} from "../onigLib";
-import { IRawGrammar, IRawRepository, IRawRule } from "../rawGrammar";
-import {
-	ruleIdFromNumber,
-	IRuleFactoryHelper,
-	IRuleRegistry,
-	Rule,
-	RuleFactory,
-	RuleId,
-	ruleIdToNumber,
-} from "../rule";
-import {
-	FontStyle,
-	ScopeName,
-	ScopePath,
-	ScopeStack,
-	StyleAttributes,
-} from "../theme";
-import { clone } from "../utils";
-import {
-	BasicScopeAttributes,
-	BasicScopeAttributesProvider,
-} from "./basicScopesAttributeProvider";
-import { _tokenizeString } from "./tokenizeString";
+import { DebugFlags } from '../debug';
+import { EncodedTokenAttributes, OptionalStandardTokenType, StandardTokenType, toOptionalTokenType } from '../encodedTokenAttributes';
+import { IEmbeddedLanguagesMap, IGrammar, IToken, ITokenizeLineResult, ITokenizeLineResult2, ITokenTypeMap, StateStack } from '../main';
+import { createMatchers, Matcher } from '../matcher';
+import { disposeOnigString, IOnigLib, OnigScanner, OnigString } from '../onigLib';
+import { IRawGrammar, IRawRepository, IRawRule } from '../rawGrammar';
+import { ruleIdFromNumber, IRuleFactoryHelper, IRuleRegistry, Rule, RuleFactory, RuleId, ruleIdToNumber } from '../rule';
+import { FontStyle, ScopeName, ScopePath, ScopeStack, StyleAttributes } from '../theme';
+import { clone } from '../utils';
+import { BasicScopeAttributes, BasicScopeAttributesProvider } from './basicScopesAttributeProvider';
+import { _tokenizeString } from './tokenizeString';
 
 export function createGrammar(
 	scopeName: ScopeName,
@@ -89,26 +54,16 @@ export interface Injection {
 	readonly grammar: IRawGrammar;
 }
 
-function collectInjections(
-	result: Injection[],
-	selector: string,
-	rule: IRawRule,
-	ruleFactoryHelper: IRuleFactoryHelper,
-	grammar: IRawGrammar
-): void {
+function collectInjections(result: Injection[], selector: string, rule: IRawRule, ruleFactoryHelper: IRuleFactoryHelper, grammar: IRawGrammar): void {
 	const matchers = createMatchers(selector, nameMatcher);
-	const ruleId = RuleFactory.getCompiledRuleId(
-		rule,
-		ruleFactoryHelper,
-		grammar.repository
-	);
+	const ruleId = RuleFactory.getCompiledRuleId(rule, ruleFactoryHelper, grammar.repository);
 	for (const matcher of matchers) {
 		result.push({
 			debugSelector: selector,
 			matcher: matcher.matcher,
 			ruleId: ruleId,
 			grammar: grammar,
-			priority: matcher.priority,
+			priority: matcher.priority
 		});
 	}
 }
@@ -118,7 +73,7 @@ function nameMatcher(identifers: ScopeName[], scopes: ScopeName[]): boolean {
 		return false;
 	}
 	let lastIndex = 0;
-	return identifers.every((identifier) => {
+	return identifers.every(identifier => {
 		for (let i = lastIndex; i < scopes.length; i++) {
 			if (scopesAreMatching(scopes[i], identifier)) {
 				lastIndex = i + 1;
@@ -137,11 +92,7 @@ function scopesAreMatching(thisScopeName: string, scopeName: string): boolean {
 		return true;
 	}
 	const len = scopeName.length;
-	return (
-		thisScopeName.length > len &&
-		thisScopeName.substr(0, len) === scopeName &&
-		thisScopeName[len] === "."
-	);
+	return thisScopeName.length > len && thisScopeName.substr(0, len) === scopeName && thisScopeName[len] === '.';
 }
 
 export class Grammar implements IGrammar, IRuleFactoryHelper, IOnigLib {
@@ -155,9 +106,7 @@ export class Grammar implements IGrammar, IRuleFactoryHelper, IOnigLib {
 	private readonly _basicScopeAttributesProvider: BasicScopeAttributesProvider;
 	private readonly _tokenTypeMatchers: TokenTypeMatcher[];
 
-	public get themeProvider(): IThemeProvider {
-		return this._grammarRepository;
-	}
+	public get themeProvider(): IThemeProvider { return this._grammarRepository; }
 
 	constructor(
 		private readonly _rootScopeName: ScopeName,
@@ -213,9 +162,7 @@ export class Grammar implements IGrammar, IRuleFactoryHelper, IOnigLib {
 	}
 
 	public getMetadataForScope(scope: string): BasicScopeAttributes {
-		return this._basicScopeAttributesProvider.getBasicScopeAttributes(
-			scope
-		);
+		return this._basicScopeAttributesProvider.getBasicScopeAttributes(scope);
 	}
 
 	private _collectInjections(): Injection[] {
@@ -253,8 +200,7 @@ export class Grammar implements IGrammar, IRuleFactoryHelper, IOnigLib {
 
 			// add injection grammars contributed for the current scope
 
-			const injectionScopeNames =
-				this._grammarRepository.injections(scopeName);
+			const injectionScopeNames = this._grammarRepository.injections(scopeName);
 			if (injectionScopeNames) {
 				injectionScopeNames.forEach((injectionScopeName) => {
 					const injectionGrammar =
@@ -405,8 +351,8 @@ export class Grammar implements IGrammar, IRuleFactoryHelper, IOnigLib {
 				);
 			} else {
 				scopeList = AttributedScopeStack.createRoot(
-					"unknown",
-					defaultMetadata
+					 "unknown",
+					 defaultMetadata
 				);
 			}
 
@@ -456,56 +402,35 @@ export class Grammar implements IGrammar, IRuleFactoryHelper, IOnigLib {
 	}
 }
 
-function initGrammar(
-	grammar: IRawGrammar,
-	base: IRawRule | null | undefined
-): IRawGrammar {
+function initGrammar(grammar: IRawGrammar, base: IRawRule | null | undefined): IRawGrammar {
 	grammar = clone(grammar);
 
 	grammar.repository = grammar.repository || <any>{};
 	grammar.repository.$self = {
 		$vscodeTextmateLocation: grammar.$vscodeTextmateLocation,
 		patterns: grammar.patterns,
-		name: grammar.scopeName,
+		name: grammar.scopeName
 	};
 	grammar.repository.$base = base || grammar.repository.$self;
 	return grammar;
 }
 
 export class AttributedScopeStack {
-	static fromExtension(
-		namesScopeList: AttributedScopeStack | null,
-		contentNameScopesList: AttributedScopeStackFrame[]
-	): AttributedScopeStack | null {
+	static fromExtension(namesScopeList: AttributedScopeStack | null, contentNameScopesList: AttributedScopeStackFrame[]): AttributedScopeStack | null {
 		let current = namesScopeList;
 		let scopeNames = namesScopeList?.scopePath ?? null;
 		for (const frame of contentNameScopesList) {
 			scopeNames = ScopeStack.push(scopeNames, frame.scopeNames);
-			current = new AttributedScopeStack(
-				current,
-				scopeNames!,
-				frame.encodedTokenAttributes
-			);
+			current = new AttributedScopeStack(current, scopeNames!, frame.encodedTokenAttributes);
 		}
 		return current;
 	}
 
-	public static createRoot(
-		scopeName: ScopeName,
-		tokenAttributes: EncodedTokenAttributes
-	): AttributedScopeStack {
-		return new AttributedScopeStack(
-			null,
-			new ScopeStack(null, scopeName),
-			tokenAttributes
-		);
+	public static createRoot(scopeName: ScopeName, tokenAttributes: EncodedTokenAttributes): AttributedScopeStack {
+		return new AttributedScopeStack(null, new ScopeStack(null, scopeName), tokenAttributes);
 	}
 
-	public static createRootAndLookUpScopeName(
-		scopeName: ScopeName,
-		tokenAttributes: EncodedTokenAttributes,
-		grammar: Grammar
-	): AttributedScopeStack {
+	public static createRootAndLookUpScopeName(scopeName: ScopeName, tokenAttributes: EncodedTokenAttributes, grammar: Grammar): AttributedScopeStack {
 		const rawRootMetadata = grammar.getMetadataForScope(scopeName);
 		const scopePath = new ScopeStack(null, scopeName);
 		const rootStyle = grammar.themeProvider.themeMatch(scopePath);
@@ -516,16 +441,10 @@ export class AttributedScopeStack {
 			rootStyle
 		);
 
-		return new AttributedScopeStack(
-			null,
-			scopePath,
-			resolvedTokenAttributes
-		);
+		return new AttributedScopeStack(null, scopePath, resolvedTokenAttributes);
 	}
 
-	public get scopeName(): ScopeName {
-		return this.scopePath.scopeName;
-	}
+	public get scopeName(): ScopeName { return this.scopePath.scopeName; }
 
 	/**
 	 * Invariant:
@@ -539,10 +458,11 @@ export class AttributedScopeStack {
 		public readonly parent: AttributedScopeStack | null,
 		public readonly scopePath: ScopeStack,
 		public readonly tokenAttributes: EncodedTokenAttributes
-	) {}
+	) {
+	}
 
 	public toString() {
-		return this.getScopeNames().join(" ");
+		return this.getScopeNames().join(' ');
 	}
 
 	public equals(other: AttributedScopeStack): boolean {
@@ -568,10 +488,7 @@ export class AttributedScopeStack {
 				return false;
 			}
 
-			if (
-				a.scopeName !== b.scopeName ||
-				a.tokenAttributes !== b.tokenAttributes
-			) {
+			if (a.scopeName !== b.scopeName || a.tokenAttributes !== b.tokenAttributes) {
 				return false;
 			}
 
@@ -607,45 +524,36 @@ export class AttributedScopeStack {
 		);
 	}
 
-	public pushAttributed(
-		scopePath: ScopePath | null,
-		grammar: Grammar
-	): AttributedScopeStack {
+	public pushAttributed(scopePath: ScopePath | null, grammar: Grammar): AttributedScopeStack {
 		if (scopePath === null) {
 			return this;
 		}
 
-		if (scopePath.indexOf(" ") === -1) {
+		if (scopePath.indexOf(' ') === -1) {
 			// This is the common case and much faster
 
-			return AttributedScopeStack._pushAttributed(
-				this,
-				scopePath,
-				grammar
-			);
+			return AttributedScopeStack._pushAttributed(this, scopePath, grammar);
 		}
 
 		const scopes = scopePath.split(/ /g);
 		let result: AttributedScopeStack = this;
 		for (const scope of scopes) {
-			result = AttributedScopeStack._pushAttributed(
-				result,
-				scope,
-				grammar
-			);
+			result = AttributedScopeStack._pushAttributed(result, scope, grammar);
 		}
 		return result;
+
 	}
 
 	private static _pushAttributed(
 		target: AttributedScopeStack,
 		scopeName: ScopeName,
-		grammar: Grammar
+		grammar: Grammar,
 	): AttributedScopeStack {
 		const rawMetadata = grammar.getMetadataForScope(scopeName);
 
 		const newPath = target.scopePath.push(scopeName);
-		const scopeThemeMatchResult = grammar.themeProvider.themeMatch(newPath);
+		const scopeThemeMatchResult =
+			grammar.themeProvider.themeMatch(newPath);
 		const metadata = AttributedScopeStack.mergeAttributes(
 			target.tokenAttributes,
 			rawMetadata,
@@ -658,18 +566,14 @@ export class AttributedScopeStack {
 		return this.scopePath.getSegments();
 	}
 
-	public getExtensionIfDefined(
-		base: AttributedScopeStack | null
-	): AttributedScopeStackFrame[] | undefined {
+	public getExtensionIfDefined(base: AttributedScopeStack | null): AttributedScopeStackFrame[] | undefined {
 		const result: AttributedScopeStackFrame[] = [];
 		let self: AttributedScopeStack | null = this;
 
 		while (self && self !== base) {
 			result.push({
 				encodedTokenAttributes: self.tokenAttributes,
-				scopeNames: self.scopePath.getExtensionIfDefined(
-					self.parent?.scopePath ?? null
-				)!,
+				scopeNames: self.scopePath.getExtensionIfDefined(self.parent?.scopePath ?? null)!,
 			});
 			self = self.parent;
 		}
@@ -714,10 +618,12 @@ export class StateStackImpl implements StateStack {
 	 */
 	private _anchorPos: number;
 
+
 	/**
 	 * The depth of the stack.
 	 */
 	public readonly depth: number;
+
 
 	/**
 	 * Invariant:
@@ -763,7 +669,7 @@ export class StateStackImpl implements StateStack {
 		 * The list of scopes containing the "contentName" (besides "name") for this state.
 		 * This list **must** contain as an element `scopeName`.
 		 */
-		public readonly contentNameScopesList: AttributedScopeStack | null
+		public readonly contentNameScopesList: AttributedScopeStack | null,
 	) {
 		this.depth = this.parent ? this.parent.depth + 1 : 1;
 		this._enterPos = enterPos;
@@ -784,10 +690,7 @@ export class StateStackImpl implements StateStack {
 		if (!this._structuralEquals(a, b)) {
 			return false;
 		}
-		return AttributedScopeStack.equals(
-			a.contentNameScopesList,
-			b.contentNameScopesList
-		);
+		return AttributedScopeStack.equals(a.contentNameScopesList, b.contentNameScopesList);
 	}
 
 	/**
@@ -860,7 +763,7 @@ export class StateStackImpl implements StateStack {
 		beginRuleCapturedEOL: boolean,
 		endRule: string | null,
 		nameScopesList: AttributedScopeStack | null,
-		contentNameScopesList: AttributedScopeStack | null
+		contentNameScopesList: AttributedScopeStack | null,
 	): StateStackImpl {
 		return new StateStackImpl(
 			this,
@@ -897,9 +800,9 @@ export class StateStackImpl implements StateStack {
 			outIndex = this.parent._writeString(res, outIndex);
 		}
 
-		res[outIndex++] = `(${
-			this.ruleId
-		}, ${this.nameScopesList?.toString()}, ${this.contentNameScopesList?.toString()})`;
+		res[
+			outIndex++
+		] = `(${this.ruleId}, ${this.nameScopesList?.toString()}, ${this.contentNameScopesList?.toString()})`;
 
 		return outIndex;
 	}
@@ -954,25 +857,13 @@ export class StateStackImpl implements StateStack {
 			ruleId: ruleIdToNumber(this.ruleId),
 			beginRuleCapturedEOL: this.beginRuleCapturedEOL,
 			endRule: this.endRule,
-			nameScopesList:
-				this.nameScopesList?.getExtensionIfDefined(
-					this.parent?.nameScopesList ?? null
-				)! ?? [],
-			contentNameScopesList:
-				this.contentNameScopesList?.getExtensionIfDefined(
-					this.nameScopesList
-				)! ?? [],
+			nameScopesList: this.nameScopesList?.getExtensionIfDefined(this.parent?.nameScopesList ?? null)! ?? [],
+			contentNameScopesList: this.contentNameScopesList?.getExtensionIfDefined(this.nameScopesList)! ?? [],
 		};
 	}
 
-	public static pushFrame(
-		self: StateStackImpl | null,
-		frame: StateStackFrame
-	): StateStackImpl {
-		const namesScopeList = AttributedScopeStack.fromExtension(
-			self?.nameScopesList ?? null,
-			frame.nameScopesList
-		)!;
+	public static pushFrame(self: StateStackImpl | null, frame: StateStackFrame): StateStackImpl {
+		const namesScopeList = AttributedScopeStack.fromExtension(self?.nameScopesList ?? null, frame.nameScopesList)!;
 		return new StateStackImpl(
 			self,
 			ruleIdFromNumber(frame.ruleId),
@@ -981,10 +872,7 @@ export class StateStackImpl implements StateStack {
 			frame.beginRuleCapturedEOL,
 			frame.endRule,
 			namesScopeList,
-			AttributedScopeStack.fromExtension(
-				namesScopeList,
-				frame.contentNameScopesList
-			)!
+			AttributedScopeStack.fromExtension(namesScopeList, frame.contentNameScopesList)!
 		);
 	}
 }
@@ -1015,22 +903,18 @@ export class BalancedBracketSelectors {
 
 	constructor(
 		balancedBracketScopes: string[],
-		unbalancedBracketScopes: string[]
+		unbalancedBracketScopes: string[],
 	) {
-		this.balancedBracketScopes = balancedBracketScopes.flatMap(
-			(selector) => {
-				if (selector === "*") {
+		this.balancedBracketScopes = balancedBracketScopes.flatMap((selector) => {
+				if (selector === '*') {
 					this.allowAny = true;
 					return [];
 				}
-				return createMatchers(selector, nameMatcher).map(
-					(m) => m.matcher
-				);
+				return createMatchers(selector, nameMatcher).map((m) => m.matcher);
 			}
 		);
-		this.unbalancedBracketScopes = unbalancedBracketScopes.flatMap(
-			(selector) =>
-				createMatchers(selector, nameMatcher).map((m) => m.matcher)
+		this.unbalancedBracketScopes = unbalancedBracketScopes.flatMap((selector) =>
+			createMatchers(selector, nameMatcher).map((m) => m.matcher)
 		);
 	}
 
@@ -1081,7 +965,7 @@ export class LineTokens {
 		emitBinaryTokens: boolean,
 		lineText: string,
 		tokenTypeOverrides: TokenTypeMatcher[],
-		private readonly balancedBracketSelectors: BalancedBracketSelectors | null
+		private readonly balancedBracketSelectors: BalancedBracketSelectors | null,
 	) {
 		this._emitBinaryTokens = emitBinaryTokens;
 		this._tokenTypeOverrides = tokenTypeOverrides;
@@ -1114,12 +998,7 @@ export class LineTokens {
 				containsBalancedBrackets = true;
 			}
 
-			if (
-				this._tokenTypeOverrides.length > 0 ||
-				(this.balancedBracketSelectors &&
-					!this.balancedBracketSelectors.matchesAlways &&
-					!this.balancedBracketSelectors.matchesNever)
-			) {
+			if (this._tokenTypeOverrides.length > 0 || (this.balancedBracketSelectors && !this.balancedBracketSelectors.matchesAlways && !this.balancedBracketSelectors.matchesNever)) {
 				// Only generate scope array when required to improve performance
 				const scopes = scopesList?.getScopeNames() ?? [];
 				for (const tokenType of this._tokenTypeOverrides) {
@@ -1136,8 +1015,7 @@ export class LineTokens {
 					}
 				}
 				if (this.balancedBracketSelectors) {
-					containsBalancedBrackets =
-						this.balancedBracketSelectors.match(scopes);
+					containsBalancedBrackets = this.balancedBracketSelectors.match(scopes);
 				}
 			}
 
@@ -1153,10 +1031,7 @@ export class LineTokens {
 				);
 			}
 
-			if (
-				this._binaryTokens.length > 0 &&
-				this._binaryTokens[this._binaryTokens.length - 1] === metadata
-			) {
+			if (this._binaryTokens.length > 0 && this._binaryTokens[this._binaryTokens.length - 1] === metadata) {
 				// no need to push a token with the same metadata
 				this._lastTokenEndIndex = endIndex;
 				return;
@@ -1164,16 +1039,9 @@ export class LineTokens {
 
 			if (DebugFlags.InDebugMode) {
 				const scopes = scopesList?.getScopeNames() ?? [];
-				console.log(
-					"  token: |" +
-						this._lineText!.substring(
-							this._lastTokenEndIndex,
-							endIndex
-						).replace(/\n$/, "\\n") +
-						"|"
-				);
+				console.log('  token: |' + this._lineText!.substring(this._lastTokenEndIndex, endIndex).replace(/\n$/, '\\n') + '|');
 				for (let k = 0; k < scopes.length; k++) {
-					console.log("      * " + scopes[k]);
+					console.log('      * ' + scopes[k]);
 				}
 			}
 
@@ -1187,16 +1055,9 @@ export class LineTokens {
 		const scopes = scopesList?.getScopeNames() ?? [];
 
 		if (DebugFlags.InDebugMode) {
-			console.log(
-				"  token: |" +
-					this._lineText!.substring(
-						this._lastTokenEndIndex,
-						endIndex
-					).replace(/\n$/, "\\n") +
-					"|"
-			);
+			console.log('  token: |' + this._lineText!.substring(this._lastTokenEndIndex, endIndex).replace(/\n$/, '\\n') + '|');
 			for (let k = 0; k < scopes.length; k++) {
-				console.log("      * " + scopes[k]);
+				console.log('      * ' + scopes[k]);
 			}
 		}
 
@@ -1204,17 +1065,14 @@ export class LineTokens {
 			startIndex: this._lastTokenEndIndex,
 			endIndex: endIndex,
 			// value: lineText.substring(lastTokenEndIndex, endIndex),
-			scopes: scopes,
+			scopes: scopes
 		});
 
 		this._lastTokenEndIndex = endIndex;
 	}
 
 	public getResult(stack: StateStackImpl, lineLength: number): IToken[] {
-		if (
-			this._tokens.length > 0 &&
-			this._tokens[this._tokens.length - 1].startIndex === lineLength - 1
-		) {
+		if (this._tokens.length > 0 && this._tokens[this._tokens.length - 1].startIndex === lineLength - 1) {
 			// pop produced token for newline
 			this._tokens.pop();
 		}
@@ -1228,14 +1086,8 @@ export class LineTokens {
 		return this._tokens;
 	}
 
-	public getBinaryResult(
-		stack: StateStackImpl,
-		lineLength: number
-	): Uint32Array {
-		if (
-			this._binaryTokens.length > 0 &&
-			this._binaryTokens[this._binaryTokens.length - 2] === lineLength - 1
-		) {
+	public getBinaryResult(stack: StateStackImpl, lineLength: number): Uint32Array {
+		if (this._binaryTokens.length > 0 && this._binaryTokens[this._binaryTokens.length - 2] === lineLength - 1) {
 			// pop produced token for newline
 			this._binaryTokens.pop();
 			this._binaryTokens.pop();
@@ -1255,3 +1107,4 @@ export class LineTokens {
 		return result;
 	}
 }
+

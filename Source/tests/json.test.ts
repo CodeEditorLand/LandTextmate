@@ -2,8 +2,8 @@
  * Copyright (C) Microsoft Corporation. All rights reserved.
  *--------------------------------------------------------*/
 
-import * as assert from "assert";
-import { parseJSON } from "../json";
+import * as assert from 'assert';
+import { parseJSON } from '../json';
 
 function isValid(json: string): void {
 	let expected = JSON.parse(json);
@@ -21,51 +21,49 @@ function isInvalid(json: string): void {
 	} catch (err) {
 		hadErr = true;
 	}
-	assert.strictEqual(hadErr, true, "expected invalid: " + json);
+	assert.strictEqual(hadErr, true, 'expected invalid: ' + json);
 }
 
-test("JSON Invalid body", function () {
-	isInvalid("{}[]");
-	isInvalid("*");
+test('JSON Invalid body', function () {
+	isInvalid('{}[]');
+	isInvalid('*');
 });
 
-test("JSON Trailing Whitespace", function () {
-	isValid("{}\n\n");
+test('JSON Trailing Whitespace', function () {
+	isValid('{}\n\n');
 });
 
-test("JSON Objects", function () {
-	isValid("{}");
+test('JSON Objects', function () {
+	isValid('{}');
 	isValid('{"key": "value"}');
-	isValid(
-		'{"key1": true, "key2": 3, "key3": [null], "key4": { "nested": {}}}'
-	);
+	isValid('{"key1": true, "key2": 3, "key3": [null], "key4": { "nested": {}}}');
 	isValid('{"constructor": true }');
 
-	isInvalid("{");
-	isInvalid("{3:3}");
-	isInvalid("{'key': 3}");
+	isInvalid('{');
+	isInvalid('{3:3}');
+	isInvalid('{\'key\': 3}');
 	isInvalid('{"key" 3}');
 	isInvalid('{"key":3 "key2": 4}');
 	isInvalid('{"key":42, }');
 	isInvalid('{"key:42');
 });
 
-test("JSON Arrays", function () {
-	isValid("[]");
-	isValid("[1, 2]");
+test('JSON Arrays', function () {
+	isValid('[]');
+	isValid('[1, 2]');
 	isValid('[1, "string", false, {}, [null]]');
 
-	isInvalid("[");
-	isInvalid("[,]");
-	isInvalid("[1 2]");
-	isInvalid("[true false]");
-	isInvalid("[1, ]");
-	isInvalid("[[]");
+	isInvalid('[');
+	isInvalid('[,]');
+	isInvalid('[1 2]');
+	isInvalid('[true false]');
+	isInvalid('[1, ]');
+	isInvalid('[[]');
 	isInvalid('["something"');
-	isInvalid("[magic]");
+	isInvalid('[magic]');
 });
 
-test("JSON Strings", function () {
+test('JSON Strings', function () {
 	isValid('["string"]');
 	isValid('["\\"\\\\\\/\\b\\f\\n\\r\\t\\u1234\\u12AB"]');
 	isValid('["\\\\"]');
@@ -76,11 +74,11 @@ test("JSON Strings", function () {
 	isInvalid('["\\u"]');
 	isInvalid('["\\u123"]');
 	isInvalid('["\\u123Z"]');
-	isInvalid("['string']");
+	isInvalid('[\'string\']');
 });
 
-test("Numbers", function () {
-	isValid("[0, -1, 186.1, 0.123, -1.583e+4, 1.583E-4, 5e8]");
+test('Numbers', function () {
+	isValid('[0, -1, 186.1, 0.123, -1.583e+4, 1.583E-4, 5e8]');
 
 	// isInvalid('[+1]');
 	// isInvalid('[01]');
@@ -90,13 +88,13 @@ test("Numbers", function () {
 	// isInvalid('[-A]');
 });
 
-test("JSON misc", function () {
-	isValid("{}");
-	isValid("[null]");
+test('JSON misc', function () {
+	isValid('{}');
+	isValid('[null]');
 	isValid('{"a":true}');
 	isValid('{\n\t"key" : {\n\t"key2": 42\n\t}\n}');
 	isValid('{"key":[{"key2":42}]}');
-	isValid("{\n\t\n}");
+	isValid('{\n\t\n}');
 	isValid('{\n"first":true\n\n}');
 	isValid('{\n"key":32,\n\n"key2":45}');
 	isValid('{"a": 1,\n\n"d": 2}');

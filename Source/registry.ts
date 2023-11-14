@@ -2,24 +2,11 @@
  * Copyright (C) Microsoft Corporation. All rights reserved.
  *--------------------------------------------------------*/
 
-import {
-	BalancedBracketSelectors,
-	createGrammar,
-	Grammar,
-	IGrammarRepository,
-	IThemeProvider,
-	AttributedScopeStack,
-} from "./grammar";
-import { IRawGrammar } from "./rawGrammar";
-import { IGrammar, IEmbeddedLanguagesMap, ITokenTypeMap } from "./main";
-import {
-	ScopeStack,
-	Theme,
-	StyleAttributes,
-	ThemeTrieElementRule,
-	ScopeName,
-} from "./theme";
-import { IOnigLib } from "./onigLib";
+import { BalancedBracketSelectors, createGrammar, Grammar, IGrammarRepository, IThemeProvider, AttributedScopeStack } from './grammar';
+import { IRawGrammar } from './rawGrammar';
+import { IGrammar, IEmbeddedLanguagesMap, ITokenTypeMap } from './main';
+import { ScopeStack, Theme, StyleAttributes, ThemeTrieElementRule, ScopeName } from './theme';
+import { IOnigLib } from './onigLib';
 
 export class SyncRegistry implements IGrammarRepository, IThemeProvider {
 	private readonly _grammars = new Map<ScopeName, Grammar>();
@@ -27,10 +14,7 @@ export class SyncRegistry implements IGrammarRepository, IThemeProvider {
 	private readonly _injectionGrammars = new Map<ScopeName, ScopeName[]>();
 	private _theme: Theme;
 
-	constructor(
-		theme: Theme,
-		private readonly _onigLibPromise: Promise<IOnigLib>
-	) {
+	constructor(theme: Theme, private readonly _onigLibPromise: Promise<IOnigLib>) {
 		this._theme = theme;
 	}
 
@@ -51,10 +35,7 @@ export class SyncRegistry implements IGrammarRepository, IThemeProvider {
 	/**
 	 * Add `grammar` to registry and return a list of referenced scope names
 	 */
-	public addGrammar(
-		grammar: IRawGrammar,
-		injectionScopeNames?: ScopeName[]
-	): void {
+	public addGrammar(grammar: IRawGrammar, injectionScopeNames?: ScopeName[]): void {
 		this._rawGrammars.set(grammar.scopeName, grammar);
 
 		if (injectionScopeNames) {
@@ -105,19 +86,16 @@ export class SyncRegistry implements IGrammarRepository, IThemeProvider {
 			if (!rawGrammar) {
 				return null;
 			}
-			this._grammars.set(
+			this._grammars.set(scopeName, createGrammar(
 				scopeName,
-				createGrammar(
-					scopeName,
-					rawGrammar,
-					initialLanguage,
-					embeddedLanguages,
-					tokenTypes,
-					balancedBracketSelectors,
-					this,
-					await this._onigLibPromise
-				)
-			);
+				rawGrammar,
+				initialLanguage,
+				embeddedLanguages,
+				tokenTypes,
+				balancedBracketSelectors,
+				this,
+				await this._onigLibPromise
+			));
 		}
 		return this._grammars.get(scopeName)!;
 	}

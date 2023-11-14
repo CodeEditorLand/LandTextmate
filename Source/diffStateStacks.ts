@@ -5,10 +5,7 @@
 import { StateStackImpl, StateStackFrame } from "./grammar";
 import { StateStack } from "./main";
 
-export function diffStateStacksRefEq(
-	first: StateStack,
-	second: StateStack
-): StackDiff {
+export function diffStateStacksRefEq(first: StateStack, second: StateStack): StackDiff {
 	let pops = 0;
 	const newFrames: StateStackFrame[] = [];
 
@@ -33,10 +30,7 @@ export function diffStateStacksRefEq(
 	};
 }
 
-export function applyStateStackDiff(
-	stack: StateStack | null,
-	diff: StackDiff
-): StateStackImpl | null {
+export function applyStateStackDiff(stack: StateStack | null, diff: StackDiff): StateStackImpl | null {
 	let curStack = stack as StateStackImpl | null;
 	for (let i = 0; i < diff.pops; i++) {
 		curStack = curStack!.parent;
