@@ -2,7 +2,7 @@
  * Copyright (C) Microsoft Corporation. All rights reserved.
  *--------------------------------------------------------*/
 
-import { IOnigCaptureIndex } from './onigLib';
+import { IOnigCaptureIndex } from "./onigLib";
 
 export function clone<T>(something: T): T {
 	return doClone(something);
@@ -12,7 +12,7 @@ function doClone(something: any): any {
 	if (Array.isArray(something)) {
 		return cloneArray(something);
 	}
-	if (typeof something === 'object') {
+	if (typeof something === "object") {
 		return cloneObj(something);
 	}
 	return something;
@@ -35,7 +35,7 @@ function cloneObj(obj: any): any {
 }
 
 export function mergeObjects(target: any, ...sources: any[]): any {
-	sources.forEach(source => {
+	sources.forEach((source) => {
 		for (let key in source) {
 			target[key] = source[key];
 		}
@@ -44,7 +44,7 @@ export function mergeObjects(target: any, ...sources: any[]): any {
 }
 
 export function basename(path: string): string {
-	const idx = ~path.lastIndexOf('/') || ~path.lastIndexOf('\\');
+	const idx = ~path.lastIndexOf("/") || ~path.lastIndexOf("\\");
 	if (idx === 0) {
 		return path;
 	} else if (~idx === path.length - 1) {
@@ -57,7 +57,6 @@ export function basename(path: string): string {
 let CAPTURING_REGEX_SOURCE = /\$(\d+)|\${(\d+):\/(downcase|upcase)}/g;
 
 export class RegexSource {
-
 	public static hasCaptures(regexSource: string | null): boolean {
 		if (regexSource === null) {
 			return false;
@@ -66,33 +65,49 @@ export class RegexSource {
 		return CAPTURING_REGEX_SOURCE.test(regexSource);
 	}
 
-	public static replaceCaptures(regexSource: string, captureSource: string, captureIndices: IOnigCaptureIndex[]): string {
-		return regexSource.replace(CAPTURING_REGEX_SOURCE, (match: string, index: string, commandIndex: string, command: string) => {
-			let capture = captureIndices[parseInt(index || commandIndex, 10)];
-			if (capture) {
-				let result = captureSource.substring(capture.start, capture.end);
-				// Remove leading dots that would make the selector invalid
-				while (result[0] === '.') {
-					result = result.substring(1);
+	public static replaceCaptures(
+		regexSource: string,
+		captureSource: string,
+		captureIndices: IOnigCaptureIndex[]
+	): string {
+		return regexSource.replace(
+			CAPTURING_REGEX_SOURCE,
+			(
+				match: string,
+				index: string,
+				commandIndex: string,
+				command: string
+			) => {
+				let capture =
+					captureIndices[parseInt(index || commandIndex, 10)];
+				if (capture) {
+					let result = captureSource.substring(
+						capture.start,
+						capture.end
+					);
+					// Remove leading dots that would make the selector invalid
+					while (result[0] === ".") {
+						result = result.substring(1);
+					}
+					switch (command) {
+						case "downcase":
+							return result.toLowerCase();
+						case "upcase":
+							return result.toUpperCase();
+						default:
+							return result;
+					}
+				} else {
+					return match;
 				}
-				switch (command) {
-					case 'downcase':
-						return result.toLowerCase();
-					case 'upcase':
-						return result.toUpperCase();
-					default:
-						return result;
-				}
-			} else {
-				return match;
 			}
-		});
+		);
 	}
 }
 
 /**
  * A union of given const enum values.
-*/
+ */
 export type OrMask<T extends number> = number;
 
 export function strcmp(a: string, b: string): number {
@@ -157,13 +172,12 @@ export function isValidHexColor(hex: string): boolean {
  * Escapes regular expression characters in a given string
  */
 export function escapeRegExpCharacters(value: string): string {
-	return value.replace(/[\-\\\{\}\*\+\?\|\^\$\.\,\[\]\(\)\#\s]/g, '\\$&');
+	return value.replace(/[\-\\\{\}\*\+\?\|\^\$\.\,\[\]\(\)\#\s]/g, "\\$&");
 }
 
 export class CachedFn<TKey, TValue> {
 	private readonly cache = new Map<TKey, TValue>();
-	constructor(private readonly fn: (key: TKey) => TValue) {
-	}
+	constructor(private readonly fn: (key: TKey) => TValue) {}
 
 	public get(key: TKey): TValue {
 		if (this.cache.has(key)) {
@@ -178,8 +192,8 @@ export class CachedFn<TKey, TValue> {
 declare let performance: { now: () => number } | undefined;
 export const performanceNow =
 	typeof performance === "undefined"
-		// performance.now() is not available in this environment, so use Date.now()
-		? function () {
+		? // performance.now() is not available in this environment, so use Date.now()
+		  function () {
 				return Date.now();
 		  }
 		: function () {
