@@ -1,5 +1,36 @@
 {
+	"name": "vscode-textmate",
+	"version": "0.0.1",
+	"private": false,
 	"description": "VSCode TextMate grammar helpers",
+	"homepage": "https://github.com/CodeEditorLand/Foundation#readme",
+	"bugs": {
+		"url": "https://github.com/CodeEditorLand/Foundation/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/CodeEditorLand/Foundation.git"
+	},
+	"license": "SEE LICENSE IN LICENSE",
+	"author": {
+		"name": "Playform",
+		"email": "Hello@Playform.Cloud",
+		"url": "https://playform.cloud"
+	},
+	"type": "module",
+	"main": "./release/main.js",
+	"typings": "./release/main.d.ts",
+	"scripts": {
+		"benchmark": "node benchmark/benchmark.js",
+		"bundle": "webpack",
+		"compile": "tsc",
+		"inspect": "node out/tests/inspect.js",
+		"prepublishOnly": "TypeScriptESBuild 'Source/**/*.ts'",
+		"tmconvert": "node scripts/tmconvert.js",
+		"version": "npm run compile && npm run test",
+		"postversion": "git push && git push --tags",
+		"watch": "tsc --watch"
+	},
 	"devDependencies": {
 		"@types/mocha": "^9.1.0",
 		"@types/node": "^16.6.1",
@@ -11,19 +42,7 @@
 		"webpack": "^5.50.0",
 		"webpack-cli": "^4.8.0"
 	},
-	"main": "./release/main.js",
-	"name": "vscode-textmate",
-	"scripts": {
-		"benchmark": "node benchmark/benchmark.js",
-		"bundle": "webpack",
-		"compile": "tsc",
-		"inspect": "node out/tests/inspect.js",
-		"postversion": "git push && git push --tags",
-		"prepublishOnly": "TypeScriptESBuild 'Source/**/*.ts'",
-		"tmconvert": "node scripts/tmconvert.js",
-		"version": "npm run compile && npm run test",
-		"watch": "tsc --watch"
-	},
-	"type": "module",
-	"typings": "./release/main.d.ts"
+	"publishConfig": {
+		"access": "public"
+	}
 }
