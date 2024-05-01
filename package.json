@@ -1,45 +1,45 @@
 {
-	"name": "vscode-textmate",
-	"version": "0.0.1",
-	"private": false,
+	"author": {
+		"email": "Land@PlayForm.Cloud",
+		"name": "🌆 — Land —",
+		"url": "HTTPS://Land.PlayForm.Cloud"
+	},
+	"bugs": {
+		"url": "HTTPS://GitHub.Com/CodeEditorLand/LandTextMate/issues"
+	},
 	"description": "VSCode TextMate grammar helpers",
+	"devDependencies": {
+		"@playform/build": "0.0.7",
+		"@playform/document": "0.0.6",
+		"@types/node": "20.12.7"
+	},
+	"homepage": "HTTPS://GitHub.Com/CodeEditorLand/LandTextMate#readme",
 	"keywords": [
 		"land"
 	],
-	"homepage": "HTTPS://GitHub.Com/CodeEditorLand/LandTextMate#readme",
-	"bugs": {
-		"url": "HTTPS://GitHub.Com/CodeEditorLand/LandTextMate/issues"
+	"license": "SEE LICENSE IN LICENSE",
+	"main": "./release/main.js",
+	"name": "vscode-textmate",
+	"private": false,
+	"publishConfig": {
+		"access": "public"
 	},
 	"repository": {
 		"type": "git",
 		"url": "git+HTTPS://github.com/CodeEditorLand/LandTextMate.git"
 	},
-	"license": "SEE LICENSE IN LICENSE",
-	"author": {
-		"name": "🌆 — Land —",
-		"email": "Land@PlayForm.Cloud",
-		"url": "HTTPS://Land.PlayForm.Cloud"
-	},
-	"type": "module",
-	"main": "./release/main.js",
-	"typings": "./release/main.d.ts",
 	"scripts": {
 		"Document": "Document 'Source/**/*.ts'",
 		"benchmark": "node benchmark/benchmark.js",
 		"bundle": "webpack",
 		"compile": "tsc",
 		"inspect": "node out/tests/inspect.js",
+		"postversion": "git push && git push --tags",
 		"prepublishOnly": "Build 'Source/**/*.ts'",
 		"tmconvert": "node scripts/tmconvert.js",
-		"version": "npm run compile && npm run test",
-		"postversion": "git push && git push --tags"
+		"version": "npm run compile && npm run test"
 	},
-	"devDependencies": {
-		"@playform/build": "0.0.7",
-		"@playform/document": "0.0.6",
-		"@types/node": "20.12.7"
-	},
-	"publishConfig": {
-		"access": "public"
-	}
+	"type": "module",
+	"typings": "./release/main.d.ts",
+	"version": "0.0.1"
 }
