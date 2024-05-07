@@ -8258,6 +8258,7 @@ Tween.prototype = {
 		} else {
 			this.pos = eased = percent;
 		}
+
 		this.now = ( this.end - this.start ) * eased + this.start;
 
 		if ( this.options.step ) {

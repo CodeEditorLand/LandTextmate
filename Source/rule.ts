@@ -646,6 +646,7 @@ export class RegExpSource<TRuleId = RuleId | typeof endRuleId> {
 		if (this.source === newSource) {
 			return;
 		}
+
 		this.source = newSource;
 
 		if (this.hasAnchor) {

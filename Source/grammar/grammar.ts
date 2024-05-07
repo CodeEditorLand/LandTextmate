@@ -974,6 +974,7 @@ export class LineTokens {
 		} else {
 			this._lineText = null;
 		}
+
 		this._tokens = [];
 		this._binaryTokens = [];
 		this._lastTokenEndIndex = 0;
