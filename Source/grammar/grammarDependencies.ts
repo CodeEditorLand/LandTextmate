@@ -51,7 +51,6 @@ export class ExternalReferenceCollector {
 		if (this._seenReferenceKeys.has(key)) {
 			return;
 		}
-
 		this._seenReferenceKeys.add(key);
 		this._references.push(reference);
 	}
