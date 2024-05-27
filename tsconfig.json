@@ -8,7 +8,15 @@
 		"declaration": true,
 		"strict": true,
 		"newLine": "lf",
-		"lib": ["es5", "es2015.promise"]
+		"lib": [
+			"es5",
+			"es2015.promise"
+		]
 	},
-	"exclude": ["node_modules", "release", "out", "test-cases"]
+	"exclude": [
+		"node_modules",
+		"release",
+		"out",
+		"test-cases"
+	]
 }
