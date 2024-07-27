@@ -4,7 +4,15 @@
 
 function doFail(streamState: JSONStreamState, msg: string): void {
 	// console.log('Near offset ' + streamState.pos + ': ' + msg + ' ~~~' + streamState.source.substr(streamState.pos, 50) + '~~~');
-	throw new Error('Near offset ' + streamState.pos + ': ' + msg + ' ~~~' + streamState.source.substr(streamState.pos, 50) + '~~~');
+	throw new Error(
+		"Near offset " +
+			streamState.pos +
+			": " +
+			msg +
+			" ~~~" +
+			streamState.source.substr(streamState.pos, 50) +
+			"~~~",
+	);
 }
 
 export interface ILocation {
@@ -13,7 +21,11 @@ export interface ILocation {
 	readonly char: number;
 }
 
-export function parseJSON(source: string, filename: string | null, withMetadata: boolean): any {
+export function parseJSON(
+	source: string,
+	filename: string | null,
+	withMetadata: boolean,
+): any {
 	let streamState = new JSONStreamState(source);
 	let token = new JSONToken();
 	let state = JSONState.ROOT_STATE;
@@ -36,10 +48,9 @@ export function parseJSON(source: string, filename: string | null, withMetadata:
 	}
 
 	while (nextJSONToken(streamState, token)) {
-
 		if (state === JSONState.ROOT_STATE) {
 			if (cur !== null) {
-				fail('too many constructs in root');
+				fail("too many constructs in root");
 			}
 
 			if (token.type === JSONTokenType.LEFT_CURLY_BRACKET) {
@@ -59,12 +70,10 @@ export function parseJSON(source: string, filename: string | null, withMetadata:
 				continue;
 			}
 
-			fail('unexpected token in root');
-
+			fail("unexpected token in root");
 		}
 
 		if (state === JSONState.DICT_STATE_COMMA) {
-
 			if (token.type === JSONTokenType.RIGHT_CURLY_BRACKET) {
 				popState();
 				continue;
@@ -75,13 +84,17 @@ export function parseJSON(source: string, filename: string | null, withMetadata:
 				continue;
 			}
 
-			fail('expected , or }');
-
+			fail("expected , or }");
 		}
 
-		if (state === JSONState.DICT_STATE || state === JSONState.DICT_STATE_NO_CLOSE) {
-
-			if (state === JSONState.DICT_STATE && token.type === JSONTokenType.RIGHT_CURLY_BRACKET) {
+		if (
+			state === JSONState.DICT_STATE ||
+			state === JSONState.DICT_STATE_NO_CLOSE
+		) {
+			if (
+				state === JSONState.DICT_STATE &&
+				token.type === JSONTokenType.RIGHT_CURLY_BRACKET
+			) {
 				popState();
 				continue;
 			}
@@ -89,11 +102,14 @@ export function parseJSON(source: string, filename: string | null, withMetadata:
 			if (token.type === JSONTokenType.STRING) {
 				let keyValue = token.value!;
 
-				if (!nextJSONToken(streamState, token) || (/*TS bug*/<any>token.type) !== JSONTokenType.COLON) {
-					fail('expected colon');
+				if (
+					!nextJSONToken(streamState, token) ||
+					/*TS bug*/ <any>token.type !== JSONTokenType.COLON
+				) {
+					fail("expected colon");
 				}
 				if (!nextJSONToken(streamState, token)) {
-					fail('expected value');
+					fail("expected value");
 				}
 
 				state = JSONState.DICT_STATE_COMMA;
@@ -129,7 +145,8 @@ export function parseJSON(source: string, filename: string | null, withMetadata:
 				if (token.type === JSONTokenType.LEFT_CURLY_BRACKET) {
 					let newDict: any = {};
 					if (withMetadata) {
-						newDict.$vscodeTextmateLocation = token.toLocation(filename);
+						newDict.$vscodeTextmateLocation =
+							token.toLocation(filename);
 					}
 					cur[keyValue] = newDict;
 					pushState();
@@ -139,11 +156,10 @@ export function parseJSON(source: string, filename: string | null, withMetadata:
 				}
 			}
 
-			fail('unexpected token in dict');
+			fail("unexpected token in dict");
 		}
 
 		if (state === JSONState.ARR_STATE_COMMA) {
-
 			if (token.type === JSONTokenType.RIGHT_SQUARE_BRACKET) {
 				popState();
 				continue;
@@ -154,12 +170,17 @@ export function parseJSON(source: string, filename: string | null, withMetadata:
 				continue;
 			}
 
-			fail('expected , or ]');
+			fail("expected , or ]");
 		}
 
-		if (state === JSONState.ARR_STATE || state === JSONState.ARR_STATE_NO_CLOSE) {
-
-			if (state === JSONState.ARR_STATE && token.type === JSONTokenType.RIGHT_SQUARE_BRACKET) {
+		if (
+			state === JSONState.ARR_STATE ||
+			state === JSONState.ARR_STATE_NO_CLOSE
+		) {
+			if (
+				state === JSONState.ARR_STATE &&
+				token.type === JSONTokenType.RIGHT_SQUARE_BRACKET
+			) {
 				popState();
 				continue;
 			}
@@ -198,7 +219,8 @@ export function parseJSON(source: string, filename: string | null, withMetadata:
 			if (token.type === JSONTokenType.LEFT_CURLY_BRACKET) {
 				let newDict: any = {};
 				if (withMetadata) {
-					newDict.$vscodeTextmateLocation = token.toLocation(filename);
+					newDict.$vscodeTextmateLocation =
+						token.toLocation(filename);
 				}
 				cur.push(newDict);
 				pushState();
@@ -207,14 +229,14 @@ export function parseJSON(source: string, filename: string | null, withMetadata:
 				continue;
 			}
 
-			fail('unexpected token in array');
+			fail("unexpected token in array");
 		}
 
-		fail('unknown state');
+		fail("unknown state");
 	}
 
 	if (objStack.length !== 0) {
-		fail('unclosed constructs');
+		fail("unclosed constructs");
 	}
 
 	return cur;
@@ -250,7 +272,7 @@ const enum JSONTokenType {
 	NULL = 8,
 	TRUE = 9,
 	FALSE = 10,
-	NUMBER = 11
+	NUMBER = 11,
 }
 
 const enum JSONState {
@@ -266,32 +288,32 @@ const enum JSONState {
 const enum ChCode {
 	SPACE = 0x20,
 	HORIZONTAL_TAB = 0x09,
-	CARRIAGE_RETURN = 0x0D,
-	LINE_FEED = 0x0A,
+	CARRIAGE_RETURN = 0x0d,
+	LINE_FEED = 0x0a,
 	QUOTATION_MARK = 0x22,
-	BACKSLASH = 0x5C,
+	BACKSLASH = 0x5c,
 
-	LEFT_SQUARE_BRACKET = 0x5B,
-	LEFT_CURLY_BRACKET = 0x7B,
-	RIGHT_SQUARE_BRACKET = 0x5D,
-	RIGHT_CURLY_BRACKET = 0x7D,
-	COLON = 0x3A,
-	COMMA = 0x2C,
-	DOT = 0x2E,
+	LEFT_SQUARE_BRACKET = 0x5b,
+	LEFT_CURLY_BRACKET = 0x7b,
+	RIGHT_SQUARE_BRACKET = 0x5d,
+	RIGHT_CURLY_BRACKET = 0x7d,
+	COLON = 0x3a,
+	COMMA = 0x2c,
+	DOT = 0x2e,
 
 	D0 = 0x30,
 	D9 = 0x39,
 
-	MINUS = 0x2D,
-	PLUS = 0x2B,
+	MINUS = 0x2d,
+	PLUS = 0x2b,
 
 	E = 0x45,
 
 	a = 0x61,
 	e = 0x65,
 	f = 0x66,
-	l = 0x6C,
-	n = 0x6E,
+	l = 0x6c,
+	n = 0x6e,
 	r = 0x72,
 	s = 0x73,
 	t = 0x74,
@@ -321,7 +343,7 @@ class JSONToken {
 		return {
 			filename: filename,
 			line: this.line,
-			char: this.char
+			char: this.char,
 		};
 	}
 }
@@ -351,15 +373,22 @@ function nextJSONToken(_state: JSONStreamState, _out: JSONToken): boolean {
 		}
 
 		chCode = source.charCodeAt(pos);
-		if (chCode === ChCode.SPACE || chCode === ChCode.HORIZONTAL_TAB || chCode === ChCode.CARRIAGE_RETURN) {
+		if (
+			chCode === ChCode.SPACE ||
+			chCode === ChCode.HORIZONTAL_TAB ||
+			chCode === ChCode.CARRIAGE_RETURN
+		) {
 			// regular whitespace
-			pos++; char++;
+			pos++;
+			char++;
 			continue;
 		}
 
 		if (chCode === ChCode.LINE_FEED) {
 			// newline
-			pos++; line++; char = 0;
+			pos++;
+			line++;
+			char = 0;
 			continue;
 		}
 
@@ -375,7 +404,8 @@ function nextJSONToken(_state: JSONStreamState, _out: JSONToken): boolean {
 		//------------------------ strings
 		_out.type = JSONTokenType.STRING;
 
-		pos++; char++;
+		pos++;
+		char++;
 
 		do {
 			if (pos >= len) {
@@ -383,11 +413,13 @@ function nextJSONToken(_state: JSONStreamState, _out: JSONToken): boolean {
 			}
 
 			chCode = source.charCodeAt(pos);
-			pos++; char++;
+			pos++;
+			char++;
 
 			if (chCode === ChCode.BACKSLASH) {
 				// skip next char
-				pos++; char++;
+				pos++;
+				char++;
 				continue;
 			}
 
@@ -397,107 +429,157 @@ function nextJSONToken(_state: JSONStreamState, _out: JSONToken): boolean {
 			}
 		} while (true);
 
-		_out.value = source.substring(_out.offset + 1, pos - 1).replace(/\\u([0-9A-Fa-f]{4})/g, (_, m0) => {
-			return (<any>String).fromCodePoint(parseInt(m0, 16));
-		}).replace(/\\(.)/g, (_, m0) => {
-			switch (m0) {
-				case '"': return '"';
-				case '\\': return '\\';
-				case '/': return '/';
-				case 'b': return '\b';
-				case 'f': return '\f';
-				case 'n': return '\n';
-				case 'r': return '\r';
-				case 't': return '\t';
-				default: doFail(_state, 'invalid escape sequence');
-			}
-			throw new Error('unreachable');
-		});
-
+		_out.value = source
+			.substring(_out.offset + 1, pos - 1)
+			.replace(/\\u([0-9A-Fa-f]{4})/g, (_, m0) => {
+				return (<any>String).fromCodePoint(parseInt(m0, 16));
+			})
+			.replace(/\\(.)/g, (_, m0) => {
+				switch (m0) {
+					case '"':
+						return '"';
+					case "\\":
+						return "\\";
+					case "/":
+						return "/";
+					case "b":
+						return "\b";
+					case "f":
+						return "\f";
+					case "n":
+						return "\n";
+					case "r":
+						return "\r";
+					case "t":
+						return "\t";
+					default:
+						doFail(_state, "invalid escape sequence");
+				}
+				throw new Error("unreachable");
+			});
 	} else if (chCode === ChCode.LEFT_SQUARE_BRACKET) {
-
 		_out.type = JSONTokenType.LEFT_SQUARE_BRACKET;
-		pos++; char++;
-
+		pos++;
+		char++;
 	} else if (chCode === ChCode.LEFT_CURLY_BRACKET) {
-
 		_out.type = JSONTokenType.LEFT_CURLY_BRACKET;
-		pos++; char++;
-
+		pos++;
+		char++;
 	} else if (chCode === ChCode.RIGHT_SQUARE_BRACKET) {
-
 		_out.type = JSONTokenType.RIGHT_SQUARE_BRACKET;
-		pos++; char++;
-
+		pos++;
+		char++;
 	} else if (chCode === ChCode.RIGHT_CURLY_BRACKET) {
-
 		_out.type = JSONTokenType.RIGHT_CURLY_BRACKET;
-		pos++; char++;
-
+		pos++;
+		char++;
 	} else if (chCode === ChCode.COLON) {
-
 		_out.type = JSONTokenType.COLON;
-		pos++; char++;
-
+		pos++;
+		char++;
 	} else if (chCode === ChCode.COMMA) {
-
 		_out.type = JSONTokenType.COMMA;
-		pos++; char++;
-
+		pos++;
+		char++;
 	} else if (chCode === ChCode.n) {
 		//------------------------ null
 
 		_out.type = JSONTokenType.NULL;
-		pos++; char++; chCode = source.charCodeAt(pos);
-		if (chCode !== ChCode.u) { return false; /* INVALID */ }
-		pos++; char++; chCode = source.charCodeAt(pos);
-		if (chCode !== ChCode.l) { return false; /* INVALID */ }
-		pos++; char++; chCode = source.charCodeAt(pos);
-		if (chCode !== ChCode.l) { return false; /* INVALID */ }
-		pos++; char++;
-
+		pos++;
+		char++;
+		chCode = source.charCodeAt(pos);
+		if (chCode !== ChCode.u) {
+			return false; /* INVALID */
+		}
+		pos++;
+		char++;
+		chCode = source.charCodeAt(pos);
+		if (chCode !== ChCode.l) {
+			return false; /* INVALID */
+		}
+		pos++;
+		char++;
+		chCode = source.charCodeAt(pos);
+		if (chCode !== ChCode.l) {
+			return false; /* INVALID */
+		}
+		pos++;
+		char++;
 	} else if (chCode === ChCode.t) {
 		//------------------------ true
 
 		_out.type = JSONTokenType.TRUE;
-		pos++; char++; chCode = source.charCodeAt(pos);
-		if (chCode !== ChCode.r) { return false; /* INVALID */ }
-		pos++; char++; chCode = source.charCodeAt(pos);
-		if (chCode !== ChCode.u) { return false; /* INVALID */ }
-		pos++; char++; chCode = source.charCodeAt(pos);
-		if (chCode !== ChCode.e) { return false; /* INVALID */ }
-		pos++; char++;
-
+		pos++;
+		char++;
+		chCode = source.charCodeAt(pos);
+		if (chCode !== ChCode.r) {
+			return false; /* INVALID */
+		}
+		pos++;
+		char++;
+		chCode = source.charCodeAt(pos);
+		if (chCode !== ChCode.u) {
+			return false; /* INVALID */
+		}
+		pos++;
+		char++;
+		chCode = source.charCodeAt(pos);
+		if (chCode !== ChCode.e) {
+			return false; /* INVALID */
+		}
+		pos++;
+		char++;
 	} else if (chCode === ChCode.f) {
 		//------------------------ false
 
 		_out.type = JSONTokenType.FALSE;
-		pos++; char++; chCode = source.charCodeAt(pos);
-		if (chCode !== ChCode.a) { return false; /* INVALID */ }
-		pos++; char++; chCode = source.charCodeAt(pos);
-		if (chCode !== ChCode.l) { return false; /* INVALID */ }
-		pos++; char++; chCode = source.charCodeAt(pos);
-		if (chCode !== ChCode.s) { return false; /* INVALID */ }
-		pos++; char++; chCode = source.charCodeAt(pos);
-		if (chCode !== ChCode.e) { return false; /* INVALID */ }
-		pos++; char++;
-
+		pos++;
+		char++;
+		chCode = source.charCodeAt(pos);
+		if (chCode !== ChCode.a) {
+			return false; /* INVALID */
+		}
+		pos++;
+		char++;
+		chCode = source.charCodeAt(pos);
+		if (chCode !== ChCode.l) {
+			return false; /* INVALID */
+		}
+		pos++;
+		char++;
+		chCode = source.charCodeAt(pos);
+		if (chCode !== ChCode.s) {
+			return false; /* INVALID */
+		}
+		pos++;
+		char++;
+		chCode = source.charCodeAt(pos);
+		if (chCode !== ChCode.e) {
+			return false; /* INVALID */
+		}
+		pos++;
+		char++;
 	} else {
 		//------------------------ numbers
 
 		_out.type = JSONTokenType.NUMBER;
 		do {
-			if (pos >= len) { return false; /*EOS*/ }
+			if (pos >= len) {
+				return false; /*EOS*/
+			}
 
 			chCode = source.charCodeAt(pos);
 			if (
-				chCode === ChCode.DOT
-				|| (chCode >= ChCode.D0 && chCode <= ChCode.D9)
-				|| (chCode === ChCode.e || chCode === ChCode.E)
-				|| (chCode === ChCode.MINUS || chCode === ChCode.PLUS)
+				chCode === ChCode.DOT ||
+				(chCode >= ChCode.D0 && chCode <= ChCode.D9) ||
+				chCode === ChCode.e ||
+				chCode === ChCode.E ||
+				chCode === ChCode.MINUS ||
+				chCode === ChCode.PLUS
 			) {
 				// looks like a piece of a number
-				pos++; char++;
+				pos++;
+				char++;
 				continue;
 			}
 
