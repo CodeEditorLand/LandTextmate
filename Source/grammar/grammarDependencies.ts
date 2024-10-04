@@ -2,20 +2,20 @@
  * Copyright (C) Microsoft Corporation. All rights reserved.
  *--------------------------------------------------------*/
 
-import { IRawGrammar, IRawRepository, IRawRule } from '../rawGrammar';
-import { ScopeName } from '../theme';
-import { mergeObjects } from '../utils';
-import { IGrammarRepository } from './grammar';
+import { IRawGrammar, IRawRepository, IRawRule } from "../rawGrammar";
+import { ScopeName } from "../theme";
+import { mergeObjects } from "../utils";
+import { IGrammarRepository } from "./grammar";
 
-export type AbsoluteRuleReference = TopLevelRuleReference | TopLevelRepositoryRuleReference;
+export type AbsoluteRuleReference =
+	| TopLevelRuleReference
+	| TopLevelRepositoryRuleReference;
 
 /**
  * References the top level rule of a grammar with the given scope name.
-*/
+ */
 export class TopLevelRuleReference {
-	constructor(
-		public readonly scopeName: ScopeName
-	) { }
+	constructor(public readonly scopeName: ScopeName) {}
 
 	public toKey(): string {
 		return this.scopeName;
@@ -24,12 +24,12 @@ export class TopLevelRuleReference {
 
 /**
  * References a rule of a grammar in the top level repository section with the given name.
-*/
+ */
 export class TopLevelRepositoryRuleReference {
 	constructor(
 		public readonly scopeName: ScopeName,
-		public readonly ruleName: string
-	) { }
+		public readonly ruleName: string,
+	) {}
 
 	public toKey(): string {
 		return `${this.scopeName}#${this.ruleName}`;
@@ -63,7 +63,7 @@ export class ScopeDependencyProcessor {
 
 	constructor(
 		public readonly repo: IGrammarRepository,
-		public readonly initialScopeName: ScopeName
+		public readonly initialScopeName: ScopeName,
 	) {
 		this.seenFullScopeRequests.add(this.initialScopeName);
 		this.Q = [new TopLevelRuleReference(this.initialScopeName)];
@@ -75,7 +75,12 @@ export class ScopeDependencyProcessor {
 
 		const deps = new ExternalReferenceCollector();
 		for (const dep of q) {
-			collectReferencesOfReference(dep, this.initialScopeName, this.repo, deps);
+			collectReferencesOfReference(
+				dep,
+				this.initialScopeName,
+				this.repo,
+				deps,
+			);
 		}
 
 		for (const dep of deps.references) {
@@ -111,7 +116,9 @@ function collectReferencesOfReference(
 	const selfGrammar = repo.lookup(reference.scopeName);
 	if (!selfGrammar) {
 		if (reference.scopeName === baseGrammarScopeName) {
-			throw new Error(`No grammar provided for <${baseGrammarScopeName}>`);
+			throw new Error(
+				`No grammar provided for <${baseGrammarScopeName}>`,
+			);
 		}
 		return;
 	}
@@ -119,12 +126,15 @@ function collectReferencesOfReference(
 	const baseGrammar = repo.lookup(baseGrammarScopeName)!;
 
 	if (reference instanceof TopLevelRuleReference) {
-		collectExternalReferencesInTopLevelRule({ baseGrammar, selfGrammar }, result);
+		collectExternalReferencesInTopLevelRule(
+			{ baseGrammar, selfGrammar },
+			result,
+		);
 	} else {
 		collectExternalReferencesInTopLevelRepositoryRule(
 			reference.ruleName,
 			{ baseGrammar, selfGrammar, repository: selfGrammar.repository },
-			result
+			result,
 		);
 	}
 
@@ -150,7 +160,7 @@ interface ContextWithRepository {
 function collectExternalReferencesInTopLevelRepositoryRule(
 	ruleName: string,
 	context: ContextWithRepository,
-	result: ExternalReferenceCollector
+	result: ExternalReferenceCollector,
 ): void {
 	if (context.repository && context.repository[ruleName]) {
 		const rule = context.repository[ruleName];
@@ -158,19 +168,25 @@ function collectExternalReferencesInTopLevelRepositoryRule(
 	}
 }
 
-function collectExternalReferencesInTopLevelRule(context: Context, result: ExternalReferenceCollector): void {
-	if (context.selfGrammar.patterns && Array.isArray(context.selfGrammar.patterns)) {
+function collectExternalReferencesInTopLevelRule(
+	context: Context,
+	result: ExternalReferenceCollector,
+): void {
+	if (
+		context.selfGrammar.patterns &&
+		Array.isArray(context.selfGrammar.patterns)
+	) {
 		collectExternalReferencesInRules(
 			context.selfGrammar.patterns,
 			{ ...context, repository: context.selfGrammar.repository },
-			result
+			result,
 		);
 	}
 	if (context.selfGrammar.injections) {
 		collectExternalReferencesInRules(
 			Object.values(context.selfGrammar.injections),
 			{ ...context, repository: context.selfGrammar.repository },
-			result
+			result,
 		);
 	}
 }
@@ -186,10 +202,16 @@ function collectExternalReferencesInRules(
 		}
 		result.visitedRule.add(rule);
 
-		const patternRepository = rule.repository ? mergeObjects({}, context.repository, rule.repository) : context.repository;
+		const patternRepository = rule.repository
+			? mergeObjects({}, context.repository, rule.repository)
+			: context.repository;
 
 		if (Array.isArray(rule.patterns)) {
-			collectExternalReferencesInRules(rule.patterns, { ...context, repository: patternRepository }, result);
+			collectExternalReferencesInRules(
+				rule.patterns,
+				{ ...context, repository: patternRepository },
+				result,
+			);
 		}
 
 		const include = rule.include;
@@ -202,13 +224,20 @@ function collectExternalReferencesInRules(
 
 		switch (reference.kind) {
 			case IncludeReferenceKind.Base:
-				collectExternalReferencesInTopLevelRule({ ...context, selfGrammar: context.baseGrammar }, result);
+				collectExternalReferencesInTopLevelRule(
+					{ ...context, selfGrammar: context.baseGrammar },
+					result,
+				);
 				break;
 			case IncludeReferenceKind.Self:
 				collectExternalReferencesInTopLevelRule(context, result);
 				break;
 			case IncludeReferenceKind.RelativeReference:
-				collectExternalReferencesInTopLevelRepositoryRule(reference.ruleName, { ...context, repository: patternRepository }, result);
+				collectExternalReferencesInTopLevelRepositoryRule(
+					reference.ruleName,
+					{ ...context, repository: patternRepository },
+					result,
+				);
 				break;
 			case IncludeReferenceKind.TopLevelReference:
 			case IncludeReferenceKind.TopLevelRepositoryReference:
@@ -216,20 +245,44 @@ function collectExternalReferencesInRules(
 					reference.scopeName === context.selfGrammar.scopeName
 						? context.selfGrammar
 						: reference.scopeName === context.baseGrammar.scopeName
-						? context.baseGrammar
-						: undefined;
+							? context.baseGrammar
+							: undefined;
 				if (selfGrammar) {
-					const newContext: ContextWithRepository = { baseGrammar: context.baseGrammar, selfGrammar, repository: patternRepository };
-					if (reference.kind === IncludeReferenceKind.TopLevelRepositoryReference) {
-						collectExternalReferencesInTopLevelRepositoryRule(reference.ruleName, newContext, result);
+					const newContext: ContextWithRepository = {
+						baseGrammar: context.baseGrammar,
+						selfGrammar,
+						repository: patternRepository,
+					};
+					if (
+						reference.kind ===
+						IncludeReferenceKind.TopLevelRepositoryReference
+					) {
+						collectExternalReferencesInTopLevelRepositoryRule(
+							reference.ruleName,
+							newContext,
+							result,
+						);
 					} else {
-						collectExternalReferencesInTopLevelRule(newContext, result);
+						collectExternalReferencesInTopLevelRule(
+							newContext,
+							result,
+						);
 					}
 				} else {
-					if (reference.kind === IncludeReferenceKind.TopLevelRepositoryReference) {
-						result.add(new TopLevelRepositoryRuleReference(reference.scopeName, reference.ruleName));
+					if (
+						reference.kind ===
+						IncludeReferenceKind.TopLevelRepositoryReference
+					) {
+						result.add(
+							new TopLevelRepositoryRuleReference(
+								reference.scopeName,
+								reference.ruleName,
+							),
+						);
 					} else {
-						result.add(new TopLevelRuleReference(reference.scopeName));
+						result.add(
+							new TopLevelRuleReference(reference.scopeName),
+						);
 					}
 				}
 				break;
@@ -272,13 +325,16 @@ export class TopLevelReference {
 
 export class TopLevelRepositoryReference {
 	public readonly kind = IncludeReferenceKind.TopLevelRepositoryReference;
-	constructor(public readonly scopeName: ScopeName, public readonly ruleName: string) {}
+	constructor(
+		public readonly scopeName: ScopeName,
+		public readonly ruleName: string,
+	) {}
 }
 
 export function parseInclude(include: string): IncludeReference {
-	if (include === '$base') {
+	if (include === "$base") {
 		return new BaseReference();
-	} else if (include === '$self') {
+	} else if (include === "$self") {
 		return new SelfReference();
 	}
 
