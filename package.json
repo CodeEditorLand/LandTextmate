@@ -1,19 +1,19 @@
 {
-	"description": "VSCode TextMate grammar helpers",
-	"devDependencies": {
-		"@types/node": "22.7.5"
-	},
-	"main": "./release/main.js",
 	"name": "vscode-textmate",
+	"description": "VSCode TextMate grammar helpers",
+	"main": "./release/main.js",
+	"typings": "./release/main.d.ts",
 	"scripts": {
 		"benchmark": "node benchmark/benchmark.js",
 		"bundle": "webpack",
 		"compile": "tsc",
 		"inspect": "node out/tests/inspect.js",
-		"postversion": "git push && git push --tags",
 		"prepublishOnly": "tsc && webpack --progress",
 		"tmconvert": "node scripts/tmconvert.js",
-		"version": "npm run compile && npm run test"
+		"version": "npm run compile && npm run test",
+		"postversion": "git push && git push --tags"
 	},
-	"typings": "./release/main.d.ts"
+	"devDependencies": {
+		"@types/node": "22.7.5"
+	}
 }

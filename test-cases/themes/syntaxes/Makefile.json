@@ -1,10 +1,5 @@
 {
-	"fileTypes": [
-		"Makefile",
-		"makefile",
-		"GNUmakefile",
-		"OCamlMakefile"
-	],
+	"fileTypes": ["Makefile", "makefile", "GNUmakefile", "OCamlMakefile"],
 	"name": "Makefile",
 	"patterns": [
 		{
