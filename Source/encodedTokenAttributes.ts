@@ -19,15 +19,19 @@ export namespace EncodedTokenAttributes {
 		const languageId = EncodedTokenAttributes.getLanguageId(
 			encodedTokenAttributes,
 		);
+
 		const tokenType = EncodedTokenAttributes.getTokenType(
 			encodedTokenAttributes,
 		);
+
 		const fontStyle = EncodedTokenAttributes.getFontStyle(
 			encodedTokenAttributes,
 		);
+
 		const foreground = EncodedTokenAttributes.getForeground(
 			encodedTokenAttributes,
 		);
+
 		const background = EncodedTokenAttributes.getBackground(
 			encodedTokenAttributes,
 		);
@@ -117,21 +121,26 @@ export namespace EncodedTokenAttributes {
 		let _languageId = EncodedTokenAttributes.getLanguageId(
 			encodedTokenAttributes,
 		);
+
 		let _tokenType = EncodedTokenAttributes.getTokenType(
 			encodedTokenAttributes,
 		);
+
 		let _containsBalancedBracketsBit: 0 | 1 =
 			EncodedTokenAttributes.containsBalancedBrackets(
 				encodedTokenAttributes,
 			)
 				? 1
 				: 0;
+
 		let _fontStyle = EncodedTokenAttributes.getFontStyle(
 			encodedTokenAttributes,
 		);
+
 		let _foreground = EncodedTokenAttributes.getForeground(
 			encodedTokenAttributes,
 		);
+
 		let _background = EncodedTokenAttributes.getBackground(
 			encodedTokenAttributes,
 		);

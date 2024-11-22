@@ -48,6 +48,7 @@ export class ExternalReferenceCollector {
 
 	public add(reference: AbsoluteRuleReference): void {
 		const key = reference.toKey();
+
 		if (this._seenReferenceKeys.has(key)) {
 			return;
 		}
@@ -74,6 +75,7 @@ export class ScopeDependencyProcessor {
 		this.Q = [];
 
 		const deps = new ExternalReferenceCollector();
+
 		for (const dep of q) {
 			collectReferencesOfReference(
 				dep,
@@ -114,6 +116,7 @@ function collectReferencesOfReference(
 	result: ExternalReferenceCollector,
 ) {
 	const selfGrammar = repo.lookup(reference.scopeName);
+
 	if (!selfGrammar) {
 		if (reference.scopeName === baseGrammarScopeName) {
 			throw new Error(
@@ -139,6 +142,7 @@ function collectReferencesOfReference(
 	}
 
 	const injections = repo.injections(reference.scopeName);
+
 	if (injections) {
 		for (const injection of injections) {
 			result.add(new TopLevelRuleReference(injection));
@@ -228,17 +232,23 @@ function collectExternalReferencesInRules(
 					{ ...context, selfGrammar: context.baseGrammar },
 					result,
 				);
+
 				break;
+
 			case IncludeReferenceKind.Self:
 				collectExternalReferencesInTopLevelRule(context, result);
+
 				break;
+
 			case IncludeReferenceKind.RelativeReference:
 				collectExternalReferencesInTopLevelRepositoryRule(
 					reference.ruleName,
 					{ ...context, repository: patternRepository },
 					result,
 				);
+
 				break;
+
 			case IncludeReferenceKind.TopLevelReference:
 			case IncludeReferenceKind.TopLevelRepositoryReference:
 				const selfGrammar =
@@ -247,12 +257,14 @@ function collectExternalReferencesInRules(
 						: reference.scopeName === context.baseGrammar.scopeName
 							? context.baseGrammar
 							: undefined;
+
 				if (selfGrammar) {
 					const newContext: ContextWithRepository = {
 						baseGrammar: context.baseGrammar,
 						selfGrammar,
 						repository: patternRepository,
 					};
+
 					if (
 						reference.kind ===
 						IncludeReferenceKind.TopLevelRepositoryReference
@@ -315,16 +327,19 @@ export class SelfReference {
 
 export class RelativeReference {
 	public readonly kind = IncludeReferenceKind.RelativeReference;
+
 	constructor(public readonly ruleName: string) {}
 }
 
 export class TopLevelReference {
 	public readonly kind = IncludeReferenceKind.TopLevelReference;
+
 	constructor(public readonly scopeName: ScopeName) {}
 }
 
 export class TopLevelRepositoryReference {
 	public readonly kind = IncludeReferenceKind.TopLevelRepositoryReference;
+
 	constructor(
 		public readonly scopeName: ScopeName,
 		public readonly ruleName: string,
@@ -339,13 +354,16 @@ export function parseInclude(include: string): IncludeReference {
 	}
 
 	const indexOfSharp = include.indexOf("#");
+
 	if (indexOfSharp === -1) {
 		return new TopLevelReference(include);
 	} else if (indexOfSharp === 0) {
 		return new RelativeReference(include.substring(1));
 	} else {
 		const scopeName = include.substring(0, indexOfSharp);
+
 		const ruleName = include.substring(indexOfSharp + 1);
+
 		return new TopLevelRepositoryReference(scopeName, ruleName);
 	}
 }

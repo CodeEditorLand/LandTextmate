@@ -102,6 +102,7 @@ export class SyncRegistry implements IGrammarRepository, IThemeProvider {
 	): Promise<IGrammar | null> {
 		if (!this._grammars.has(scopeName)) {
 			let rawGrammar = this._rawGrammars.get(scopeName)!;
+
 			if (!rawGrammar) {
 				return null;
 			}

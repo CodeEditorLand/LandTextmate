@@ -9,12 +9,15 @@
 interface Map<K, V> {
 	clear(): void;
 	delete(key: K): boolean;
+
 	forEach(
 		callbackfn: (value: V, index: K, map: Map<K, V>) => void,
 		thisArg?: any,
 	): void;
+
 	get(key: K): V | undefined;
 	has(key: K): boolean;
+
 	set(key: K, value?: V): Map<K, V>;
 	readonly size: number;
 
@@ -38,6 +41,7 @@ interface Set<T> {
 	add(value: T): Set<T>;
 	clear(): void;
 	delete(value: T): boolean;
+
 	forEach(
 		callbackfn: (value: T, index: T, set: Set<T>) => void,
 		thisArg?: any,
@@ -63,10 +67,12 @@ declare var Set: SetConstructor;
 
 interface WeakMap<K extends object, V> {
 	delete(key: K): boolean;
+
 	get(key: K): V | undefined;
 	has(key: K): boolean;
 	// IE11 doesn't return this
 	// set(key: K, value?: V): this;
+
 	set(key: K, value?: V): undefined;
 }
 

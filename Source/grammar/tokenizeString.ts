@@ -61,6 +61,7 @@ export function _tokenizeString(
 	const lineLength = lineText.content.length;
 
 	let STOP = false;
+
 	let anchorPosition = -1;
 
 	if (checkWhileConditions) {
@@ -79,9 +80,11 @@ export function _tokenizeString(
 	}
 
 	const startTime = Date.now();
+
 	while (!STOP) {
 		if (timeLimit !== 0) {
 			const elapsedTime = Date.now() - startTime;
+
 			if (elapsedTime > timeLimit) {
 				return new TokenizeStringResult(stack, true);
 			}
@@ -116,10 +119,12 @@ export function _tokenizeString(
 			// No match
 			lineTokens.produce(stack, lineLength);
 			STOP = true;
+
 			return;
 		}
 
 		const captureIndices: IOnigCaptureIndex[] = r.captureIndices;
+
 		const matchedRuleId = r.matchedRuleId;
 
 		const hasAdvanced =
@@ -172,6 +177,7 @@ export function _tokenizeString(
 
 				lineTokens.produce(stack, lineLength);
 				STOP = true;
+
 				return;
 			}
 		} else {
@@ -183,6 +189,7 @@ export function _tokenizeString(
 			const beforePush = stack;
 			// push it on the stack rule
 			const scopeName = _rule.getName(lineText.content, captureIndices);
+
 			const nameScopesList = stack.contentNameScopesList!.pushAttributed(
 				scopeName,
 				grammar,
@@ -199,6 +206,7 @@ export function _tokenizeString(
 
 			if (_rule instanceof BeginEndRule) {
 				const pushedRule = _rule;
+
 				if (DebugFlags.InDebugMode) {
 					console.log(
 						"  pushing " +
@@ -224,6 +232,7 @@ export function _tokenizeString(
 					lineText.content,
 					captureIndices,
 				);
+
 				const contentNameScopesList = nameScopesList.pushAttributed(
 					contentName,
 					grammar,
@@ -249,10 +258,12 @@ export function _tokenizeString(
 					stack = stack.pop()!;
 					lineTokens.produce(stack, lineLength);
 					STOP = true;
+
 					return;
 				}
 			} else if (_rule instanceof BeginWhileRule) {
 				const pushedRule = <BeginWhileRule>_rule;
+
 				if (DebugFlags.InDebugMode) {
 					console.log("  pushing " + pushedRule.debugName);
 				}
@@ -268,10 +279,12 @@ export function _tokenizeString(
 				);
 				lineTokens.produce(stack, captureIndices[0].end);
 				anchorPosition = captureIndices[0].end;
+
 				const contentName = pushedRule.getContentName(
 					lineText.content,
 					captureIndices,
 				);
+
 				const contentNameScopesList = nameScopesList.pushAttributed(
 					contentName,
 					grammar,
@@ -297,10 +310,12 @@ export function _tokenizeString(
 					stack = stack.pop()!;
 					lineTokens.produce(stack, lineLength);
 					STOP = true;
+
 					return;
 				}
 			} else {
 				const matchingRule = <MatchRule>_rule;
+
 				if (DebugFlags.InDebugMode) {
 					console.log(
 						"  matched " +
@@ -334,6 +349,7 @@ export function _tokenizeString(
 					stack = stack.safePop();
 					lineTokens.produce(stack, lineLength);
 					STOP = true;
+
 					return;
 				}
 			}
@@ -368,8 +384,10 @@ function _checkWhileConditions(
 	}
 
 	const whileRules: IWhileStack[] = [];
+
 	for (let node: StateStackImpl | null = stack; node; node = node.pop()) {
 		const nodeRule = node.getRule(grammar);
+
 		if (nodeRule instanceof BeginWhileRule) {
 			whileRules.push({
 				rule: nodeRule,
@@ -380,7 +398,9 @@ function _checkWhileConditions(
 
 	for (
 		let whileRule = whileRules.pop();
+
 		whileRule;
+
 		whileRule = whileRules.pop()
 	) {
 		const { ruleScanner, findOptions } = prepareRuleWhileSearch(
@@ -390,7 +410,9 @@ function _checkWhileConditions(
 			isFirstLine,
 			linePos === anchorPosition,
 		);
+
 		const r = ruleScanner.findNextMatchSync(lineText, linePos, findOptions);
+
 		if (DebugFlags.InDebugMode) {
 			console.log("  scanning for while rule");
 			console.log(ruleScanner.toString());
@@ -398,9 +420,11 @@ function _checkWhileConditions(
 
 		if (r) {
 			const matchedRuleId = r.ruleId;
+
 			if (matchedRuleId !== whileRuleId) {
 				// we shouldn't end up here
 				stack = whileRule.stack.pop()!;
+
 				break;
 			}
 			if (r.captureIndices && r.captureIndices.length) {
@@ -416,6 +440,7 @@ function _checkWhileConditions(
 				);
 				lineTokens.produce(whileRule.stack, r.captureIndices[0].end);
 				anchorPosition = r.captureIndices[0].end;
+
 				if (r.captureIndices[0].end > linePos) {
 					linePos = r.captureIndices[0].end;
 					isFirstLine = false;
@@ -432,6 +457,7 @@ function _checkWhileConditions(
 			}
 
 			stack = whileRule.stack.pop()!;
+
 			break;
 		}
 	}
@@ -471,6 +497,7 @@ function matchRuleOrInjections(
 
 	// Look for injected rules
 	const injections = grammar.getInjections();
+
 	if (injections.length === 0) {
 		// No injections whatsoever => early return
 		return matchResult;
@@ -485,6 +512,7 @@ function matchRuleOrInjections(
 		stack,
 		anchorPosition,
 	);
+
 	if (!injectionResult) {
 		// No injections matched => early return
 		return matchResult;
@@ -497,6 +525,7 @@ function matchRuleOrInjections(
 
 	// Decide if `matchResult` or `injectionResult` should win
 	const matchResultScore = matchResult.captureIndices[0].start;
+
 	const injectionResultScore = injectionResult.captureIndices[0].start;
 
 	if (
@@ -524,6 +553,7 @@ function matchRule(
 	anchorPosition: number,
 ): IMatchResult | null {
 	const rule = stack.getRule(grammar);
+
 	const { ruleScanner, findOptions } = prepareRuleSearch(
 		rule,
 		grammar,
@@ -533,6 +563,7 @@ function matchRule(
 	);
 
 	let perfStart = 0;
+
 	if (DebugFlags.InDebugMode) {
 		perfStart = performanceNow();
 	}
@@ -541,6 +572,7 @@ function matchRule(
 
 	if (DebugFlags.InDebugMode) {
 		const elapsedMillis = performanceNow() - perfStart;
+
 		if (elapsedMillis > 5) {
 			console.warn(
 				`Rule ${rule.debugName} (${rule.id}) matching took ${elapsedMillis} against '${lineText}'`,
@@ -550,6 +582,7 @@ function matchRule(
 			`  scanning for (linePos: ${linePos}, anchorPosition: ${anchorPosition})`,
 		);
 		console.log(ruleScanner.toString());
+
 		if (r) {
 			console.log(
 				`matched rule id: ${r.ruleId} from ${r.captureIndices[0].start} to ${r.captureIndices[0].end}`,
@@ -577,19 +610,24 @@ function matchInjections(
 ): IMatchInjectionsResult | null {
 	// The lower the better
 	let bestMatchRating = Number.MAX_VALUE;
+
 	let bestMatchCaptureIndices: IOnigCaptureIndex[] | null = null;
+
 	let bestMatchRuleId: RuleId | typeof endRuleId;
+
 	let bestMatchResultPriority: number = 0;
 
 	const scopes = stack.contentNameScopesList!.getScopeNames();
 
 	for (let i = 0, len = injections.length; i < len; i++) {
 		const injection = injections[i];
+
 		if (!injection.matcher(scopes)) {
 			// injection selector doesn't match stack
 			continue;
 		}
 		const rule = grammar.getRule(injection.ruleId);
+
 		const { ruleScanner, findOptions } = prepareRuleSearch(
 			rule,
 			grammar,
@@ -597,11 +635,13 @@ function matchInjections(
 			isFirstLine,
 			linePos === anchorPosition,
 		);
+
 		const matchResult = ruleScanner.findNextMatchSync(
 			lineText,
 			linePos,
 			findOptions,
 		);
+
 		if (!matchResult) {
 			continue;
 		}
@@ -612,6 +652,7 @@ function matchInjections(
 		}
 
 		const matchRating = matchResult.captureIndices[0].start;
+
 		if (matchRating >= bestMatchRating) {
 			// Injections are sorted by priority, so the previous injection had a better or equal priority
 			continue;
@@ -654,10 +695,13 @@ function prepareRuleSearch(
 ): { ruleScanner: CompiledRule; findOptions: number } {
 	if (UseOnigurumaFindOptions) {
 		const ruleScanner = rule.compile(grammar, endRegexSource);
+
 		const findOptions = getFindOptions(allowA, allowG);
+
 		return { ruleScanner, findOptions };
 	}
 	const ruleScanner = rule.compileAG(grammar, endRegexSource, allowA, allowG);
+
 	return { ruleScanner, findOptions: FindOption.None };
 }
 
@@ -673,7 +717,9 @@ function prepareRuleWhileSearch(
 } {
 	if (UseOnigurumaFindOptions) {
 		const ruleScanner = rule.compileWhile(grammar, endRegexSource);
+
 		const findOptions = getFindOptions(allowA, allowG);
+
 		return { ruleScanner, findOptions };
 	}
 	const ruleScanner = rule.compileWhileAG(
@@ -682,11 +728,13 @@ function prepareRuleWhileSearch(
 		allowA,
 		allowG,
 	);
+
 	return { ruleScanner, findOptions: FindOption.None };
 }
 
 function getFindOptions(allowA: boolean, allowG: boolean): number {
 	let options = FindOption.None;
+
 	if (!allowA) {
 		options |= FindOption.NotBeginString;
 	}
@@ -712,11 +760,14 @@ function handleCaptures(
 	const lineTextContent = lineText.content;
 
 	const len = Math.min(captures.length, captureIndices.length);
+
 	const localStack: LocalStackElement[] = [];
+
 	const maxEnd = captureIndices[0].end;
 
 	for (let i = 0; i < len; i++) {
 		const captureRule = captures[i];
+
 		if (captureRule === null) {
 			// Not interested
 			continue;
@@ -762,14 +813,17 @@ function handleCaptures(
 				lineTextContent,
 				captureIndices,
 			);
+
 			const nameScopesList = stack.contentNameScopesList!.pushAttributed(
 				scopeName,
 				grammar,
 			);
+
 			const contentName = captureRule.getContentName(
 				lineTextContent,
 				captureIndices,
 			);
+
 			const contentNameScopesList = nameScopesList.pushAttributed(
 				contentName,
 				grammar,
@@ -784,6 +838,7 @@ function handleCaptures(
 				nameScopesList,
 				contentNameScopesList,
 			);
+
 			const onigSubStr = grammar.createOnigString(
 				lineTextContent.substring(0, captureIndex.end),
 			);
@@ -798,6 +853,7 @@ function handleCaptures(
 				/* no time limit */ 0,
 			);
 			disposeOnigString(onigSubStr);
+
 			continue;
 		}
 
@@ -805,12 +861,14 @@ function handleCaptures(
 			lineTextContent,
 			captureIndices,
 		);
+
 		if (captureRuleScopeName !== null) {
 			// push
 			const base =
 				localStack.length > 0
 					? localStack[localStack.length - 1].scopes
 					: stack.contentNameScopesList;
+
 			const captureRuleScopesList = base!.pushAttributed(
 				captureRuleScopeName,
 				grammar,

@@ -73,6 +73,7 @@ export function createGrammar(
 
 export interface IThemeProvider {
 	themeMatch(scopePath: ScopeStack): StyleAttributes | null;
+
 	getDefaults(): StyleAttributes;
 }
 
@@ -97,11 +98,13 @@ function collectInjections(
 	grammar: IRawGrammar,
 ): void {
 	const matchers = createMatchers(selector, nameMatcher);
+
 	const ruleId = RuleFactory.getCompiledRuleId(
 		rule,
 		ruleFactoryHelper,
 		grammar.repository,
 	);
+
 	for (const matcher of matchers) {
 		result.push({
 			debugSelector: selector,
@@ -118,10 +121,12 @@ function nameMatcher(identifers: ScopeName[], scopes: ScopeName[]): boolean {
 		return false;
 	}
 	let lastIndex = 0;
+
 	return identifers.every((identifier) => {
 		for (let i = lastIndex; i < scopes.length; i++) {
 			if (scopesAreMatching(scopes[i], identifier)) {
 				lastIndex = i + 1;
+
 				return true;
 			}
 		}
@@ -137,6 +142,7 @@ function scopesAreMatching(thisScopeName: string, scopeName: string): boolean {
 		return true;
 	}
 	const len = scopeName.length;
+
 	return (
 		thisScopeName.length > len &&
 		thisScopeName.substr(0, len) === scopeName &&
@@ -183,9 +189,11 @@ export class Grammar implements IGrammar, IRuleFactoryHelper, IOnigLib {
 		this._injections = null;
 
 		this._tokenTypeMatchers = [];
+
 		if (tokenTypes) {
 			for (const selector of Object.keys(tokenTypes)) {
 				const matchers = createMatchers(selector, nameMatcher);
+
 				for (const matcher of matchers) {
 					this._tokenTypeMatchers.push({
 						matcher: matcher.matcher,
@@ -236,9 +244,11 @@ export class Grammar implements IGrammar, IRuleFactoryHelper, IOnigLib {
 		const scopeName = this._rootScopeName;
 
 		const grammar = grammarRepository.lookup(scopeName);
+
 		if (grammar) {
 			// add injections from the current grammar
 			const rawInjections = grammar.injections;
+
 			if (rawInjections) {
 				for (let expression in rawInjections) {
 					collectInjections(
@@ -255,12 +265,15 @@ export class Grammar implements IGrammar, IRuleFactoryHelper, IOnigLib {
 
 			const injectionScopeNames =
 				this._grammarRepository.injections(scopeName);
+
 			if (injectionScopeNames) {
 				injectionScopeNames.forEach((injectionScopeName) => {
 					const injectionGrammar =
 						this.getExternalGrammar(injectionScopeName);
+
 					if (injectionGrammar) {
 						const selector = injectionGrammar.injectionSelector;
+
 						if (selector) {
 							collectInjections(
 								result,
@@ -288,6 +301,7 @@ export class Grammar implements IGrammar, IRuleFactoryHelper, IOnigLib {
 				console.log(
 					`Grammar ${this._rootScopeName} contains the following injections:`,
 				);
+
 				for (const injection of this._injections) {
 					console.log(`  - ${injection.debugSelector}`);
 				}
@@ -298,8 +312,10 @@ export class Grammar implements IGrammar, IRuleFactoryHelper, IOnigLib {
 
 	public registerRule<T extends Rule>(factory: (id: RuleId) => T): T {
 		const id = ++this._lastRuleId;
+
 		const result = factory(ruleIdFromNumber(id));
 		this._ruleId2desc[id] = result;
+
 		return result;
 	}
 
@@ -316,12 +332,14 @@ export class Grammar implements IGrammar, IRuleFactoryHelper, IOnigLib {
 		} else if (this._grammarRepository) {
 			const rawIncludedGrammar =
 				this._grammarRepository.lookup(scopeName);
+
 			if (rawIncludedGrammar) {
 				// console.log('LOADED GRAMMAR ' + pattern.include);
 				this._includedGrammars[scopeName] = initGrammar(
 					rawIncludedGrammar,
 					repository && repository.$base,
 				);
+
 				return this._includedGrammars[scopeName];
 			}
 		}
@@ -334,6 +352,7 @@ export class Grammar implements IGrammar, IRuleFactoryHelper, IOnigLib {
 		timeLimit: number = 0,
 	): ITokenizeLineResult {
 		const r = this._tokenize(lineText, prevState, false, timeLimit);
+
 		return {
 			tokens: r.lineTokens.getResult(r.ruleStack, r.lineLength),
 			ruleStack: r.ruleStack,
@@ -347,6 +366,7 @@ export class Grammar implements IGrammar, IRuleFactoryHelper, IOnigLib {
 		timeLimit: number = 0,
 	): ITokenizeLineResult2 {
 		const r = this._tokenize(lineText, prevState, true, timeLimit);
+
 		return {
 			tokens: r.lineTokens.getBinaryResult(r.ruleStack, r.lineLength),
 			ruleStack: r.ruleStack,
@@ -376,11 +396,15 @@ export class Grammar implements IGrammar, IRuleFactoryHelper, IOnigLib {
 		}
 
 		let isFirstLine: boolean;
+
 		if (!prevState || prevState === StateStackImpl.NULL) {
 			isFirstLine = true;
+
 			const rawDefaultMetadata =
 				this._basicScopeAttributesProvider.getDefaultAttributes();
+
 			const defaultStyle = this.themeProvider.getDefaults();
+
 			const defaultMetadata = EncodedTokenAttributes.set(
 				0,
 				rawDefaultMetadata.languageId,
@@ -397,6 +421,7 @@ export class Grammar implements IGrammar, IRuleFactoryHelper, IOnigLib {
 			);
 
 			let scopeList: AttributedScopeStack;
+
 			if (rootScopeName) {
 				scopeList = AttributedScopeStack.createRootAndLookUpScopeName(
 					rootScopeName,
@@ -426,14 +451,18 @@ export class Grammar implements IGrammar, IRuleFactoryHelper, IOnigLib {
 		}
 
 		lineText = lineText + "\n";
+
 		const onigLineText = this.createOnigString(lineText);
+
 		const lineLength = onigLineText.content.length;
+
 		const lineTokens = new LineTokens(
 			emitBinaryTokens,
 			lineText,
 			this._tokenTypeMatchers,
 			this.balancedBracketSelectors,
 		);
+
 		const r = _tokenizeString(
 			this,
 			onigLineText,
@@ -469,6 +498,7 @@ function initGrammar(
 		name: grammar.scopeName,
 	};
 	grammar.repository.$base = base || grammar.repository.$self;
+
 	return grammar;
 }
 
@@ -478,7 +508,9 @@ export class AttributedScopeStack {
 		contentNameScopesList: AttributedScopeStackFrame[],
 	): AttributedScopeStack | null {
 		let current = namesScopeList;
+
 		let scopeNames = namesScopeList?.scopePath ?? null;
+
 		for (const frame of contentNameScopesList) {
 			scopeNames = ScopeStack.push(scopeNames, frame.scopeNames);
 			current = new AttributedScopeStack(
@@ -507,7 +539,9 @@ export class AttributedScopeStack {
 		grammar: Grammar,
 	): AttributedScopeStack {
 		const rawRootMetadata = grammar.getMetadataForScope(scopeName);
+
 		const scopePath = new ScopeStack(null, scopeName);
+
 		const rootStyle = grammar.themeProvider.themeMatch(scopePath);
 
 		const resolvedTokenAttributes = AttributedScopeStack.mergeAttributes(
@@ -587,11 +621,14 @@ export class AttributedScopeStack {
 		styleAttributes: StyleAttributes | null,
 	): EncodedTokenAttributes {
 		let fontStyle = FontStyle.NotSet;
+
 		let foreground = 0;
+
 		let background = 0;
 
 		if (styleAttributes !== null) {
 			fontStyle = styleAttributes.fontStyle;
+
 			foreground = styleAttributes.foregroundId;
 			background = styleAttributes.backgroundId;
 		}
@@ -626,7 +663,9 @@ export class AttributedScopeStack {
 		}
 
 		const scopes = scopePath.split(/ /g);
+
 		let result: AttributedScopeStack = this;
+
 		for (const scope of scopes) {
 			result = AttributedScopeStack._pushAttributed(
 				result,
@@ -645,12 +684,15 @@ export class AttributedScopeStack {
 		const rawMetadata = grammar.getMetadataForScope(scopeName);
 
 		const newPath = target.scopePath.push(scopeName);
+
 		const scopeThemeMatchResult = grammar.themeProvider.themeMatch(newPath);
+
 		const metadata = AttributedScopeStack.mergeAttributes(
 			target.tokenAttributes,
 			rawMetadata,
 			scopeThemeMatchResult,
 		);
+
 		return new AttributedScopeStack(target, newPath, metadata);
 	}
 
@@ -662,6 +704,7 @@ export class AttributedScopeStack {
 		base: AttributedScopeStack | null,
 	): AttributedScopeStackFrame[] | undefined {
 		const result: AttributedScopeStackFrame[] = [];
+
 		let self: AttributedScopeStack | null = this;
 
 		while (self && self !== base) {
@@ -889,6 +932,7 @@ export class StateStackImpl implements StateStack {
 	public toString(): string {
 		const r: string[] = [];
 		this._writeString(r, 0);
+
 		return "[" + r.join(",") + "]";
 	}
 
@@ -939,6 +983,7 @@ export class StateStackImpl implements StateStack {
 	// Used to warn of endless loops
 	public hasSameRuleAs(other: StateStackImpl): boolean {
 		let el: StateStackImpl | null = this;
+
 		while (el && el._enterPos === other._enterPos) {
 			if (el.ruleId === other.ruleId) {
 				return true;
@@ -972,6 +1017,7 @@ export class StateStackImpl implements StateStack {
 			self?.nameScopesList ?? null,
 			frame.nameScopesList,
 		)!;
+
 		return new StateStackImpl(
 			self,
 			ruleIdFromNumber(frame.ruleId),
@@ -1020,6 +1066,7 @@ export class BalancedBracketSelectors {
 			(selector) => {
 				if (selector === "*") {
 					this.allowAny = true;
+
 					return [];
 				}
 				return createMatchers(selector, nameMatcher).map(
@@ -1084,6 +1131,7 @@ export class LineTokens {
 	) {
 		this._emitBinaryTokens = emitBinaryTokens;
 		this._tokenTypeOverrides = tokenTypeOverrides;
+
 		if (DebugFlags.InDebugMode) {
 			this._lineText = lineText;
 		} else {
@@ -1108,7 +1156,9 @@ export class LineTokens {
 
 		if (this._emitBinaryTokens) {
 			let metadata = scopesList?.tokenAttributes ?? 0;
+
 			let containsBalancedBrackets = false;
+
 			if (this.balancedBracketSelectors?.matchesAlways) {
 				containsBalancedBrackets = true;
 			}
@@ -1121,6 +1171,7 @@ export class LineTokens {
 			) {
 				// Only generate scope array when required to improve performance
 				const scopes = scopesList?.getScopeNames() ?? [];
+
 				for (const tokenType of this._tokenTypeOverrides) {
 					if (tokenType.matcher(scopes)) {
 						metadata = EncodedTokenAttributes.set(
@@ -1158,6 +1209,7 @@ export class LineTokens {
 			) {
 				// no need to push a token with the same metadata
 				this._lastTokenEndIndex = endIndex;
+
 				return;
 			}
 
@@ -1171,6 +1223,7 @@ export class LineTokens {
 						).replace(/\n$/, "\\n") +
 						"|",
 				);
+
 				for (let k = 0; k < scopes.length; k++) {
 					console.log("      * " + scopes[k]);
 				}
@@ -1180,6 +1233,7 @@ export class LineTokens {
 			this._binaryTokens.push(metadata);
 
 			this._lastTokenEndIndex = endIndex;
+
 			return;
 		}
 
@@ -1194,6 +1248,7 @@ export class LineTokens {
 					).replace(/\n$/, "\\n") +
 					"|",
 			);
+
 			for (let k = 0; k < scopes.length; k++) {
 				console.log("      * " + scopes[k]);
 			}
@@ -1247,6 +1302,7 @@ export class LineTokens {
 		}
 
 		const result = new Uint32Array(this._binaryTokens.length);
+
 		for (let i = 0, len = this._binaryTokens.length; i < len; i++) {
 			result[i] = this._binaryTokens[i];
 		}

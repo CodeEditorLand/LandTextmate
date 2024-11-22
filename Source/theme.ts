@@ -43,11 +43,13 @@ export class Theme {
 			return this._defaults;
 		}
 		const scopeName = scopePath.scopeName;
+
 		const matchingTrieElements = this._cachedMatchRoot.get(scopeName);
 
 		const effectiveRule = matchingTrieElements.find((v) =>
 			_scopePathMatchesParentScopes(scopePath.parent, v.parentScopes),
 		);
+
 		if (!effectiveRule) {
 			return null;
 		}
@@ -114,6 +116,7 @@ export class ScopeStack {
 	public static from(...segments: ScopeName[]): ScopeStack | null;
 	public static from(...segments: ScopeName[]): ScopeStack | null {
 		let result: ScopeStack | null = null;
+
 		for (let i = 0; i < segments.length; i++) {
 			result = new ScopeStack(result, segments[i]);
 		}
@@ -131,12 +134,15 @@ export class ScopeStack {
 
 	public getSegments(): ScopeName[] {
 		let item: ScopeStack | null = this;
+
 		const result: ScopeName[] = [];
+
 		while (item) {
 			result.push(item.scopeName);
 			item = item.parent;
 		}
 		result.reverse();
+
 		return result;
 	}
 
@@ -158,7 +164,9 @@ export class ScopeStack {
 		base: ScopeStack | null,
 	): string[] | undefined {
 		const result: string[] = [];
+
 		let item: ScopeStack | null = this;
+
 		while (item && item !== base) {
 			result.push(item.scopeName);
 			item = item.parent;
@@ -178,6 +186,7 @@ function _scopePathMatchesParentScopes(
 	// Starting with the deepest parent scope, look for a match in the scope path.
 	for (let index = 0; index < parentScopes.length; index++) {
 		let scopePattern = parentScopes[index];
+
 		let scopeMustMatch = false;
 
 		// Check for a child combinator (a parent-child relationship)
@@ -239,8 +248,10 @@ export function parseTheme(source: IRawTheme | undefined): ParsedThemeRule[] {
 		return [];
 	}
 	let settings = source.settings;
+
 	let result: ParsedThemeRule[] = [],
 		resultLen = 0;
+
 	for (let i = 0, len = settings.length; i < len; i++) {
 		let entry = settings[i];
 
@@ -249,6 +260,7 @@ export function parseTheme(source: IRawTheme | undefined): ParsedThemeRule[] {
 		}
 
 		let scopes: string[];
+
 		if (typeof entry.scope === "string") {
 			let _scope = entry.scope;
 
@@ -266,30 +278,41 @@ export function parseTheme(source: IRawTheme | undefined): ParsedThemeRule[] {
 		}
 
 		let fontStyle: OrMask<FontStyle> = FontStyle.NotSet;
+
 		if (typeof entry.settings.fontStyle === "string") {
 			fontStyle = FontStyle.None;
 
 			let segments = entry.settings.fontStyle.split(" ");
+
 			for (let j = 0, lenJ = segments.length; j < lenJ; j++) {
 				let segment = segments[j];
+
 				switch (segment) {
 					case "italic":
 						fontStyle = fontStyle | FontStyle.Italic;
+
 						break;
+
 					case "bold":
 						fontStyle = fontStyle | FontStyle.Bold;
+
 						break;
+
 					case "underline":
 						fontStyle = fontStyle | FontStyle.Underline;
+
 						break;
+
 					case "strikethrough":
 						fontStyle = fontStyle | FontStyle.Strikethrough;
+
 						break;
 				}
 			}
 		}
 
 		let foreground: string | null = null;
+
 		if (
 			typeof entry.settings.foreground === "string" &&
 			isValidHexColor(entry.settings.foreground)
@@ -298,6 +321,7 @@ export function parseTheme(source: IRawTheme | undefined): ParsedThemeRule[] {
 		}
 
 		let background: string | null = null;
+
 		if (
 			typeof entry.settings.background === "string" &&
 			isValidHexColor(entry.settings.background)
@@ -311,7 +335,9 @@ export function parseTheme(source: IRawTheme | undefined): ParsedThemeRule[] {
 			let segments = _scope.split(" ");
 
 			let scope = segments[segments.length - 1];
+
 			let parentScopes: string[] | null = null;
+
 			if (segments.length > 1) {
 				parentScopes = segments.slice(0, segments.length - 1);
 				parentScopes.reverse();
@@ -357,6 +383,7 @@ export function fontStyleToString(fontStyle: OrMask<FontStyle>) {
 	}
 
 	let style = "";
+
 	if (fontStyle & FontStyle.Italic) {
 		style += "italic ";
 	}
@@ -385,10 +412,12 @@ function resolveParsedThemeRules(
 	// Sort rules lexicographically, and then by index if necessary
 	parsedThemeRules.sort((a, b) => {
 		let r = strcmp(a.scope, b.scope);
+
 		if (r !== 0) {
 			return r;
 		}
 		r = strArrCmp(a.parentScopes, b.parentScopes);
+
 		if (r !== 0) {
 			return r;
 		}
@@ -397,10 +426,14 @@ function resolveParsedThemeRules(
 
 	// Determine defaults
 	let defaultFontStyle = FontStyle.None;
+
 	let defaultForeground = "#000000";
+
 	let defaultBackground = "#ffffff";
+
 	while (parsedThemeRules.length >= 1 && parsedThemeRules[0].scope === "") {
 		let incomingDefaults = parsedThemeRules.shift()!;
+
 		if (incomingDefaults.fontStyle !== FontStyle.NotSet) {
 			defaultFontStyle = incomingDefaults.fontStyle;
 		}
@@ -412,6 +445,7 @@ function resolveParsedThemeRules(
 		}
 	}
 	let colorMap = new ColorMap(_colorMap);
+
 	let defaults = new StyleAttributes(
 		defaultFontStyle,
 		colorMap.getId(defaultForeground),
@@ -422,6 +456,7 @@ function resolveParsedThemeRules(
 		new ThemeTrieElementRule(0, null, FontStyle.NotSet, 0, 0),
 		[],
 	);
+
 	for (let i = 0, len = parsedThemeRules.length; i < len; i++) {
 		let rule = parsedThemeRules[i];
 		root.insert(
@@ -450,6 +485,7 @@ export class ColorMap {
 
 		if (Array.isArray(_colorMap)) {
 			this._isFrozen = true;
+
 			for (let i = 0, len = _colorMap.length; i < len; i++) {
 				this._color2id[_colorMap[i]] = i;
 				this._id2color[i] = _colorMap[i];
@@ -464,7 +500,9 @@ export class ColorMap {
 			return 0;
 		}
 		color = color.toUpperCase();
+
 		let value = this._color2id[color];
+
 		if (value) {
 			return value;
 		}
@@ -474,6 +512,7 @@ export class ColorMap {
 		value = ++this._lastColorId;
 		this._color2id[color] = value;
 		this._id2color[value] = color;
+
 		return value;
 	}
 
@@ -488,6 +527,7 @@ export class ThemeTrieElementRule {
 	scopeDepth: number;
 	parentScopes: readonly ScopeName[];
 	fontStyle: number;
+
 	foreground: number;
 	background: number;
 
@@ -519,6 +559,7 @@ export class ThemeTrieElementRule {
 		arr: ThemeTrieElementRule[],
 	): ThemeTrieElementRule[] {
 		let r: ThemeTrieElementRule[] = [];
+
 		for (let i = 0, len = arr.length; i < len; i++) {
 			r[i] = arr[i].clone();
 		}
@@ -537,6 +578,7 @@ export class ThemeTrieElementRule {
 			this.scopeDepth = scopeDepth;
 		}
 		// console.log('TODO -> my depth: ' + this.scopeDepth + ', overwriting depth: ' + scopeDepth);
+
 		if (fontStyle !== FontStyle.NotSet) {
 			this.fontStyle = fontStyle;
 		}
@@ -581,6 +623,7 @@ export class ThemeTrieElement {
 		// Start at index 0 for both rules, since the parent scopes were reversed
 		// beforehand (i.e. index 0 is the deepest parent scope).
 		let aParentIndex = 0;
+
 		let bParentIndex = 0;
 
 		while (true) {
@@ -624,8 +667,11 @@ export class ThemeTrieElement {
 	public match(scope: ScopeName): ThemeTrieElementRule[] {
 		if (scope !== "") {
 			let dotIndex = scope.indexOf(".");
+
 			let head: string;
+
 			let tail: string;
+
 			if (dotIndex === -1) {
 				head = scope;
 				tail = "";
@@ -641,6 +687,7 @@ export class ThemeTrieElement {
 
 		const rules = this._rulesWithParentScopes.concat(this._mainRule);
 		rules.sort(ThemeTrieElement._cmpBySpecificity);
+
 		return rules;
 	}
 
@@ -660,12 +707,16 @@ export class ThemeTrieElement {
 				foreground,
 				background,
 			);
+
 			return;
 		}
 
 		let dotIndex = scope.indexOf(".");
+
 		let head: string;
+
 		let tail: string;
+
 		if (dotIndex === -1) {
 			head = scope;
 			tail = "";
@@ -675,6 +726,7 @@ export class ThemeTrieElement {
 		}
 
 		let child: ThemeTrieElement;
+
 		if (this._children.hasOwnProperty(head)) {
 			child = this._children[head];
 		} else {
@@ -710,6 +762,7 @@ export class ThemeTrieElement {
 				foreground,
 				background,
 			);
+
 			return;
 		}
 
@@ -729,6 +782,7 @@ export class ThemeTrieElement {
 					foreground,
 					background,
 				);
+
 				return;
 			}
 		}

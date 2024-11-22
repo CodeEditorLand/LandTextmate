@@ -54,7 +54,9 @@ export class BasicScopeAttributesProvider {
 		BasicScopeAttributes
 	>((scopeName) => {
 		const languageId = this._scopeToLanguage(scopeName);
+
 		const standardTokenType = this._toStandardTokenType(scopeName);
+
 		return new BasicScopeAttributes(languageId, standardTokenType);
 	});
 
@@ -72,16 +74,20 @@ export class BasicScopeAttributesProvider {
 		const m = scopeName.match(
 			BasicScopeAttributesProvider.STANDARD_TOKEN_TYPE_REGEXP,
 		);
+
 		if (!m) {
 			return OptionalStandardTokenType.NotSet;
 		}
 		switch (m[1]) {
 			case "comment":
 				return OptionalStandardTokenType.Comment;
+
 			case "string":
 				return OptionalStandardTokenType.String;
+
 			case "regex":
 				return OptionalStandardTokenType.RegEx;
+
 			case "meta.embedded":
 				return OptionalStandardTokenType.Other;
 		}
@@ -122,6 +128,7 @@ class ScopeMatcher<TValue> {
 			return undefined;
 		}
 		const m = scope.match(this.scopesRegExp);
+
 		if (!m) {
 			// no scopes matched
 			return undefined;

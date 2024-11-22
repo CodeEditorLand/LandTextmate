@@ -46,7 +46,9 @@ function _parse(
 	const len = content.length;
 
 	let pos = 0;
+
 	let line = 1;
+
 	let char = 0;
 
 	// Skip UTF8 BOM
@@ -60,6 +62,7 @@ function _parse(
 		} else {
 			while (by > 0) {
 				let chCode = content.charCodeAt(pos);
+
 				if (chCode === ChCode.LINE_FEED) {
 					pos++;
 					line++;
@@ -83,6 +86,7 @@ function _parse(
 	function skipWhitespace(): void {
 		while (pos < len) {
 			let chCode = content.charCodeAt(pos);
+
 			if (
 				chCode !== ChCode.SPACE &&
 				chCode !== ChCode.TAB &&
@@ -98,6 +102,7 @@ function _parse(
 	function advanceIfStartsWith(str: string): boolean {
 		if (content.substr(pos, str.length) === str) {
 			advancePosBy(str.length);
+
 			return true;
 		}
 		return false;
@@ -105,6 +110,7 @@ function _parse(
 
 	function advanceUntil(str: string): void {
 		let nextOccurence = content.indexOf(str, pos);
+
 		if (nextOccurence !== -1) {
 			advancePosTo(nextOccurence + str.length);
 		} else {
@@ -115,14 +121,17 @@ function _parse(
 
 	function captureUntil(str: string): string {
 		let nextOccurence = content.indexOf(str, pos);
+
 		if (nextOccurence !== -1) {
 			let r = content.substring(pos, nextOccurence);
 			advancePosTo(nextOccurence + str.length);
+
 			return r;
 		} else {
 			// EOF
 			let r = content.substr(pos);
 			advancePosTo(len);
+
 			return r;
 		}
 	}
@@ -130,8 +139,11 @@ function _parse(
 	let state = State.ROOT_STATE;
 
 	let cur: any = null;
+
 	let stateStack: State[] = [];
+
 	let objStack: any[] = [];
+
 	let curKey: string | null = null;
 
 	function pushState(newState: State, newCur: any): void {
@@ -167,6 +179,7 @@ function _parse(
 				return fail("missing <key>");
 			}
 			let newDict: any = {};
+
 			if (locationKeyName !== null) {
 				newDict[locationKeyName] = {
 					filename: filename,
@@ -192,6 +205,7 @@ function _parse(
 	const arrState = {
 		enterDict: function () {
 			let newDict: any = {};
+
 			if (locationKeyName !== null) {
 				newDict[locationKeyName] = {
 					filename: filename,
@@ -217,6 +231,7 @@ function _parse(
 		} else {
 			// ROOT_STATE
 			cur = {};
+
 			if (locationKeyName !== null) {
 				cur[locationKeyName] = {
 					filename: filename,
@@ -374,12 +389,16 @@ function _parse(
 				switch (_) {
 					case "&amp;":
 						return "&";
+
 					case "&lt;":
 						return "<";
+
 					case "&gt;":
 						return ">";
+
 					case "&quot;":
 						return '"';
+
 					case "&apos;":
 						return "'";
 				}
@@ -394,7 +413,9 @@ function _parse(
 
 	function parseOpenTag(): IParsedTag {
 		let r = captureUntil(">");
+
 		let isClosed = false;
+
 		if (r.charCodeAt(r.length - 1) === ChCode.SLASH) {
 			isClosed = true;
 			r = r.substring(0, r.length - 1);
@@ -412,17 +433,20 @@ function _parse(
 		}
 		let val = captureUntil("</");
 		advanceUntil(">");
+
 		return escapeVal(val);
 	}
 
 	while (pos < len) {
 		skipWhitespace();
+
 		if (pos >= len) {
 			break;
 		}
 
 		const chCode = content.charCodeAt(pos);
 		advancePosBy(1);
+
 		if (chCode !== ChCode.LESS_THAN) {
 			return fail("expected <");
 		}
@@ -436,6 +460,7 @@ function _parse(
 		if (peekChCode === ChCode.QUESTION_MARK) {
 			advancePosBy(1);
 			advanceUntil("?>");
+
 			continue;
 		}
 
@@ -444,10 +469,12 @@ function _parse(
 
 			if (advanceIfStartsWith("--")) {
 				advanceUntil("-->");
+
 				continue;
 			}
 
 			advanceUntil(">");
+
 			continue;
 		}
 
@@ -457,18 +484,21 @@ function _parse(
 
 			if (advanceIfStartsWith("plist")) {
 				advanceUntil(">");
+
 				continue;
 			}
 
 			if (advanceIfStartsWith("dict")) {
 				advanceUntil(">");
 				leaveDict();
+
 				continue;
 			}
 
 			if (advanceIfStartsWith("array")) {
 				advanceUntil(">");
 				leaveArray();
+
 				continue;
 			}
 
@@ -480,6 +510,7 @@ function _parse(
 		switch (tag.name) {
 			case "dict":
 				enterDict();
+
 				if (tag.isClosed) {
 					leaveDict();
 				}
@@ -487,6 +518,7 @@ function _parse(
 
 			case "array":
 				enterArray();
+
 				if (tag.isClosed) {
 					leaveArray();
 				}
@@ -494,36 +526,44 @@ function _parse(
 
 			case "key":
 				acceptKey(parseTagValue(tag));
+
 				continue;
 
 			case "string":
 				acceptString(parseTagValue(tag));
+
 				continue;
 
 			case "real":
 				acceptReal(parseFloat(parseTagValue(tag)));
+
 				continue;
 
 			case "integer":
 				acceptInteger(parseInt(parseTagValue(tag), 10));
+
 				continue;
 
 			case "date":
 				acceptDate(new Date(parseTagValue(tag)));
+
 				continue;
 
 			case "data":
 				acceptData(parseTagValue(tag));
+
 				continue;
 
 			case "true":
 				parseTagValue(tag);
 				acceptBool(true);
+
 				continue;
 
 			case "false":
 				parseTagValue(tag);
 				acceptBool(false);
+
 				continue;
 		}
 

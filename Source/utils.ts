@@ -20,6 +20,7 @@ function doClone(something: any): any {
 
 function cloneArray(arr: any[]): any[] {
 	let r: any[] = [];
+
 	for (let i = 0, len = arr.length; i < len; i++) {
 		r[i] = doClone(arr[i]);
 	}
@@ -28,6 +29,7 @@ function cloneArray(arr: any[]): any[] {
 
 function cloneObj(obj: any): any {
 	let r: any = {};
+
 	for (let key in obj) {
 		r[key] = doClone(obj[key]);
 	}
@@ -40,11 +42,13 @@ export function mergeObjects(target: any, ...sources: any[]): any {
 			target[key] = source[key];
 		}
 	});
+
 	return target;
 }
 
 export function basename(path: string): string {
 	const idx = ~path.lastIndexOf("/") || ~path.lastIndexOf("\\");
+
 	if (idx === 0) {
 		return path;
 	} else if (~idx === path.length - 1) {
@@ -62,6 +66,7 @@ export class RegexSource {
 			return false;
 		}
 		CAPTURING_REGEX_SOURCE.lastIndex = 0;
+
 		return CAPTURING_REGEX_SOURCE.test(regexSource);
 	}
 
@@ -80,6 +85,7 @@ export class RegexSource {
 			) => {
 				let capture =
 					captureIndices[parseInt(index || commandIndex, 10)];
+
 				if (capture) {
 					let result = captureSource.substring(
 						capture.start,
@@ -92,8 +98,10 @@ export class RegexSource {
 					switch (command) {
 						case "downcase":
 							return result.toLowerCase();
+
 						case "upcase":
 							return result.toUpperCase();
+
 						default:
 							return result;
 					}
@@ -134,10 +142,13 @@ export function strArrCmp(
 		return 1;
 	}
 	let len1 = a.length;
+
 	let len2 = b.length;
+
 	if (len1 === len2) {
 		for (let i = 0; i < len1; i++) {
 			let res = strcmp(a[i], b[i]);
+
 			if (res !== 0) {
 				return res;
 			}
@@ -180,6 +191,7 @@ export function escapeRegExpCharacters(value: string): string {
 
 export class CachedFn<TKey, TValue> {
 	private readonly cache = new Map<TKey, TValue>();
+
 	constructor(private readonly fn: (key: TKey) => TValue) {}
 
 	public get(key: TKey): TValue {
@@ -188,6 +200,7 @@ export class CachedFn<TKey, TValue> {
 		}
 		const value = this.fn(key);
 		this.cache.set(key, value);
+
 		return value;
 	}
 }

@@ -30,6 +30,7 @@ import {
 } from "./utils";
 
 const HAS_BACK_REFERENCES = /\\(\d+)/;
+
 const BACK_REFERENCING_END = /\\(\d+)/g;
 
 const ruleIdSymbol = Symbol("RuleId");
@@ -95,6 +96,7 @@ export abstract class Rule {
 		const location = this.$location
 			? `${basename(this.$location.filename)}:${this.$location.line}`
 			: "unknown";
+
 		return `${(<any>this.constructor).name}#${this.id} @ ${location}`;
 	}
 
@@ -635,6 +637,7 @@ export class RuleFactory {
 						);
 					}
 					let patterns = desc.patterns;
+
 					if (typeof patterns === "undefined" && desc.include) {
 						patterns = [{ include: desc.include }];
 					}
@@ -717,11 +720,13 @@ export class RuleFactory {
 		if (captures) {
 			// Find the maximum capture id
 			let maximumCaptureId = 0;
+
 			for (const captureId in captures) {
 				if (captureId === "$vscodeTextmateLocation") {
 					continue;
 				}
 				const numericCaptureId = parseInt(captureId, 10);
+
 				if (numericCaptureId > maximumCaptureId) {
 					maximumCaptureId = numericCaptureId;
 				}
@@ -738,7 +743,9 @@ export class RuleFactory {
 					continue;
 				}
 				const numericCaptureId = parseInt(captureId, 10);
+
 				let retokenizeCapturedWithRuleId: RuleId | 0 = 0;
+
 				if (captures[captureId].patterns) {
 					retokenizeCapturedWithRuleId =
 						RuleFactory.getCompiledRuleId(
@@ -770,6 +777,7 @@ export class RuleFactory {
 		if (patterns) {
 			for (let i = 0, len = patterns.length; i < len; i++) {
 				const pattern = patterns[i];
+
 				let ruleId: RuleId | -1 = -1;
 
 				if (pattern.include) {
@@ -783,12 +791,14 @@ export class RuleFactory {
 								helper,
 								repository,
 							);
+
 							break;
 
 						case IncludeReferenceKind.RelativeReference:
 							// Local include found in `repository`
 							let localIncludedRule =
 								repository[reference.ruleName];
+
 							if (localIncludedRule) {
 								ruleId = RuleFactory.getCompiledRuleId(
 									localIncludedRule,
@@ -803,6 +813,7 @@ export class RuleFactory {
 						case IncludeReferenceKind.TopLevelReference:
 						case IncludeReferenceKind.TopLevelRepositoryReference:
 							const externalGrammarName = reference.scopeName;
+
 							const externalGrammarInclude =
 								reference.kind ===
 								IncludeReferenceKind.TopLevelRepositoryReference
@@ -821,6 +832,7 @@ export class RuleFactory {
 										externalGrammar.repository[
 											externalGrammarInclude
 										];
+
 									if (externalIncludedRule) {
 										ruleId = RuleFactory.getCompiledRuleId(
 											externalIncludedRule,
@@ -870,6 +882,7 @@ export class RuleFactory {
 
 					if (skipRule) {
 						// console.log('REMOVING RULE ENTIRELY DUE TO EMPTY PATTERNS THAT ARE MISSING');
+
 						continue;
 					}
 
@@ -902,16 +915,20 @@ export class RegExpSource<TRuleId = RuleId | typeof endRuleId> {
 	constructor(regExpSource: string, ruleId: TRuleId) {
 		if (regExpSource) {
 			const len = regExpSource.length;
+
 			let lastPushedPos = 0;
+
 			let output: string[] = [];
 
 			let hasAnchor = false;
+
 			for (let pos = 0; pos < len; pos++) {
 				const ch = regExpSource.charAt(pos);
 
 				if (ch === "\\") {
 					if (pos + 1 < len) {
 						const nextCh = regExpSource.charAt(pos + 1);
+
 						if (nextCh === "z") {
 							output.push(
 								regExpSource.substring(lastPushedPos, pos),
@@ -927,6 +944,7 @@ export class RegExpSource<TRuleId = RuleId | typeof endRuleId> {
 			}
 
 			this.hasAnchor = hasAnchor;
+
 			if (lastPushedPos === 0) {
 				// No \z hit
 				this.source = regExpSource;
@@ -974,6 +992,7 @@ export class RegExpSource<TRuleId = RuleId | typeof endRuleId> {
 			return lineText.substring(capture.start, capture.end);
 		});
 		BACK_REFERENCING_END.lastIndex = 0;
+
 		return this.source.replace(BACK_REFERENCING_END, (match, g1) => {
 			return escapeRegExpCharacters(
 				capturedValues[parseInt(g1, 10)] || "",
@@ -983,8 +1002,11 @@ export class RegExpSource<TRuleId = RuleId | typeof endRuleId> {
 
 	private _buildAnchorCache(): IRegExpSourceAnchorCache {
 		let A0_G0_result: string[] = [];
+
 		let A0_G1_result: string[] = [];
+
 		let A1_G0_result: string[] = [];
+
 		let A1_G1_result: string[] = [];
 
 		let pos: number, len: number, ch: string, nextCh: string;
@@ -999,6 +1021,7 @@ export class RegExpSource<TRuleId = RuleId | typeof endRuleId> {
 			if (ch === "\\") {
 				if (pos + 1 < len) {
 					nextCh = this.source.charAt(pos + 1);
+
 					if (nextCh === "A") {
 						A0_G0_result[pos + 1] = "\uFFFF";
 						A0_G1_result[pos + 1] = "\uFFFF";
@@ -1193,6 +1216,7 @@ export class RegExpSourceList<TRuleId = RuleId | typeof endRuleId> {
 		allowG: boolean,
 	): CompiledRule<TRuleId> {
 		let regExps = this._items.map((e) => e.resolveAnchors(allowA, allowG));
+
 		return new CompiledRule(
 			onigLib,
 			regExps,
@@ -1220,6 +1244,7 @@ export class CompiledRule<TRuleId = RuleId | typeof endRuleId> {
 
 	toString(): string {
 		const r: string[] = [];
+
 		for (let i = 0, len = this.rules.length; i < len; i++) {
 			r.push("   - " + this.rules[i] + ": " + this.regExps[i]);
 		}
@@ -1236,6 +1261,7 @@ export class CompiledRule<TRuleId = RuleId | typeof endRuleId> {
 			startPosition,
 			options,
 		);
+
 		if (!result) {
 			return null;
 		}

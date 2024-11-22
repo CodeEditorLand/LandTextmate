@@ -28,6 +28,7 @@ export interface RegistryOptions {
 	theme?: IRawTheme;
 	colorMap?: string[];
 	loadGrammar(scopeName: ScopeName): Promise<IRawGrammar | undefined | null>;
+
 	getInjections?(scopeName: ScopeName): ScopeName[] | undefined;
 }
 
@@ -142,6 +143,7 @@ export class Registry {
 			this._syncRegistry,
 			initialScopeName,
 		);
+
 		while (dependencyProcessor.Q.length > 0) {
 			await Promise.all(
 				dependencyProcessor.Q.map((request) =>
@@ -172,6 +174,7 @@ export class Registry {
 
 	private async _doLoadSingleGrammar(scopeName: ScopeName): Promise<void> {
 		const grammar = await this._options.loadGrammar(scopeName);
+
 		if (grammar) {
 			const injections =
 				typeof this._options.getInjections === "function"
@@ -191,6 +194,7 @@ export class Registry {
 		embeddedLanguages: IEmbeddedLanguagesMap | null = null,
 	): Promise<IGrammar> {
 		this._syncRegistry.addGrammar(rawGrammar, injections);
+
 		return (await this._grammarForScopeName(
 			rawGrammar.scopeName,
 			initialLanguage,

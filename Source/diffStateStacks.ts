@@ -10,9 +10,11 @@ export function diffStateStacksRefEq(
 	second: StateStack,
 ): StackDiff {
 	let pops = 0;
+
 	const newFrames: StateStackFrame[] = [];
 
 	let curFirst: StateStackImpl | null = first as StateStackImpl;
+
 	let curSecond: StateStackImpl | null = second as StateStackImpl;
 
 	while (curFirst !== curSecond) {
@@ -38,6 +40,7 @@ export function applyStateStackDiff(
 	diff: StackDiff,
 ): StateStackImpl | null {
 	let curStack = stack as StateStackImpl | null;
+
 	for (let i = 0; i < diff.pops; i++) {
 		curStack = curStack!.parent;
 	}
