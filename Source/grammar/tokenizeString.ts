@@ -398,9 +398,7 @@ function _checkWhileConditions(
 
 	for (
 		let whileRule = whileRules.pop();
-
 		whileRule;
-
 		whileRule = whileRules.pop()
 	) {
 		const { ruleScanner, findOptions } = prepareRuleWhileSearch(
