@@ -206,6 +206,7 @@ export class CachedFn<TKey, TValue> {
 }
 
 declare let performance: { now: () => number } | undefined;
+
 export const performanceNow =
 	typeof performance === "undefined"
 		? // performance.now() is not available in this environment, so use Date.now()

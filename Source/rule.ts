@@ -34,6 +34,7 @@ const HAS_BACK_REFERENCES = /\\(\d+)/;
 const BACK_REFERENCING_END = /\\(\d+)/g;
 
 const ruleIdSymbol = Symbol("RuleId");
+
 export type RuleId = { __brand: typeof ruleIdSymbol };
 
 // This is a special constant to indicate that the end regexp matched.
