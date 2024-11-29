@@ -7,13 +7,19 @@ import { ScopeName } from "./theme";
 
 export interface IRawGrammar extends ILocatable {
 	repository: IRawRepository;
+
 	readonly scopeName: ScopeName;
+
 	readonly patterns: IRawRule[];
+
 	readonly injections?: { [expression: string]: IRawRule };
+
 	readonly injectionSelector?: string;
 
 	readonly fileTypes?: string[];
+
 	readonly name?: string;
+
 	readonly firstLineMatch?: string;
 }
 
@@ -43,16 +49,25 @@ export interface IRawRule extends ILocatable {
 	readonly include?: IncludeString;
 
 	readonly name?: ScopeName;
+
 	readonly contentName?: ScopeName;
 
 	readonly match?: RegExpString;
+
 	readonly captures?: IRawCaptures;
+
 	readonly begin?: RegExpString;
+
 	readonly beginCaptures?: IRawCaptures;
+
 	readonly end?: RegExpString;
+
 	readonly endCaptures?: IRawCaptures;
+
 	readonly while?: RegExpString;
+
 	readonly whileCaptures?: IRawCaptures;
+
 	readonly patterns?: IRawRule[];
 
 	readonly repository?: IRawRepository;
@@ -68,7 +83,9 @@ export interface IRawCapturesMap {
 
 export interface ILocation {
 	readonly filename: string;
+
 	readonly line: number;
+
 	readonly char: number;
 }
 

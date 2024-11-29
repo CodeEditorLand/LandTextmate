@@ -6,17 +6,21 @@ import { OrMask } from "./utils";
 
 export interface IOnigLib {
 	createOnigScanner(sources: string[]): OnigScanner;
+
 	createOnigString(str: string): OnigString;
 }
 
 export interface IOnigCaptureIndex {
 	start: number;
+
 	end: number;
+
 	length: number;
 }
 
 export interface IOnigMatch {
 	index: number;
+
 	captureIndices: IOnigCaptureIndex[];
 }
 
@@ -46,11 +50,13 @@ export interface OnigScanner {
 		startPosition: number,
 		options: OrMask<FindOption>,
 	): IOnigMatch | null;
+
 	dispose?(): void;
 }
 
 export interface OnigString {
 	readonly content: string;
+
 	dispose?(): void;
 }
 

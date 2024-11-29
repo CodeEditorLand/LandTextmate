@@ -23,8 +23,11 @@ import {
 
 export class SyncRegistry implements IGrammarRepository, IThemeProvider {
 	private readonly _grammars = new Map<ScopeName, Grammar>();
+
 	private readonly _rawGrammars = new Map<ScopeName, IRawGrammar>();
+
 	private readonly _injectionGrammars = new Map<ScopeName, ScopeName[]>();
+
 	private _theme: Theme;
 
 	constructor(
@@ -106,6 +109,7 @@ export class SyncRegistry implements IGrammarRepository, IThemeProvider {
 			if (!rawGrammar) {
 				return null;
 			}
+
 			this._grammars.set(
 				scopeName,
 				createGrammar(
@@ -120,6 +124,7 @@ export class SyncRegistry implements IGrammarRepository, IThemeProvider {
 				),
 			);
 		}
+
 		return this._grammars.get(scopeName)!;
 	}
 }

@@ -12,9 +12,11 @@ function doClone(something: any): any {
 	if (Array.isArray(something)) {
 		return cloneArray(something);
 	}
+
 	if (typeof something === "object") {
 		return cloneObj(something);
 	}
+
 	return something;
 }
 
@@ -24,6 +26,7 @@ function cloneArray(arr: any[]): any[] {
 	for (let i = 0, len = arr.length; i < len; i++) {
 		r[i] = doClone(arr[i]);
 	}
+
 	return r;
 }
 
@@ -33,6 +36,7 @@ function cloneObj(obj: any): any {
 	for (let key in obj) {
 		r[key] = doClone(obj[key]);
 	}
+
 	return r;
 }
 
@@ -65,6 +69,7 @@ export class RegexSource {
 		if (regexSource === null) {
 			return false;
 		}
+
 		CAPTURING_REGEX_SOURCE.lastIndex = 0;
 
 		return CAPTURING_REGEX_SOURCE.test(regexSource);
@@ -95,6 +100,7 @@ export class RegexSource {
 					while (result[0] === ".") {
 						result = result.substring(1);
 					}
+
 					switch (command) {
 						case "downcase":
 							return result.toLowerCase();
@@ -122,9 +128,11 @@ export function strcmp(a: string, b: string): number {
 	if (a < b) {
 		return -1;
 	}
+
 	if (a > b) {
 		return 1;
 	}
+
 	return 0;
 }
 
@@ -135,12 +143,15 @@ export function strArrCmp(
 	if (a === null && b === null) {
 		return 0;
 	}
+
 	if (!a) {
 		return -1;
 	}
+
 	if (!b) {
 		return 1;
 	}
+
 	let len1 = a.length;
 
 	let len2 = b.length;
@@ -153,8 +164,10 @@ export function strArrCmp(
 				return res;
 			}
 		}
+
 		return 0;
 	}
+
 	return len1 - len2;
 }
 
@@ -198,7 +211,9 @@ export class CachedFn<TKey, TValue> {
 		if (this.cache.has(key)) {
 			return this.cache.get(key)!;
 		}
+
 		const value = this.fn(key);
+
 		this.cache.set(key, value);
 
 		return value;

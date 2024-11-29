@@ -18,7 +18,9 @@ function doFail(streamState: JSONStreamState, msg: string): void {
 
 export interface ILocation {
 	readonly filename: string | null;
+
 	readonly line: number;
+
 	readonly char: number;
 }
 
@@ -41,11 +43,13 @@ export function parseJSON(
 
 	function pushState(): void {
 		stateStack.push(state);
+
 		objStack.push(cur);
 	}
 
 	function popState(): void {
 		state = stateStack.pop()!;
+
 		cur = objStack.pop();
 	}
 
@@ -65,7 +69,9 @@ export function parseJSON(
 				if (withMetadata) {
 					cur.$vscodeTextmateLocation = token.toLocation(filename);
 				}
+
 				pushState();
+
 				state = JSONState.DICT_STATE;
 
 				continue;
@@ -73,7 +79,9 @@ export function parseJSON(
 
 			if (token.type === JSONTokenType.LEFT_SQUARE_BRACKET) {
 				cur = [];
+
 				pushState();
+
 				state = JSONState.ARR_STATE;
 
 				continue;
@@ -120,6 +128,7 @@ export function parseJSON(
 				) {
 					fail("expected colon");
 				}
+
 				if (!nextJSONToken(streamState, token)) {
 					fail("expected value");
 				}
@@ -131,35 +140,45 @@ export function parseJSON(
 
 					continue;
 				}
+
 				if (token.type === JSONTokenType.NULL) {
 					cur[keyValue] = null;
 
 					continue;
 				}
+
 				if (token.type === JSONTokenType.TRUE) {
 					cur[keyValue] = true;
 
 					continue;
 				}
+
 				if (token.type === JSONTokenType.FALSE) {
 					cur[keyValue] = false;
 
 					continue;
 				}
+
 				if (token.type === JSONTokenType.NUMBER) {
 					cur[keyValue] = parseFloat(token.value!);
 
 					continue;
 				}
+
 				if (token.type === JSONTokenType.LEFT_SQUARE_BRACKET) {
 					let newArr: any[] = [];
+
 					cur[keyValue] = newArr;
+
 					pushState();
+
 					state = JSONState.ARR_STATE;
+
 					cur = newArr;
 
 					continue;
 				}
+
 				if (token.type === JSONTokenType.LEFT_CURLY_BRACKET) {
 					let newDict: any = {};
 
@@ -167,9 +186,13 @@ export function parseJSON(
 						newDict.$vscodeTextmateLocation =
 							token.toLocation(filename);
 					}
+
 					cur[keyValue] = newDict;
+
 					pushState();
+
 					state = JSONState.DICT_STATE;
+
 					cur = newDict;
 
 					continue;
@@ -215,21 +238,25 @@ export function parseJSON(
 
 				continue;
 			}
+
 			if (token.type === JSONTokenType.NULL) {
 				cur.push(null);
 
 				continue;
 			}
+
 			if (token.type === JSONTokenType.TRUE) {
 				cur.push(true);
 
 				continue;
 			}
+
 			if (token.type === JSONTokenType.FALSE) {
 				cur.push(false);
 
 				continue;
 			}
+
 			if (token.type === JSONTokenType.NUMBER) {
 				cur.push(parseFloat(token.value!));
 
@@ -238,13 +265,18 @@ export function parseJSON(
 
 			if (token.type === JSONTokenType.LEFT_SQUARE_BRACKET) {
 				let newArr: any[] = [];
+
 				cur.push(newArr);
+
 				pushState();
+
 				state = JSONState.ARR_STATE;
+
 				cur = newArr;
 
 				continue;
 			}
+
 			if (token.type === JSONTokenType.LEFT_CURLY_BRACKET) {
 				let newDict: any = {};
 
@@ -252,9 +284,13 @@ export function parseJSON(
 					newDict.$vscodeTextmateLocation =
 						token.toLocation(filename);
 				}
+
 				cur.push(newDict);
+
 				pushState();
+
 				state = JSONState.DICT_STATE;
+
 				cur = newDict;
 
 				continue;
@@ -277,16 +313,22 @@ class JSONStreamState {
 	source: string;
 
 	pos: number;
+
 	len: number;
 
 	line: number;
+
 	char: number;
 
 	constructor(source: string) {
 		this.source = source;
+
 		this.pos = 0;
+
 		this.len = source.length;
+
 		this.line = 1;
+
 		this.char = 0;
 	}
 }
@@ -298,6 +340,7 @@ const enum JSONTokenType {
 	LEFT_CURLY_BRACKET = 3, // {
 	RIGHT_SQUARE_BRACKET = 4, // ]
 	RIGHT_CURLY_BRACKET = 5, // }
+
 	COLON = 6, // :
 	COMMA = 7, // ,
 	NULL = 8,
@@ -353,9 +396,11 @@ const enum ChCode {
 
 class JSONToken {
 	value: string | null;
+
 	type: JSONTokenType;
 
 	offset: number;
+
 	len: number;
 
 	line: number; /* 1 based line number */
@@ -363,10 +408,15 @@ class JSONToken {
 
 	constructor() {
 		this.value = null;
+
 		this.type = JSONTokenType.UNKNOWN;
+
 		this.offset = -1;
+
 		this.len = -1;
+
 		this.line = -1;
+
 		this.char = -1;
 	}
 
@@ -384,10 +434,15 @@ class JSONToken {
  */
 function nextJSONToken(_state: JSONStreamState, _out: JSONToken): boolean {
 	_out.value = null;
+
 	_out.type = JSONTokenType.UNKNOWN;
+
 	_out.offset = -1;
+
 	_out.len = -1;
+
 	_out.line = -1;
+
 	_out.char = -1;
 
 	let source = _state.source;
@@ -417,6 +472,7 @@ function nextJSONToken(_state: JSONStreamState, _out: JSONToken): boolean {
 		) {
 			// regular whitespace
 			pos++;
+
 			char++;
 
 			continue;
@@ -425,7 +481,9 @@ function nextJSONToken(_state: JSONStreamState, _out: JSONToken): boolean {
 		if (chCode === ChCode.LINE_FEED) {
 			// newline
 			pos++;
+
 			line++;
+
 			char = 0;
 
 			continue;
@@ -436,7 +494,9 @@ function nextJSONToken(_state: JSONStreamState, _out: JSONToken): boolean {
 	} while (true);
 
 	_out.offset = pos;
+
 	_out.line = line;
+
 	_out.char = char;
 
 	if (chCode === ChCode.QUOTATION_MARK) {
@@ -444,6 +504,7 @@ function nextJSONToken(_state: JSONStreamState, _out: JSONToken): boolean {
 		_out.type = JSONTokenType.STRING;
 
 		pos++;
+
 		char++;
 
 		do {
@@ -452,12 +513,15 @@ function nextJSONToken(_state: JSONStreamState, _out: JSONToken): boolean {
 			}
 
 			chCode = source.charCodeAt(pos);
+
 			pos++;
+
 			char++;
 
 			if (chCode === ChCode.BACKSLASH) {
 				// skip next char
 				pos++;
+
 				char++;
 
 				continue;
@@ -503,119 +567,168 @@ function nextJSONToken(_state: JSONStreamState, _out: JSONToken): boolean {
 					default:
 						doFail(_state, "invalid escape sequence");
 				}
+
 				throw new Error("unreachable");
 			});
 	} else if (chCode === ChCode.LEFT_SQUARE_BRACKET) {
 		_out.type = JSONTokenType.LEFT_SQUARE_BRACKET;
+
 		pos++;
+
 		char++;
 	} else if (chCode === ChCode.LEFT_CURLY_BRACKET) {
 		_out.type = JSONTokenType.LEFT_CURLY_BRACKET;
+
 		pos++;
+
 		char++;
 	} else if (chCode === ChCode.RIGHT_SQUARE_BRACKET) {
 		_out.type = JSONTokenType.RIGHT_SQUARE_BRACKET;
+
 		pos++;
+
 		char++;
 	} else if (chCode === ChCode.RIGHT_CURLY_BRACKET) {
 		_out.type = JSONTokenType.RIGHT_CURLY_BRACKET;
+
 		pos++;
+
 		char++;
 	} else if (chCode === ChCode.COLON) {
 		_out.type = JSONTokenType.COLON;
+
 		pos++;
+
 		char++;
 	} else if (chCode === ChCode.COMMA) {
 		_out.type = JSONTokenType.COMMA;
+
 		pos++;
+
 		char++;
 	} else if (chCode === ChCode.n) {
 		//------------------------ null
 
 		_out.type = JSONTokenType.NULL;
+
 		pos++;
+
 		char++;
+
 		chCode = source.charCodeAt(pos);
 
 		if (chCode !== ChCode.u) {
 			return false; /* INVALID */
 		}
+
 		pos++;
+
 		char++;
+
 		chCode = source.charCodeAt(pos);
 
 		if (chCode !== ChCode.l) {
 			return false; /* INVALID */
 		}
+
 		pos++;
+
 		char++;
+
 		chCode = source.charCodeAt(pos);
 
 		if (chCode !== ChCode.l) {
 			return false; /* INVALID */
 		}
+
 		pos++;
+
 		char++;
 	} else if (chCode === ChCode.t) {
 		//------------------------ true
 
 		_out.type = JSONTokenType.TRUE;
+
 		pos++;
+
 		char++;
+
 		chCode = source.charCodeAt(pos);
 
 		if (chCode !== ChCode.r) {
 			return false; /* INVALID */
 		}
+
 		pos++;
+
 		char++;
+
 		chCode = source.charCodeAt(pos);
 
 		if (chCode !== ChCode.u) {
 			return false; /* INVALID */
 		}
+
 		pos++;
+
 		char++;
+
 		chCode = source.charCodeAt(pos);
 
 		if (chCode !== ChCode.e) {
 			return false; /* INVALID */
 		}
+
 		pos++;
+
 		char++;
 	} else if (chCode === ChCode.f) {
 		//------------------------ false
 
 		_out.type = JSONTokenType.FALSE;
+
 		pos++;
+
 		char++;
+
 		chCode = source.charCodeAt(pos);
 
 		if (chCode !== ChCode.a) {
 			return false; /* INVALID */
 		}
+
 		pos++;
+
 		char++;
+
 		chCode = source.charCodeAt(pos);
 
 		if (chCode !== ChCode.l) {
 			return false; /* INVALID */
 		}
+
 		pos++;
+
 		char++;
+
 		chCode = source.charCodeAt(pos);
 
 		if (chCode !== ChCode.s) {
 			return false; /* INVALID */
 		}
+
 		pos++;
+
 		char++;
+
 		chCode = source.charCodeAt(pos);
 
 		if (chCode !== ChCode.e) {
 			return false; /* INVALID */
 		}
+
 		pos++;
+
 		char++;
 	} else {
 		//------------------------ numbers
@@ -639,6 +752,7 @@ function nextJSONToken(_state: JSONStreamState, _out: JSONToken): boolean {
 			) {
 				// looks like a piece of a number
 				pos++;
+
 				char++;
 
 				continue;
@@ -657,7 +771,9 @@ function nextJSONToken(_state: JSONStreamState, _out: JSONToken): boolean {
 	}
 
 	_state.pos = pos;
+
 	_state.line = line;
+
 	_state.char = char;
 
 	// console.log('PRODUCING TOKEN: ', _out.value, JSONTokenType[_out.type]);

@@ -148,18 +148,23 @@ export namespace EncodedTokenAttributes {
 		if (languageId !== 0) {
 			_languageId = languageId;
 		}
+
 		if (tokenType !== OptionalStandardTokenType.NotSet) {
 			_tokenType = fromOptionalTokenType(tokenType);
 		}
+
 		if (containsBalancedBrackets !== null) {
 			_containsBalancedBracketsBit = containsBalancedBrackets ? 1 : 0;
 		}
+
 		if (fontStyle !== FontStyle.NotSet) {
 			_fontStyle = fontStyle;
 		}
+
 		if (foreground !== 0) {
 			_foreground = foreground;
 		}
+
 		if (background !== 0) {
 			_background = background;
 		}

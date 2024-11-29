@@ -16,6 +16,7 @@ export class BasicScopeAttributes {
 
 export class BasicScopeAttributesProvider {
 	private readonly _defaultAttributes: BasicScopeAttributes;
+
 	private readonly _embeddedLanguagesMatcher: ScopeMatcher</* language id */ number>;
 
 	constructor(
@@ -26,6 +27,7 @@ export class BasicScopeAttributesProvider {
 			initialLanguageId,
 			OptionalStandardTokenType.NotSet,
 		);
+
 		this._embeddedLanguagesMatcher = new ScopeMatcher(
 			Object.entries(embeddedLanguages || {}),
 		);
@@ -41,6 +43,7 @@ export class BasicScopeAttributesProvider {
 		if (scopeName === null) {
 			return BasicScopeAttributesProvider._NULL_SCOPE_METADATA;
 		}
+
 		return this._getBasicScopeAttributes.get(scopeName);
 	}
 
@@ -78,6 +81,7 @@ export class BasicScopeAttributesProvider {
 		if (!m) {
 			return OptionalStandardTokenType.NotSet;
 		}
+
 		switch (m[1]) {
 			case "comment":
 				return OptionalStandardTokenType.Comment;
@@ -91,6 +95,7 @@ export class BasicScopeAttributesProvider {
 			case "meta.embedded":
 				return OptionalStandardTokenType.Other;
 		}
+
 		throw new Error("Unexpected match for standard token type!");
 	}
 
@@ -100,11 +105,13 @@ export class BasicScopeAttributesProvider {
 
 class ScopeMatcher<TValue> {
 	private readonly values: ReadonlyMap<string, TValue> | null;
+
 	private readonly scopesRegExp: RegExp | null;
 
 	constructor(values: [ScopeName, TValue][]) {
 		if (values.length === 0) {
 			this.values = null;
+
 			this.scopesRegExp = null;
 		} else {
 			this.values = new Map(values);
@@ -115,6 +122,7 @@ class ScopeMatcher<TValue> {
 			);
 
 			escapedScopes.sort();
+
 			escapedScopes.reverse(); // Longest scope first
 			this.scopesRegExp = new RegExp(
 				`^((${escapedScopes.join(")|(")}))($|\\.)`,
@@ -127,12 +135,14 @@ class ScopeMatcher<TValue> {
 		if (!this.scopesRegExp) {
 			return undefined;
 		}
+
 		const m = scope.match(this.scopesRegExp);
 
 		if (!m) {
 			// no scopes matched
 			return undefined;
 		}
+
 		return this.values!.get(m[1])!;
 	}
 }

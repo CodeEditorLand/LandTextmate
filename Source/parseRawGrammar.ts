@@ -14,6 +14,7 @@ export function parseRawGrammar(
 	if (filePath !== null && /\.json$/.test(filePath)) {
 		return parseJSONGrammar(content, filePath);
 	}
+
 	return parsePLISTGrammar(content, filePath);
 }
 
@@ -24,6 +25,7 @@ function parseJSONGrammar(
 	if (DebugFlags.InDebugMode) {
 		return <IRawGrammar>parseJSON(contents, filename, true);
 	}
+
 	return <IRawGrammar>JSON.parse(contents);
 }
 
@@ -40,5 +42,6 @@ function parsePLISTGrammar(
 			)
 		);
 	}
+
 	return <IRawGrammar>plist.parsePLIST(contents);
 }

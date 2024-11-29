@@ -42,6 +42,7 @@ export class Theme {
 		if (scopePath === null) {
 			return this._defaults;
 		}
+
 		const scopeName = scopePath.scopeName;
 
 		const matchingTrieElements = this._cachedMatchRoot.get(scopeName);
@@ -85,6 +86,7 @@ export type ScopePattern = string;
  */
 export interface IRawTheme {
 	readonly name?: string;
+
 	readonly settings: IRawThemeSetting[];
 }
 
@@ -93,10 +95,14 @@ export interface IRawTheme {
  */
 export interface IRawThemeSetting {
 	readonly name?: string;
+
 	readonly scope?: ScopePattern | ScopePattern[];
+
 	readonly settings: {
 		readonly fontStyle?: string;
+
 		readonly foreground?: string;
+
 		readonly background?: string;
 	};
 }
@@ -109,17 +115,21 @@ export class ScopeStack {
 		for (const name of scopeNames) {
 			path = new ScopeStack(path, name);
 		}
+
 		return path;
 	}
 
 	public static from(first: ScopeName, ...segments: ScopeName[]): ScopeStack;
+
 	public static from(...segments: ScopeName[]): ScopeStack | null;
+
 	public static from(...segments: ScopeName[]): ScopeStack | null {
 		let result: ScopeStack | null = null;
 
 		for (let i = 0; i < segments.length; i++) {
 			result = new ScopeStack(result, segments[i]);
 		}
+
 		return result;
 	}
 
@@ -139,8 +149,10 @@ export class ScopeStack {
 
 		while (item) {
 			result.push(item.scopeName);
+
 			item = item.parent;
 		}
+
 		result.reverse();
 
 		return result;
@@ -154,9 +166,11 @@ export class ScopeStack {
 		if (this === other) {
 			return true;
 		}
+
 		if (this.parent === null) {
 			return false;
 		}
+
 		return this.parent.extends(other);
 	}
 
@@ -169,8 +183,10 @@ export class ScopeStack {
 
 		while (item && item !== base) {
 			result.push(item.scopeName);
+
 			item = item.parent;
 		}
+
 		return item === base ? result.reverse() : undefined;
 	}
 }
@@ -195,7 +211,9 @@ function _scopePathMatchesParentScopes(
 				// Invalid use of child combinator
 				return false;
 			}
+
 			scopePattern = parentScopes[++index];
+
 			scopeMustMatch = true;
 		}
 
@@ -203,10 +221,12 @@ function _scopePathMatchesParentScopes(
 			if (_matchesScope(scopePath.scopeName, scopePattern)) {
 				break;
 			}
+
 			if (scopeMustMatch) {
 				// If a child combinator was used, the parent scope must match.
 				return false;
 			}
+
 			scopePath = scopePath.parent;
 		}
 
@@ -214,6 +234,7 @@ function _scopePathMatchesParentScopes(
 			// No more potential matches
 			return false;
 		}
+
 		scopePath = scopePath.parent;
 	}
 
@@ -244,9 +265,11 @@ export function parseTheme(source: IRawTheme | undefined): ParsedThemeRule[] {
 	if (!source) {
 		return [];
 	}
+
 	if (!source.settings || !Array.isArray(source.settings)) {
 		return [];
 	}
+
 	let settings = source.settings;
 
 	let result: ParsedThemeRule[] = [],
@@ -340,6 +363,7 @@ export function parseTheme(source: IRawTheme | undefined): ParsedThemeRule[] {
 
 			if (segments.length > 1) {
 				parentScopes = segments.slice(0, segments.length - 1);
+
 				parentScopes.reverse();
 			}
 
@@ -387,18 +411,23 @@ export function fontStyleToString(fontStyle: OrMask<FontStyle>) {
 	if (fontStyle & FontStyle.Italic) {
 		style += "italic ";
 	}
+
 	if (fontStyle & FontStyle.Bold) {
 		style += "bold ";
 	}
+
 	if (fontStyle & FontStyle.Underline) {
 		style += "underline ";
 	}
+
 	if (fontStyle & FontStyle.Strikethrough) {
 		style += "strikethrough ";
 	}
+
 	if (style === "") {
 		style = "none";
 	}
+
 	return style.trim();
 }
 
@@ -416,11 +445,13 @@ function resolveParsedThemeRules(
 		if (r !== 0) {
 			return r;
 		}
+
 		r = strArrCmp(a.parentScopes, b.parentScopes);
 
 		if (r !== 0) {
 			return r;
 		}
+
 		return a.index - b.index;
 	});
 
@@ -437,13 +468,16 @@ function resolveParsedThemeRules(
 		if (incomingDefaults.fontStyle !== FontStyle.NotSet) {
 			defaultFontStyle = incomingDefaults.fontStyle;
 		}
+
 		if (incomingDefaults.foreground !== null) {
 			defaultForeground = incomingDefaults.foreground;
 		}
+
 		if (incomingDefaults.background !== null) {
 			defaultBackground = incomingDefaults.background;
 		}
 	}
+
 	let colorMap = new ColorMap(_colorMap);
 
 	let defaults = new StyleAttributes(
@@ -459,6 +493,7 @@ function resolveParsedThemeRules(
 
 	for (let i = 0, len = parsedThemeRules.length; i < len; i++) {
 		let rule = parsedThemeRules[i];
+
 		root.insert(
 			0,
 			rule.scope,
@@ -474,13 +509,18 @@ function resolveParsedThemeRules(
 
 export class ColorMap {
 	private readonly _isFrozen: boolean;
+
 	private _lastColorId: number;
+
 	private _id2color: string[];
+
 	private _color2id: { [color: string]: number };
 
 	constructor(_colorMap?: string[]) {
 		this._lastColorId = 0;
+
 		this._id2color = [];
+
 		this._color2id = Object.create(null);
 
 		if (Array.isArray(_colorMap)) {
@@ -488,6 +528,7 @@ export class ColorMap {
 
 			for (let i = 0, len = _colorMap.length; i < len; i++) {
 				this._color2id[_colorMap[i]] = i;
+
 				this._id2color[i] = _colorMap[i];
 			}
 		} else {
@@ -499,6 +540,7 @@ export class ColorMap {
 		if (color === null) {
 			return 0;
 		}
+
 		color = color.toUpperCase();
 
 		let value = this._color2id[color];
@@ -506,11 +548,15 @@ export class ColorMap {
 		if (value) {
 			return value;
 		}
+
 		if (this._isFrozen) {
 			throw new Error(`Missing color in color map - ${color}`);
 		}
+
 		value = ++this._lastColorId;
+
 		this._color2id[color] = value;
+
 		this._id2color[value] = color;
 
 		return value;
@@ -525,10 +571,13 @@ const emptyParentScopes = Object.freeze(<ScopeName[]>[]);
 
 export class ThemeTrieElementRule {
 	scopeDepth: number;
+
 	parentScopes: readonly ScopeName[];
+
 	fontStyle: number;
 
 	foreground: number;
+
 	background: number;
 
 	constructor(
@@ -539,9 +588,13 @@ export class ThemeTrieElementRule {
 		background: number,
 	) {
 		this.scopeDepth = scopeDepth;
+
 		this.parentScopes = parentScopes || emptyParentScopes;
+
 		this.fontStyle = fontStyle;
+
 		this.foreground = foreground;
+
 		this.background = background;
 	}
 
@@ -563,6 +616,7 @@ export class ThemeTrieElementRule {
 		for (let i = 0, len = arr.length; i < len; i++) {
 			r[i] = arr[i].clone();
 		}
+
 		return r;
 	}
 
@@ -582,9 +636,11 @@ export class ThemeTrieElementRule {
 		if (fontStyle !== FontStyle.NotSet) {
 			this.fontStyle = fontStyle;
 		}
+
 		if (foreground !== 0) {
 			this.foreground = foreground;
 		}
+
 		if (background !== 0) {
 			this.background = background;
 		}
@@ -631,6 +687,7 @@ export class ThemeTrieElement {
 			if (a.parentScopes[aParentIndex] === ">") {
 				aParentIndex++;
 			}
+
 			if (b.parentScopes[bParentIndex] === ">") {
 				bParentIndex++;
 			}
@@ -656,6 +713,7 @@ export class ThemeTrieElement {
 			}
 
 			aParentIndex++;
+
 			bParentIndex++;
 		}
 
@@ -674,9 +732,11 @@ export class ThemeTrieElement {
 
 			if (dotIndex === -1) {
 				head = scope;
+
 				tail = "";
 			} else {
 				head = scope.substring(0, dotIndex);
+
 				tail = scope.substring(dotIndex + 1);
 			}
 
@@ -686,6 +746,7 @@ export class ThemeTrieElement {
 		}
 
 		const rules = this._rulesWithParentScopes.concat(this._mainRule);
+
 		rules.sort(ThemeTrieElement._cmpBySpecificity);
 
 		return rules;
@@ -719,9 +780,11 @@ export class ThemeTrieElement {
 
 		if (dotIndex === -1) {
 			head = scope;
+
 			tail = "";
 		} else {
 			head = scope.substring(0, dotIndex);
+
 			tail = scope.substring(dotIndex + 1);
 		}
 
@@ -734,6 +797,7 @@ export class ThemeTrieElement {
 				this._mainRule.clone(),
 				ThemeTrieElementRule.cloneArr(this._rulesWithParentScopes),
 			);
+
 			this._children[head] = child;
 		}
 
@@ -769,7 +833,9 @@ export class ThemeTrieElement {
 		// Try to merge into existing rule
 		for (
 			let i = 0, len = this._rulesWithParentScopes.length;
+
 			i < len;
+
 			i++
 		) {
 			let rule = this._rulesWithParentScopes[i];
@@ -793,9 +859,11 @@ export class ThemeTrieElement {
 		if (fontStyle === FontStyle.NotSet) {
 			fontStyle = this._mainRule.fontStyle;
 		}
+
 		if (foreground === 0) {
 			foreground = this._mainRule.foreground;
 		}
+
 		if (background === 0) {
 			background = this._mainRule.background;
 		}

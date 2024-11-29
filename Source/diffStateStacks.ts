@@ -21,14 +21,17 @@ export function diffStateStacksRefEq(
 		if (curFirst && (!curSecond || curFirst.depth >= curSecond.depth)) {
 			// curFirst is certainly not contained in curSecond
 			pops++;
+
 			curFirst = curFirst.parent;
 		} else {
 			// curSecond is certainly not contained in curFirst.
 			// Also, curSecond must be defined, as otherwise a previous case would match
 			newFrames.push(curSecond!.toStateStackFrame());
+
 			curSecond = curSecond!.parent;
 		}
 	}
+
 	return {
 		pops,
 		newFrames: newFrames.reverse(),
@@ -44,13 +47,16 @@ export function applyStateStackDiff(
 	for (let i = 0; i < diff.pops; i++) {
 		curStack = curStack!.parent;
 	}
+
 	for (const frame of diff.newFrames) {
 		curStack = StateStackImpl.pushFrame(curStack, frame);
 	}
+
 	return curStack;
 }
 
 export interface StackDiff {
 	readonly pops: number;
+
 	readonly newFrames: StateStackFrame[];
 }

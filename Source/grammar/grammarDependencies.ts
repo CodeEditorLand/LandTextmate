@@ -38,6 +38,7 @@ export class TopLevelRepositoryRuleReference {
 
 export class ExternalReferenceCollector {
 	private readonly _references: AbsoluteRuleReference[] = [];
+
 	private readonly _seenReferenceKeys = new Set<string>();
 
 	public get references(): readonly AbsoluteRuleReference[] {
@@ -52,14 +53,18 @@ export class ExternalReferenceCollector {
 		if (this._seenReferenceKeys.has(key)) {
 			return;
 		}
+
 		this._seenReferenceKeys.add(key);
+
 		this._references.push(reference);
 	}
 }
 
 export class ScopeDependencyProcessor {
 	public readonly seenFullScopeRequests = new Set<ScopeName>();
+
 	public readonly seenPartialScopeRequests = new Set<string>();
+
 	public Q: AbsoluteRuleReference[];
 
 	constructor(
@@ -67,11 +72,13 @@ export class ScopeDependencyProcessor {
 		public readonly initialScopeName: ScopeName,
 	) {
 		this.seenFullScopeRequests.add(this.initialScopeName);
+
 		this.Q = [new TopLevelRuleReference(this.initialScopeName)];
 	}
 
 	public processQueue(): void {
 		const q = this.Q;
+
 		this.Q = [];
 
 		const deps = new ExternalReferenceCollector();
@@ -91,18 +98,23 @@ export class ScopeDependencyProcessor {
 					// already processed
 					continue;
 				}
+
 				this.seenFullScopeRequests.add(dep.scopeName);
+
 				this.Q.push(dep);
 			} else {
 				if (this.seenFullScopeRequests.has(dep.scopeName)) {
 					// already processed in full
 					continue;
 				}
+
 				if (this.seenPartialScopeRequests.has(dep.toKey())) {
 					// already processed
 					continue;
 				}
+
 				this.seenPartialScopeRequests.add(dep.toKey());
+
 				this.Q.push(dep);
 			}
 		}
@@ -123,6 +135,7 @@ function collectReferencesOfReference(
 				`No grammar provided for <${baseGrammarScopeName}>`,
 			);
 		}
+
 		return;
 	}
 
@@ -152,12 +165,15 @@ function collectReferencesOfReference(
 
 interface Context {
 	baseGrammar: IRawGrammar;
+
 	selfGrammar: IRawGrammar;
 }
 
 interface ContextWithRepository {
 	baseGrammar: IRawGrammar;
+
 	selfGrammar: IRawGrammar;
+
 	repository: Record<string, IRawRule> | undefined;
 }
 
@@ -168,6 +184,7 @@ function collectExternalReferencesInTopLevelRepositoryRule(
 ): void {
 	if (context.repository && context.repository[ruleName]) {
 		const rule = context.repository[ruleName];
+
 		collectExternalReferencesInRules([rule], context, result);
 	}
 }
@@ -186,6 +203,7 @@ function collectExternalReferencesInTopLevelRule(
 			result,
 		);
 	}
+
 	if (context.selfGrammar.injections) {
 		collectExternalReferencesInRules(
 			Object.values(context.selfGrammar.injections),
@@ -204,6 +222,7 @@ function collectExternalReferencesInRules(
 		if (result.visitedRule.has(rule)) {
 			continue;
 		}
+
 		result.visitedRule.add(rule);
 
 		const patternRepository = rule.repository
@@ -297,6 +316,7 @@ function collectExternalReferencesInRules(
 						);
 					}
 				}
+
 				break;
 		}
 	}

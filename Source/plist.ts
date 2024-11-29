@@ -65,16 +65,21 @@ function _parse(
 
 				if (chCode === ChCode.LINE_FEED) {
 					pos++;
+
 					line++;
+
 					char = 0;
 				} else {
 					pos++;
+
 					char++;
 				}
+
 				by--;
 			}
 		}
 	}
+
 	function advancePosTo(to: number): void {
 		if (locationKeyName === null) {
 			pos = to;
@@ -95,6 +100,7 @@ function _parse(
 			) {
 				break;
 			}
+
 			advancePosBy(1);
 		}
 	}
@@ -105,6 +111,7 @@ function _parse(
 
 			return true;
 		}
+
 		return false;
 	}
 
@@ -124,12 +131,14 @@ function _parse(
 
 		if (nextOccurence !== -1) {
 			let r = content.substring(pos, nextOccurence);
+
 			advancePosTo(nextOccurence + str.length);
 
 			return r;
 		} else {
 			// EOF
 			let r = content.substr(pos);
+
 			advancePosTo(len);
 
 			return r;
@@ -148,8 +157,11 @@ function _parse(
 
 	function pushState(newState: State, newCur: any): void {
 		stateStack.push(state);
+
 		objStack.push(cur);
+
 		state = newState;
+
 		cur = newCur;
 	}
 
@@ -157,7 +169,9 @@ function _parse(
 		if (stateStack.length === 0) {
 			return fail("illegal state stack");
 		}
+
 		state = stateStack.pop()!;
+
 		cur = objStack.pop();
 	}
 
@@ -178,6 +192,7 @@ function _parse(
 			if (curKey === null) {
 				return fail("missing <key>");
 			}
+
 			let newDict: any = {};
 
 			if (locationKeyName !== null) {
@@ -187,17 +202,24 @@ function _parse(
 					char: char,
 				};
 			}
+
 			cur[curKey] = newDict;
+
 			curKey = null;
+
 			pushState(State.DICT_STATE, newDict);
 		},
 		enterArray: function () {
 			if (curKey === null) {
 				return fail("missing <key>");
 			}
+
 			let newArr: any[] = [];
+
 			cur[curKey] = newArr;
+
 			curKey = null;
+
 			pushState(State.ARR_STATE, newArr);
 		},
 	};
@@ -213,12 +235,16 @@ function _parse(
 					char: char,
 				};
 			}
+
 			cur.push(newDict);
+
 			pushState(State.DICT_STATE, newDict);
 		},
 		enterArray: function () {
 			let newArr: any[] = [];
+
 			cur.push(newArr);
+
 			pushState(State.ARR_STATE, newArr);
 		},
 	};
@@ -239,9 +265,11 @@ function _parse(
 					char: char,
 				};
 			}
+
 			pushState(State.DICT_STATE, cur);
 		}
 	}
+
 	function leaveDict() {
 		if (state === State.DICT_STATE) {
 			popState();
@@ -252,6 +280,7 @@ function _parse(
 			return fail("unexpected </dict>");
 		}
 	}
+
 	function enterArray() {
 		if (state === State.DICT_STATE) {
 			dictState.enterArray();
@@ -260,9 +289,11 @@ function _parse(
 		} else {
 			// ROOT_STATE
 			cur = [];
+
 			pushState(State.ARR_STATE, cur);
 		}
 	}
+
 	function leaveArray() {
 		if (state === State.DICT_STATE) {
 			return fail("unexpected </array>");
@@ -273,11 +304,13 @@ function _parse(
 			return fail("unexpected </array>");
 		}
 	}
+
 	function acceptKey(val: string) {
 		if (state === State.DICT_STATE) {
 			if (curKey !== null) {
 				return fail("too many <key>");
 			}
+
 			curKey = val;
 		} else if (state === State.ARR_STATE) {
 			return fail("unexpected <key>");
@@ -286,12 +319,15 @@ function _parse(
 			return fail("unexpected <key>");
 		}
 	}
+
 	function acceptString(val: string) {
 		if (state === State.DICT_STATE) {
 			if (curKey === null) {
 				return fail("missing <key>");
 			}
+
 			cur[curKey] = val;
+
 			curKey = null;
 		} else if (state === State.ARR_STATE) {
 			cur.push(val);
@@ -300,15 +336,19 @@ function _parse(
 			cur = val;
 		}
 	}
+
 	function acceptReal(val: number) {
 		if (isNaN(val)) {
 			return fail("cannot parse float");
 		}
+
 		if (state === State.DICT_STATE) {
 			if (curKey === null) {
 				return fail("missing <key>");
 			}
+
 			cur[curKey] = val;
+
 			curKey = null;
 		} else if (state === State.ARR_STATE) {
 			cur.push(val);
@@ -317,15 +357,19 @@ function _parse(
 			cur = val;
 		}
 	}
+
 	function acceptInteger(val: number) {
 		if (isNaN(val)) {
 			return fail("cannot parse integer");
 		}
+
 		if (state === State.DICT_STATE) {
 			if (curKey === null) {
 				return fail("missing <key>");
 			}
+
 			cur[curKey] = val;
+
 			curKey = null;
 		} else if (state === State.ARR_STATE) {
 			cur.push(val);
@@ -334,12 +378,15 @@ function _parse(
 			cur = val;
 		}
 	}
+
 	function acceptDate(val: Date) {
 		if (state === State.DICT_STATE) {
 			if (curKey === null) {
 				return fail("missing <key>");
 			}
+
 			cur[curKey] = val;
+
 			curKey = null;
 		} else if (state === State.ARR_STATE) {
 			cur.push(val);
@@ -348,12 +395,15 @@ function _parse(
 			cur = val;
 		}
 	}
+
 	function acceptData(val: string) {
 		if (state === State.DICT_STATE) {
 			if (curKey === null) {
 				return fail("missing <key>");
 			}
+
 			cur[curKey] = val;
+
 			curKey = null;
 		} else if (state === State.ARR_STATE) {
 			cur.push(val);
@@ -362,12 +412,15 @@ function _parse(
 			cur = val;
 		}
 	}
+
 	function acceptBool(val: boolean) {
 		if (state === State.DICT_STATE) {
 			if (curKey === null) {
 				return fail("missing <key>");
 			}
+
 			cur[curKey] = val;
+
 			curKey = null;
 		} else if (state === State.ARR_STATE) {
 			cur.push(val);
@@ -402,12 +455,14 @@ function _parse(
 					case "&apos;":
 						return "'";
 				}
+
 				return _;
 			});
 	}
 
 	interface IParsedTag {
 		name: string;
+
 		isClosed: boolean;
 	}
 
@@ -418,6 +473,7 @@ function _parse(
 
 		if (r.charCodeAt(r.length - 1) === ChCode.SLASH) {
 			isClosed = true;
+
 			r = r.substring(0, r.length - 1);
 		}
 
@@ -431,7 +487,9 @@ function _parse(
 		if (tag.isClosed) {
 			return "";
 		}
+
 		let val = captureUntil("</");
+
 		advanceUntil(">");
 
 		return escapeVal(val);
@@ -445,6 +503,7 @@ function _parse(
 		}
 
 		const chCode = content.charCodeAt(pos);
+
 		advancePosBy(1);
 
 		if (chCode !== ChCode.LESS_THAN) {
@@ -459,6 +518,7 @@ function _parse(
 
 		if (peekChCode === ChCode.QUESTION_MARK) {
 			advancePosBy(1);
+
 			advanceUntil("?>");
 
 			continue;
@@ -480,6 +540,7 @@ function _parse(
 
 		if (peekChCode === ChCode.SLASH) {
 			advancePosBy(1);
+
 			skipWhitespace();
 
 			if (advanceIfStartsWith("plist")) {
@@ -490,6 +551,7 @@ function _parse(
 
 			if (advanceIfStartsWith("dict")) {
 				advanceUntil(">");
+
 				leaveDict();
 
 				continue;
@@ -497,6 +559,7 @@ function _parse(
 
 			if (advanceIfStartsWith("array")) {
 				advanceUntil(">");
+
 				leaveArray();
 
 				continue;
@@ -514,6 +577,7 @@ function _parse(
 				if (tag.isClosed) {
 					leaveDict();
 				}
+
 				continue;
 
 			case "array":
@@ -522,6 +586,7 @@ function _parse(
 				if (tag.isClosed) {
 					leaveArray();
 				}
+
 				continue;
 
 			case "key":
@@ -556,12 +621,14 @@ function _parse(
 
 			case "true":
 				parseTagValue(tag);
+
 				acceptBool(true);
 
 				continue;
 
 			case "false":
 				parseTagValue(tag);
+
 				acceptBool(false);
 
 				continue;

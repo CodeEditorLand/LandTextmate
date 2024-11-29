@@ -25,8 +25,11 @@ export { IRawGrammar, IRawTheme };
  */
 export interface RegistryOptions {
 	onigLib: Promise<IOnigLib>;
+
 	theme?: IRawTheme;
+
 	colorMap?: string[];
+
 	loadGrammar(scopeName: ScopeName): Promise<IRawGrammar | undefined | null>;
 
 	getInjections?(scopeName: ScopeName): ScopeName[] | undefined;
@@ -48,8 +51,11 @@ export interface ITokenTypeMap {
 
 export interface IGrammarConfiguration {
 	embeddedLanguages?: IEmbeddedLanguagesMap;
+
 	tokenTypes?: ITokenTypeMap;
+
 	balancedBracketSelectors?: string[];
+
 	unbalancedBracketSelectors?: string[];
 }
 
@@ -58,15 +64,19 @@ export interface IGrammarConfiguration {
  */
 export class Registry {
 	private readonly _options: RegistryOptions;
+
 	private readonly _syncRegistry: SyncRegistry;
+
 	private readonly _ensureGrammarCache: Map<string, Promise<void>>;
 
 	constructor(options: RegistryOptions) {
 		this._options = options;
+
 		this._syncRegistry = new SyncRegistry(
 			Theme.createFromRawTheme(options.theme, options.colorMap),
 			options.onigLib,
 		);
+
 		this._ensureGrammarCache = new Map<string, Promise<void>>();
 	}
 
@@ -150,6 +160,7 @@ export class Registry {
 					this._loadSingleGrammar(request.scopeName),
 				),
 			);
+
 			dependencyProcessor.processQueue();
 		}
 
@@ -169,6 +180,7 @@ export class Registry {
 				this._doLoadSingleGrammar(scopeName),
 			);
 		}
+
 		return this._ensureGrammarCache.get(scopeName);
 	}
 
@@ -180,6 +192,7 @@ export class Registry {
 				typeof this._options.getInjections === "function"
 					? this._options.getInjections(scopeName)
 					: undefined;
+
 			this._syncRegistry.addGrammar(grammar, injections);
 		}
 	}
@@ -284,7 +297,9 @@ export interface ITokenizeLineResult2 {
 
 export interface IToken {
 	startIndex: number;
+
 	readonly endIndex: number;
+
 	readonly scopes: string[];
 }
 
@@ -293,9 +308,11 @@ export interface IToken {
  */
 export interface StateStack {
 	_stackElementBrand: void;
+
 	readonly depth: number;
 
 	clone(): StateStack;
+
 	equals(other: StateStack): boolean;
 }
 

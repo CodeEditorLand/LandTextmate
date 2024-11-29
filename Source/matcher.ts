@@ -4,6 +4,7 @@
 
 export interface MatcherWithPriority<T> {
 	matcher: Matcher<T>;
+
 	priority: -1 | 0 | 1;
 }
 
@@ -39,16 +40,21 @@ export function createMatchers<T>(
 				default:
 					console.log(`Unknown priority ${token} in scope selector`);
 			}
+
 			token = tokenizer.next();
 		}
+
 		let matcher = parseConjunction();
+
 		results.push({ matcher, priority });
 
 		if (token !== ",") {
 			break;
 		}
+
 		token = tokenizer.next();
 	}
+
 	return results;
 
 	function parseOperand(): Matcher<T> | null {
@@ -60,6 +66,7 @@ export function createMatchers<T>(
 			return (matcherInput) =>
 				!!expressionToNegate && !expressionToNegate(matcherInput);
 		}
+
 		if (token === "(") {
 			token = tokenizer.next();
 
@@ -68,20 +75,25 @@ export function createMatchers<T>(
 			if (token === ")") {
 				token = tokenizer.next();
 			}
+
 			return expressionInParents;
 		}
+
 		if (isIdentifier(token)) {
 			const identifiers: string[] = [];
 
 			do {
 				identifiers.push(token);
+
 				token = tokenizer.next();
 			} while (isIdentifier(token));
 
 			return (matcherInput) => matchesName(identifiers, matcherInput);
 		}
+
 		return null;
 	}
+
 	function parseConjunction(): Matcher<T> {
 		const matchers: Matcher<T>[] = [];
 
@@ -89,11 +101,14 @@ export function createMatchers<T>(
 
 		while (matcher) {
 			matchers.push(matcher);
+
 			matcher = parseOperand();
 		}
+
 		return (matcherInput) =>
 			matchers.every((matcher) => matcher(matcherInput)); // and
 	}
+
 	function parseInnerExpression(): Matcher<T> {
 		const matchers: Matcher<T>[] = [];
 
@@ -109,8 +124,10 @@ export function createMatchers<T>(
 			} else {
 				break;
 			}
+
 			matcher = parseConjunction();
 		}
+
 		return (matcherInput) =>
 			matchers.some((matcher) => matcher(matcherInput)); // or
 	}
@@ -130,7 +147,9 @@ function newTokenizer(input: string): { next: () => string | null } {
 			if (!match) {
 				return null;
 			}
+
 			const res = match[0];
+
 			match = regex.exec(input);
 
 			return res;

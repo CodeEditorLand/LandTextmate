@@ -79,14 +79,18 @@ export interface IThemeProvider {
 
 export interface IGrammarRepository {
 	lookup(scopeName: ScopeName): IRawGrammar | undefined;
+
 	injections(scopeName: ScopeName): ScopeName[];
 }
 
 export interface Injection {
 	readonly debugSelector: string;
+
 	readonly matcher: Matcher<string[]>;
+
 	readonly priority: -1 | 0 | 1; // 0 is the default. -1 for 'L' and 1 for 'R'
 	readonly ruleId: RuleId;
+
 	readonly grammar: IRawGrammar;
 }
 
@@ -120,6 +124,7 @@ function nameMatcher(identifers: ScopeName[], scopes: ScopeName[]): boolean {
 	if (scopes.length < identifers.length) {
 		return false;
 	}
+
 	let lastIndex = 0;
 
 	return identifers.every((identifier) => {
@@ -130,6 +135,7 @@ function nameMatcher(identifers: ScopeName[], scopes: ScopeName[]): boolean {
 				return true;
 			}
 		}
+
 		return false;
 	});
 }
@@ -138,9 +144,11 @@ function scopesAreMatching(thisScopeName: string, scopeName: string): boolean {
 	if (!thisScopeName) {
 		return false;
 	}
+
 	if (thisScopeName === scopeName) {
 		return true;
 	}
+
 	const len = scopeName.length;
 
 	return (
@@ -152,13 +160,21 @@ function scopesAreMatching(thisScopeName: string, scopeName: string): boolean {
 
 export class Grammar implements IGrammar, IRuleFactoryHelper, IOnigLib {
 	private _rootId: RuleId | -1;
+
 	private _lastRuleId: number;
+
 	private readonly _ruleId2desc: Rule[];
+
 	private readonly _includedGrammars: { [scopeName: string]: IRawGrammar };
+
 	private readonly _grammarRepository: IGrammarRepository & IThemeProvider;
+
 	private readonly _grammar: IRawGrammar;
+
 	private _injections: Injection[] | null;
+
 	private readonly _basicScopeAttributesProvider: BasicScopeAttributesProvider;
+
 	private readonly _tokenTypeMatchers: TokenTypeMatcher[];
 
 	public get themeProvider(): IThemeProvider {
@@ -181,11 +197,17 @@ export class Grammar implements IGrammar, IRuleFactoryHelper, IOnigLib {
 		);
 
 		this._rootId = -1;
+
 		this._lastRuleId = 0;
+
 		this._ruleId2desc = [null!];
+
 		this._includedGrammars = {};
+
 		this._grammarRepository = grammarRepository;
+
 		this._grammar = initGrammar(grammar, null);
+
 		this._injections = null;
 
 		this._tokenTypeMatchers = [];
@@ -232,6 +254,7 @@ export class Grammar implements IGrammar, IRuleFactoryHelper, IOnigLib {
 				if (scopeName === this._rootScopeName) {
 					return this._grammar;
 				}
+
 				return this.getExternalGrammar(scopeName);
 			},
 			injections: (scopeName: string): string[] => {
@@ -307,6 +330,7 @@ export class Grammar implements IGrammar, IRuleFactoryHelper, IOnigLib {
 				}
 			}
 		}
+
 		return this._injections;
 	}
 
@@ -314,6 +338,7 @@ export class Grammar implements IGrammar, IRuleFactoryHelper, IOnigLib {
 		const id = ++this._lastRuleId;
 
 		const result = factory(ruleIdFromNumber(id));
+
 		this._ruleId2desc[id] = result;
 
 		return result;
@@ -335,6 +360,7 @@ export class Grammar implements IGrammar, IRuleFactoryHelper, IOnigLib {
 
 			if (rawIncludedGrammar) {
 				// console.log('LOADED GRAMMAR ' + pattern.include);
+
 				this._includedGrammars[scopeName] = initGrammar(
 					rawIncludedGrammar,
 					repository && repository.$base,
@@ -343,6 +369,7 @@ export class Grammar implements IGrammar, IRuleFactoryHelper, IOnigLib {
 				return this._includedGrammars[scopeName];
 			}
 		}
+
 		return undefined;
 	}
 
@@ -381,8 +408,11 @@ export class Grammar implements IGrammar, IRuleFactoryHelper, IOnigLib {
 		timeLimit: number,
 	): {
 		lineLength: number;
+
 		lineTokens: LineTokens;
+
 		ruleStack: StateStackImpl;
+
 		stoppedEarly: boolean;
 	} {
 		if (this._rootId === -1) {
@@ -447,6 +477,7 @@ export class Grammar implements IGrammar, IRuleFactoryHelper, IOnigLib {
 			);
 		} else {
 			isFirstLine = false;
+
 			prevState.reset();
 		}
 
@@ -492,11 +523,13 @@ function initGrammar(
 	grammar = clone(grammar);
 
 	grammar.repository = grammar.repository || <any>{};
+
 	grammar.repository.$self = {
 		$vscodeTextmateLocation: grammar.$vscodeTextmateLocation,
 		patterns: grammar.patterns,
 		name: grammar.scopeName,
 	};
+
 	grammar.repository.$base = base || grammar.repository.$self;
 
 	return grammar;
@@ -513,12 +546,14 @@ export class AttributedScopeStack {
 
 		for (const frame of contentNameScopesList) {
 			scopeNames = ScopeStack.push(scopeNames, frame.scopeNames);
+
 			current = new AttributedScopeStack(
 				current,
 				scopeNames!,
 				frame.encodedTokenAttributes,
 			);
 		}
+
 		return current;
 	}
 
@@ -611,6 +646,7 @@ export class AttributedScopeStack {
 
 			// Go to previous pair
 			a = a.parent;
+
 			b = b.parent;
 		} while (true);
 	}
@@ -630,6 +666,7 @@ export class AttributedScopeStack {
 			fontStyle = styleAttributes.fontStyle;
 
 			foreground = styleAttributes.foregroundId;
+
 			background = styleAttributes.backgroundId;
 		}
 
@@ -673,6 +710,7 @@ export class AttributedScopeStack {
 				grammar,
 			);
 		}
+
 		return result;
 	}
 
@@ -714,14 +752,17 @@ export class AttributedScopeStack {
 					self.parent?.scopePath ?? null,
 				)!,
 			});
+
 			self = self.parent;
 		}
+
 		return self === base ? result.reverse() : undefined;
 	}
 }
 
 interface AttributedScopeStackFrame {
 	encodedTokenAttributes: number;
+
 	scopeNames: string[];
 }
 
@@ -809,7 +850,9 @@ export class StateStackImpl implements StateStack {
 		public readonly contentNameScopesList: AttributedScopeStack | null,
 	) {
 		this.depth = this.parent ? this.parent.depth + 1 : 1;
+
 		this._enterPos = enterPos;
+
 		this._anchorPos = anchorPos;
 	}
 
@@ -817,6 +860,7 @@ export class StateStackImpl implements StateStack {
 		if (other === null) {
 			return false;
 		}
+
 		return StateStackImpl._equals(this, other);
 	}
 
@@ -824,9 +868,11 @@ export class StateStackImpl implements StateStack {
 		if (a === b) {
 			return true;
 		}
+
 		if (!this._structuralEquals(a, b)) {
 			return false;
 		}
+
 		return AttributedScopeStack.equals(
 			a.contentNameScopesList,
 			b.contentNameScopesList,
@@ -865,6 +911,7 @@ export class StateStackImpl implements StateStack {
 
 			// Go to previous pair
 			a = a.parent;
+
 			b = b.parent;
 		} while (true);
 	}
@@ -876,7 +923,9 @@ export class StateStackImpl implements StateStack {
 	private static _reset(el: StateStackImpl | null): void {
 		while (el) {
 			el._enterPos = -1;
+
 			el._anchorPos = -1;
+
 			el = el.parent;
 		}
 	}
@@ -893,6 +942,7 @@ export class StateStackImpl implements StateStack {
 		if (this.parent) {
 			return this.parent;
 		}
+
 		return this;
 	}
 
@@ -931,6 +981,7 @@ export class StateStackImpl implements StateStack {
 
 	public toString(): string {
 		const r: string[] = [];
+
 		this._writeString(r, 0);
 
 		return "[" + r.join(",") + "]";
@@ -953,6 +1004,7 @@ export class StateStackImpl implements StateStack {
 		if (this.contentNameScopesList === contentNameScopeStack) {
 			return this;
 		}
+
 		return this.parent!.push(
 			this.ruleId,
 			this._enterPos,
@@ -968,6 +1020,7 @@ export class StateStackImpl implements StateStack {
 		if (this.endRule === endRule) {
 			return this;
 		}
+
 		return new StateStackImpl(
 			this.parent,
 			this.ruleId,
@@ -988,8 +1041,10 @@ export class StateStackImpl implements StateStack {
 			if (el.ruleId === other.ruleId) {
 				return true;
 			}
+
 			el = el.parent;
 		}
+
 		return false;
 	}
 
@@ -1036,10 +1091,15 @@ export class StateStackImpl implements StateStack {
 
 export interface StateStackFrame {
 	ruleId: number;
+
 	enterPos?: number;
+
 	anchorPos?: number;
+
 	beginRuleCapturedEOL: boolean;
+
 	endRule: string | null;
+
 	nameScopesList: AttributedScopeStackFrame[];
 	/**
 	 * on top of nameScopesList
@@ -1049,11 +1109,13 @@ export interface StateStackFrame {
 
 interface TokenTypeMatcher {
 	readonly matcher: Matcher<string[]>;
+
 	readonly type: StandardTokenType;
 }
 
 export class BalancedBracketSelectors {
 	private readonly balancedBracketScopes: Matcher<string[]>[];
+
 	private readonly unbalancedBracketScopes: Matcher<string[]>[];
 
 	private allowAny = false;
@@ -1069,11 +1131,13 @@ export class BalancedBracketSelectors {
 
 					return [];
 				}
+
 				return createMatchers(selector, nameMatcher).map(
 					(m) => m.matcher,
 				);
 			},
 		);
+
 		this.unbalancedBracketScopes = unbalancedBracketScopes.flatMap(
 			(selector) =>
 				createMatchers(selector, nameMatcher).map((m) => m.matcher),
@@ -1100,6 +1164,7 @@ export class BalancedBracketSelectors {
 				return true;
 			}
 		}
+
 		return this.allowAny;
 	}
 }
@@ -1130,6 +1195,7 @@ export class LineTokens {
 		private readonly balancedBracketSelectors: BalancedBracketSelectors | null,
 	) {
 		this._emitBinaryTokens = emitBinaryTokens;
+
 		this._tokenTypeOverrides = tokenTypeOverrides;
 
 		if (DebugFlags.InDebugMode) {
@@ -1137,8 +1203,11 @@ export class LineTokens {
 		} else {
 			this._lineText = null;
 		}
+
 		this._tokens = [];
+
 		this._binaryTokens = [];
+
 		this._lastTokenEndIndex = 0;
 	}
 
@@ -1185,6 +1254,7 @@ export class LineTokens {
 						);
 					}
 				}
+
 				if (this.balancedBracketSelectors) {
 					containsBalancedBrackets =
 						this.balancedBracketSelectors.match(scopes);
@@ -1215,6 +1285,7 @@ export class LineTokens {
 
 			if (DebugFlags.InDebugMode) {
 				const scopes = scopesList?.getScopeNames() ?? [];
+
 				console.log(
 					"  token: |" +
 						this._lineText!.substring(
@@ -1230,6 +1301,7 @@ export class LineTokens {
 			}
 
 			this._binaryTokens.push(this._lastTokenEndIndex);
+
 			this._binaryTokens.push(metadata);
 
 			this._lastTokenEndIndex = endIndex;
@@ -1275,7 +1347,9 @@ export class LineTokens {
 
 		if (this._tokens.length === 0) {
 			this._lastTokenEndIndex = -1;
+
 			this.produce(stack, lineLength);
+
 			this._tokens[this._tokens.length - 1].startIndex = 0;
 		}
 
@@ -1292,12 +1366,15 @@ export class LineTokens {
 		) {
 			// pop produced token for newline
 			this._binaryTokens.pop();
+
 			this._binaryTokens.pop();
 		}
 
 		if (this._binaryTokens.length === 0) {
 			this._lastTokenEndIndex = -1;
+
 			this.produce(stack, lineLength);
+
 			this._binaryTokens[this._binaryTokens.length - 2] = 0;
 		}
 

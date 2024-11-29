@@ -8,6 +8,7 @@
 
 interface Map<K, V> {
 	clear(): void;
+
 	delete(key: K): boolean;
 
 	forEach(
@@ -16,9 +17,11 @@ interface Map<K, V> {
 	): void;
 
 	get(key: K): V | undefined;
+
 	has(key: K): boolean;
 
 	set(key: K, value?: V): Map<K, V>;
+
 	readonly size: number;
 
 	// not supported on IE11:
@@ -39,14 +42,18 @@ declare var Map: MapConstructor;
 
 interface Set<T> {
 	add(value: T): Set<T>;
+
 	clear(): void;
+
 	delete(value: T): boolean;
 
 	forEach(
 		callbackfn: (value: T, index: T, set: Set<T>) => void,
 		thisArg?: any,
 	): void;
+
 	has(value: T): boolean;
+
 	readonly size: number;
 
 	// not supported on IE11:
@@ -69,6 +76,7 @@ interface WeakMap<K extends object, V> {
 	delete(key: K): boolean;
 
 	get(key: K): V | undefined;
+
 	has(key: K): boolean;
 	// IE11 doesn't return this
 	// set(key: K, value?: V): this;
@@ -78,8 +86,10 @@ interface WeakMap<K extends object, V> {
 
 interface WeakMapConstructor {
 	new (): WeakMap<any, any>;
+
 	new <K extends object, V>(): WeakMap<K, V>;
 	// new <K, V>(entries?: [K, V][]): WeakMap<K, V>;
+
 	readonly prototype: WeakMap<object, any>;
 }
 declare var WeakMap: WeakMapConstructor;
