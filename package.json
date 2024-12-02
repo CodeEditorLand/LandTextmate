@@ -1,7 +1,7 @@
 {
 	"description": "VSCode TextMate grammar helpers",
 	"devDependencies": {
-		"@types/node": "22.10.0"
+		"@types/node": "22.10.1"
 	},
 	"main": "./release/main.js",
 	"name": "vscode-textmate",
