@@ -1,10 +1,11 @@
 {
+	"dependencies": {},
 	"description": "VSCode TextMate grammar helpers",
 	"devDependencies": {
 		"@types/node": "22.10.1"
 	},
 	"main": "./release/main.js",
-	"name": "vscode-textmate",
+	"name": "@codeeditorland/textmate",
 	"scripts": {
 		"benchmark": "node benchmark/benchmark.js",
 		"bundle": "webpack",
