@@ -833,9 +833,7 @@ export class ThemeTrieElement {
 		// Try to merge into existing rule
 		for (
 			let i = 0, len = this._rulesWithParentScopes.length;
-
 			i < len;
-
 			i++
 		) {
 			let rule = this._rulesWithParentScopes[i];
